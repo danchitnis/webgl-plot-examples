@@ -1,0 +1,26 @@
+{
+  "name": "webgl-plot-examples",
+  "version": "0.0.1",
+  "description": "WebGL-plot examples",
+  "main": "./src/script.js",
+  "scripts": {
+    "build": "tsc ./src/script.ts && webpack"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/danchitnis/WebGL-plot-examples.git"
+  },
+  "author": "Danial Chitnis",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/danchitnis/WebGL-plot-examples/issues"
+  },
+  "homepage": "https://github.com/danchitnis/WebGL-plot-examples#readme",
+  "dependencies": {
+    "@danchitnis/webgl-plot": "^0.1.1",
+    "cwise": "^1.0.10",
+    "ndarray": "^1.0.18",
+    "nouislider": "^14.0.2",
+    "stats.js": "^0.17.0"
+  }
+}
