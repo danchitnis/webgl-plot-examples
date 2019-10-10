@@ -17,7 +17,7 @@
   },
   "homepage": "https://github.com/danchitnis/WebGL-plot-examples#readme",
   "dependencies": {
-    "@danchitnis/webgl-plot": "^0.1.2",
+    "@danchitnis/webgl-plot": "^0.1.3",
     "ndarray": "^1.0.18",
     "nouislider": "^14.0.2",
     "stats.js": "^0.17.0"
