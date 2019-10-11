@@ -1,7 +1,7 @@
 {
   "name": "webgl-plot-examples",
   "version": "0.0.1",
-  "description": "WebGL-plot examples",
+  "description": "webgl-plot examples",
   "main": "./src/script.js",
   "scripts": {
     "build": "tsc ./src/script.ts && webpack"

@@ -31,7 +31,7 @@ let yscale = 1;
 let line_colors : Array<color_rgba>;
 let lines : Array<lineGroup>;
 
-let wglp;
+let wglp:webGLplot;
 
 let fps_divder = 1; 
 let fps_counter = 0;
