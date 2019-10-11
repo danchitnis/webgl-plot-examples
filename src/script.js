@@ -3,9 +3,9 @@
  * Author Danial Chitnis 2019
  */
 exports.__esModule = true;
-var webgl_plot_1 = require("@danchitnis/webgl-plot");
-var webgl_plot_2 = require("@danchitnis/webgl-plot");
-var webgl_plot_3 = require("@danchitnis/webgl-plot");
+var webgl_plot_1 = require("webgl-plot");
+var webgl_plot_2 = require("webgl-plot");
+var webgl_plot_3 = require("webgl-plot");
 var noUiSlider = require("nouislider");
 var Statsjs = require("stats.js");
 var canv = document.getElementById("my_canvas");

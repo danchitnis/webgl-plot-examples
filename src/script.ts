@@ -3,9 +3,9 @@
  */
 
 import ndarray = require("ndarray");
-import { webGLplot} from "@danchitnis/webgl-plot"
-import { color_rgba} from "@danchitnis/webgl-plot"
-import { lineGroup } from "@danchitnis/webgl-plot"
+import { webGLplot} from "webgl-plot"
+import { color_rgba} from "webgl-plot"
+import { lineGroup } from "webgl-plot"
 import * as noUiSlider from 'nouislider';
 
 import Statsjs = require("stats.js");
