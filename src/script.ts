@@ -3,9 +3,9 @@
  */
 
 import ndarray = require("ndarray");
-import { webGLplot} from "webgl-plot"
-import { color_rgba} from "webgl-plot"
-import { lineGroup } from "webgl-plot"
+import { webGLplot} from "./webglplot"
+import { color_rgba} from "./webglplot"
+import { lineGroup } from "./webglplot"
 import * as noUiSlider from 'nouislider';
 
 import Statsjs = require("stats.js");
@@ -158,22 +158,14 @@ window.requestAnimationFrame(new_frame);
 
 
 function plot(shift_size:number) {
-
-  for (let i=0; i<num-shift_size; i++) {
-    lines.forEach(line => {
-      line.xy.set(i,1, line.xy.get(i+shift_size,1));
-    });
-  }
   
   lines.forEach(line => {
     let y = random_walk(line.xy.get(num-1,1), shift_size);
-    for (let i=0;i<shift_size;i++) {
-      line.xy.set(i+num-shift_size,1,y[i]);
-    }
+    line.shift_add(y);
   });
-  
-  
+
 }
+
 
 function random_walk(init:number, walk_size:number):Float32Array {
   let y = new Float32Array(walk_size);

@@ -3,9 +3,9 @@
  * Author Danial Chitnis 2019
  */
 exports.__esModule = true;
-var webgl_plot_1 = require("webgl-plot");
-var webgl_plot_2 = require("webgl-plot");
-var webgl_plot_3 = require("webgl-plot");
+var webglplot_1 = require("./webglplot");
+var webglplot_2 = require("./webglplot");
+var webglplot_3 = require("./webglplot");
 var noUiSlider = require("nouislider");
 var Statsjs = require("stats.js");
 var canv = document.getElementById("my_canvas");
@@ -109,19 +109,9 @@ function new_frame() {
 }
 window.requestAnimationFrame(new_frame);
 function plot(shift_size) {
-    var _loop_1 = function (i) {
-        lines.forEach(function (line) {
-            line.xy.set(i, 1, line.xy.get(i + shift_size, 1));
-        });
-    };
-    for (var i = 0; i < num - shift_size; i++) {
-        _loop_1(i);
-    }
     lines.forEach(function (line) {
         var y = random_walk(line.xy.get(num - 1, 1), shift_size);
-        for (var i = 0; i < shift_size; i++) {
-            line.xy.set(i + num - shift_size, 1, y[i]);
-        }
+        line.shift_add(y);
     });
 }
 function random_walk(init, walk_size) {
@@ -136,15 +126,15 @@ function init() {
     line_colors = [];
     lines = [];
     for (var i = 0; i < line_num; i++) {
-        line_colors.push(new webgl_plot_2.color_rgba(Math.random(), Math.random(), Math.random(), 0.5));
-        lines.push(new webgl_plot_3.lineGroup(line_colors[i], num));
+        line_colors.push(new webglplot_2.color_rgba(Math.random(), Math.random(), Math.random(), 0.5));
+        lines.push(new webglplot_3.lineGroup(line_colors[i], num));
     }
-    wglp = new webgl_plot_1.webGLplot(canv);
+    wglp = new webglplot_1.webGLplot(canv);
     lines.forEach(function (line) {
         wglp.add_line(line);
     });
     console.log(num);
-    var _loop_2 = function (i) {
+    var _loop_1 = function (i) {
         //set x to -num/2:1:+num/2
         lines.forEach(function (line) {
             line.xy.set(i, 0, 2 * i / num - 1);
@@ -152,7 +142,7 @@ function init() {
         });
     };
     for (var i = 0; i < num; i++) {
-        _loop_2(i);
+        _loop_1(i);
     }
 }
 function doneResizing() {
