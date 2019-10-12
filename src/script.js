@@ -110,8 +110,8 @@ function new_frame() {
 window.requestAnimationFrame(new_frame);
 function plot(shift_size) {
     lines.forEach(function (line) {
-        var y = random_walk(line.xy.get(num - 1, 1), shift_size);
-        line.shift_add(y);
+        var y_array = random_walk(line.getY(num - 1), shift_size);
+        line.shift_add(y_array);
     });
 }
 function random_walk(init, walk_size) {
@@ -134,15 +134,11 @@ function init() {
         wglp.add_line(line);
     });
     console.log(num);
-    var _loop_1 = function (i) {
+    for (var i = 0; i < num; i++) {
         //set x to -num/2:1:+num/2
         lines.forEach(function (line) {
-            line.xy.set(i, 0, 2 * i / num - 1);
-            line.xy.set(i, 1, 0);
+            line.linespaceX();
         });
-    };
-    for (var i = 0; i < num; i++) {
-        _loop_1(i);
     }
 }
 function doneResizing() {

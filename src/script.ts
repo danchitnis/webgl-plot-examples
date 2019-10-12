@@ -2,7 +2,6 @@
  * Author Danial Chitnis 2019
  */
 
-import ndarray = require("ndarray");
 import { webGLplot} from "./webglplot"
 import { color_rgba} from "./webglplot"
 import { lineGroup } from "./webglplot"
@@ -160,8 +159,8 @@ window.requestAnimationFrame(new_frame);
 function plot(shift_size:number) {
   
   lines.forEach(line => {
-    let y = random_walk(line.xy.get(num-1,1), shift_size);
-    line.shift_add(y);
+    let y_array = random_walk(line.getY(num-1), shift_size);
+    line.shift_add(y_array);
   });
 
 }
@@ -201,8 +200,7 @@ function init() {
   for (let i=0; i<num; i++) {
     //set x to -num/2:1:+num/2
     lines.forEach(line => {
-      line.xy.set(i, 0, 2*i/num-1);
-      line.xy.set(i, 1, 0);
+      line.linespaceX();
     });
   }
 
