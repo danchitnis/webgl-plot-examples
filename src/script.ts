@@ -2,10 +2,9 @@
  * Author Danial Chitnis 2019
  */
 
-import ndarray = require("ndarray");
-import { webGLplot} from "webgl-plot"
-import { color_rgba} from "webgl-plot"
-import { lineGroup } from "webgl-plot"
+import { webGLplot} from 'webgl-plot'
+import { color_rgba} from 'webgl-plot'
+import { lineGroup } from 'webgl-plot'
 import * as noUiSlider from 'nouislider';
 
 import Statsjs = require("stats.js");
@@ -158,22 +157,14 @@ window.requestAnimationFrame(new_frame);
 
 
 function plot(shift_size:number) {
-
-  for (let i=0; i<num-shift_size; i++) {
-    lines.forEach(line => {
-      line.xy.set(i,1, line.xy.get(i+shift_size,1));
-    });
-  }
   
   lines.forEach(line => {
-    let y = random_walk(line.xy.get(num-1,1), shift_size);
-    for (let i=0;i<shift_size;i++) {
-      line.xy.set(i+num-shift_size,1,y[i]);
-    }
+    let y_array = random_walk(line.getY(num-1), shift_size);
+    line.shift_add(y_array);
   });
-  
-  
+
 }
+
 
 function random_walk(init:number, walk_size:number):Float32Array {
   let y = new Float32Array(walk_size);
@@ -209,8 +200,7 @@ function init() {
   for (let i=0; i<num; i++) {
     //set x to -num/2:1:+num/2
     lines.forEach(line => {
-      line.xy.set(i, 0, 2*i/num-1);
-      line.xy.set(i, 1, 0);
+      line.linespaceX();
     });
   }
 
