@@ -4,7 +4,7 @@
   "description": "webgl-plot examples",
   "main": "./src/script.js",
   "scripts": {
-    "build": "tsc ./src/script.ts ./src/webglplot.ts && webpack"
+    "build": "tsc ./src/script.ts && webpack"
   },
   "repository": {
     "type": "git",
@@ -17,8 +17,8 @@
   },
   "homepage": "https://github.com/danchitnis/WebGL-plot-examples#readme",
   "dependencies": {
-    "webgl-plot": "^0.1.3",
     "nouislider": "^14.0.2",
-    "stats.js": "^0.17.0"
+    "stats.js": "^0.17.0",
+    "webgl-plot": "^0.1.5"
   }
 }

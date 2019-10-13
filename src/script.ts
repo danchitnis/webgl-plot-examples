@@ -2,9 +2,9 @@
  * Author Danial Chitnis 2019
  */
 
-import { webGLplot} from "./webglplot"
-import { color_rgba} from "./webglplot"
-import { lineGroup } from "./webglplot"
+import { webGLplot} from 'webgl-plot'
+import { color_rgba} from 'webgl-plot'
+import { lineGroup } from 'webgl-plot'
 import * as noUiSlider from 'nouislider';
 
 import Statsjs = require("stats.js");

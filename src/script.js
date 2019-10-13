@@ -3,9 +3,9 @@
  * Author Danial Chitnis 2019
  */
 exports.__esModule = true;
-var webglplot_1 = require("./webglplot");
-var webglplot_2 = require("./webglplot");
-var webglplot_3 = require("./webglplot");
+var webgl_plot_1 = require("webgl-plot");
+var webgl_plot_2 = require("webgl-plot");
+var webgl_plot_3 = require("webgl-plot");
 var noUiSlider = require("nouislider");
 var Statsjs = require("stats.js");
 var canv = document.getElementById("my_canvas");
@@ -126,10 +126,10 @@ function init() {
     line_colors = [];
     lines = [];
     for (var i = 0; i < line_num; i++) {
-        line_colors.push(new webglplot_2.color_rgba(Math.random(), Math.random(), Math.random(), 0.5));
-        lines.push(new webglplot_3.lineGroup(line_colors[i], num));
+        line_colors.push(new webgl_plot_2.color_rgba(Math.random(), Math.random(), Math.random(), 0.5));
+        lines.push(new webgl_plot_3.lineGroup(line_colors[i], num));
     }
-    wglp = new webglplot_1.webGLplot(canv);
+    wglp = new webgl_plot_1.webGLplot(canv);
     lines.forEach(function (line) {
         wglp.add_line(line);
     });
