@@ -22,71 +22,59 @@ var lines;
 var wglp;
 var fps_divder = 1;
 var fps_counter = 0;
-var new_num = 10;
+// new data per frame
+var new_num = 1;
 var line_num_list = [1, 2, 5, 10, 20, 50, 100, 200, 500, 1000, 2000, 5000];
+var slider_lines;
+var slider_yscale;
+var slider_new_data;
+var slider_fps;
+var display_lines;
+var display_yscale;
+createUI();
 //sliders
-var slider_lines = document.getElementById('slider_lines');
-var slider_yscale = document.getElementById('slider_yscale');
-var slider_new_data = document.getElementById('slider_new_data');
-var slider_fps = document.getElementById('slider_fps');
-noUiSlider.create(slider_lines, {
-    start: [0],
-    step: 1,
-    connect: [true, false],
-    //tooltips: [false, wNumb({decimals: 1}), true],
-    range: {
-        min: 0,
-        max: 11
-    }
-});
-noUiSlider.create(slider_yscale, {
-    start: [1],
-    connect: [true, false],
-    //tooltips: [false, wNumb({decimals: 1}), true],
-    range: {
-        min: 0.01,
-        max: 10
-    }
-});
+/**/
+/*;
+
 noUiSlider.create(slider_new_data, {
-    start: [1],
-    step: 1,
-    connect: [true, false],
-    //tooltips: [false, wNumb({decimals: 1}), true],
-    range: {
-        min: 1,
-        max: 100
-    }
+   start: [1],
+   step: 1,
+   connect: [true, false],
+   //tooltips: [false, wNumb({decimals: 1}), true],
+   range: {
+     min: 1,
+     max: 100
+   }
 });
+
 noUiSlider.create(slider_fps, {
-    start: [1],
-    step: 1,
-    connect: [true, false],
-    //tooltips: [false, wNumb({decimals: 1}), true],
-    range: {
-        min: 1,
-        max: 10
-    }
+   start: [1],
+   step: 1,
+   connect: [true, false],
+   //tooltips: [false, wNumb({decimals: 1}), true],
+   range: {
+     min: 1,
+     max: 10
+   }
 });
-slider_lines.noUiSlider.on("update", function (values, handle) {
-    line_num = line_num_list[parseFloat(values[handle])];
-    document.getElementById("display_lines").innerHTML = line_num.toString();
-});
-slider_lines.noUiSlider.on("set", function (values, handle) {
-    init();
-});
-slider_yscale.noUiSlider.on("update", function (values, handle) {
-    yscale = parseFloat(values[handle]);
-    document.getElementById("display_yscale").innerHTML = yscale.toString();
-});
-slider_new_data.noUiSlider.on("update", function (values, handle) {
-    new_num = parseFloat(values[handle]);
-    document.getElementById("display_new_data_size").innerHTML = new_num.toString();
-});
-slider_fps.noUiSlider.on("update", function (values, handle) {
-    fps_divder = parseFloat(values[handle]);
-    document.getElementById("display_fps").innerHTML = (60 / fps_divder).toString();
-});
+
+
+
+
+ slider_yscale.noUiSlider.on("update", function(values, handle) {
+   yscale = parseFloat(values[handle]);
+   (<HTMLParagraphElement>document.getElementById("display_yscale")).innerHTML = yscale.toString();
+ });
+
+ slider_new_data.noUiSlider.on("update", function(values, handle) {
+   new_num = parseFloat(values[handle]);
+   (<HTMLParagraphElement>document.getElementById("display_new_data_size")).innerHTML = new_num.toString();
+ });
+
+ slider_fps.noUiSlider.on("update", function(values, handle) {
+   fps_divder = parseFloat(values[handle]);
+   (<HTMLParagraphElement>document.getElementById("display_fps")).innerHTML = (60/fps_divder).toString();
+ });*/
 var resizeId;
 window.addEventListener('resize', function () {
     clearTimeout(resizeId);
@@ -144,4 +132,52 @@ function init() {
 function doneResizing() {
     wglp.viewport(0, 0, canv.width, canv.height);
     console.log(window.innerWidth);
+}
+function createUI() {
+    var ui = document.getElementById("ui");
+    //******slider lines */
+    slider_lines = document.createElement("div");
+    slider_lines.style = "width: 100%";
+    noUiSlider.create(slider_lines, {
+        start: [0],
+        step: 1,
+        connect: [true, false],
+        //tooltips: [false, wNumb({decimals: 1}), true],
+        range: {
+            min: 0,
+            max: 11
+        }
+    });
+    display_lines = document.createElement("span");
+    ui.appendChild(slider_lines);
+    ui.appendChild(display_lines);
+    ui.appendChild(document.createElement("p"));
+    slider_lines.noUiSlider.on("update", function (values, handle) {
+        line_num = line_num_list[parseFloat(values[handle])];
+        display_lines.innerHTML = "Line number: " + line_num.toString();
+        line_num.toString();
+    });
+    slider_lines.noUiSlider.on("set", function (values, handle) {
+        init();
+    });
+    /*****slider yscale */
+    slider_yscale = document.createElement("div");
+    slider_yscale.style = "width: 100%";
+    noUiSlider.create(slider_yscale, {
+        start: [1],
+        connect: [true, false],
+        //tooltips: [false, wNumb({decimals: 1}), true],
+        range: {
+            min: 0.01,
+            max: 10
+        }
+    });
+    display_yscale = document.createElement("span");
+    ui.appendChild(slider_yscale);
+    ui.appendChild(display_yscale);
+    ui.appendChild(document.createElement("p"));
+    slider_yscale.noUiSlider.on("update", function (values, handle) {
+        yscale = parseFloat(values[handle]);
+        display_yscale.innerHTML = yscale.toString();
+    });
 }
