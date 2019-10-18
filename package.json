@@ -4,7 +4,7 @@
   "description": "webgl-plot examples",
   "main": "./src/script.js",
   "scripts": {
-    "build": "tsc ./src/script.ts && webpack"
+    "build": "tsc ./src/script.ts ./src/brown.ts && webpack"
   },
   "repository": {
     "type": "git",

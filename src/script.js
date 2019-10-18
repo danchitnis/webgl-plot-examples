@@ -7,7 +7,9 @@ var webgl_plot_1 = require("webgl-plot");
 var webgl_plot_2 = require("webgl-plot");
 var webgl_plot_3 = require("webgl-plot");
 var noUiSlider = require("nouislider");
+var brown_1 = require("./brown");
 var Statsjs = require("stats.js");
+var b = new brown_1.brown();
 var canv = document.getElementById("my_canvas");
 var devicePixelRatio = window.devicePixelRatio || 1;
 var num = Math.round(canv.clientWidth * devicePixelRatio);
@@ -31,55 +33,32 @@ var slider_new_data;
 var slider_fps;
 var display_lines;
 var display_yscale;
+var display_new_data_size;
+var display_fps;
 createUI();
 //sliders
 /**/
 /*;
 
-noUiSlider.create(slider_new_data, {
-   start: [1],
-   step: 1,
-   connect: [true, false],
-   //tooltips: [false, wNumb({decimals: 1}), true],
-   range: {
-     min: 1,
-     max: 100
-   }
-});
-
-noUiSlider.create(slider_fps, {
-   start: [1],
-   step: 1,
-   connect: [true, false],
-   //tooltips: [false, wNumb({decimals: 1}), true],
-   range: {
-     min: 1,
-     max: 10
-   }
-});
 
 
 
 
- slider_yscale.noUiSlider.on("update", function(values, handle) {
-   yscale = parseFloat(values[handle]);
-   (<HTMLParagraphElement>document.getElementById("display_yscale")).innerHTML = yscale.toString();
- });
 
- slider_new_data.noUiSlider.on("update", function(values, handle) {
-   new_num = parseFloat(values[handle]);
-   (<HTMLParagraphElement>document.getElementById("display_new_data_size")).innerHTML = new_num.toString();
- });
 
- slider_fps.noUiSlider.on("update", function(values, handle) {
-   fps_divder = parseFloat(values[handle]);
-   (<HTMLParagraphElement>document.getElementById("display_fps")).innerHTML = (60/fps_divder).toString();
- });*/
+
+ 
+
+ 
+
+ */
 var resizeId;
 window.addEventListener('resize', function () {
     clearTimeout(resizeId);
     resizeId = setTimeout(doneResizing, 500);
 });
+var bt = document.getElementById("bt");
+bt.addEventListener("click", btclick);
 init();
 function new_frame() {
     if (fps_counter == 0) {
@@ -154,7 +133,7 @@ function createUI() {
     ui.appendChild(document.createElement("p"));
     slider_lines.noUiSlider.on("update", function (values, handle) {
         line_num = line_num_list[parseFloat(values[handle])];
-        display_lines.innerHTML = "Line number: " + line_num.toString();
+        display_lines.innerHTML = "Line number: " + line_num;
         line_num.toString();
     });
     slider_lines.noUiSlider.on("set", function (values, handle) {
@@ -178,6 +157,55 @@ function createUI() {
     ui.appendChild(document.createElement("p"));
     slider_yscale.noUiSlider.on("update", function (values, handle) {
         yscale = parseFloat(values[handle]);
-        display_yscale.innerHTML = yscale.toString();
+        display_yscale.innerHTML = "Y scale = " + yscale;
     });
+    /****** slider new data */
+    slider_new_data = document.createElement("div");
+    slider_new_data.style = "width: 100%";
+    noUiSlider.create(slider_new_data, {
+        start: [1],
+        step: 1,
+        connect: [true, false],
+        //tooltips: [false, wNumb({decimals: 1}), true],
+        range: {
+            min: 1,
+            max: 100
+        }
+    });
+    display_new_data_size = document.createElement("span");
+    ui.appendChild(slider_new_data);
+    ui.appendChild(display_new_data_size);
+    ui.appendChild(document.createElement("p"));
+    slider_new_data.noUiSlider.on("update", function (values, handle) {
+        new_num = parseFloat(values[handle]);
+        display_new_data_size.innerHTML = "New data per frame = " + new_num;
+    });
+    /**** slider fps */
+    slider_fps = document.createElement("div");
+    slider_fps.style = "width: 100%";
+    noUiSlider.create(slider_fps, {
+        start: [1],
+        step: 1,
+        connect: [true, false],
+        //tooltips: [false, wNumb({decimals: 1}), true],
+        range: {
+            min: 1,
+            max: 10
+        }
+    });
+    display_fps = document.createElement("span");
+    ui.appendChild(slider_fps);
+    ui.appendChild(display_fps);
+    ui.appendChild(document.createElement("p"));
+    slider_fps.noUiSlider.on("update", function (values, handle) {
+        fps_divder = parseFloat(values[handle]);
+        display_fps.innerHTML = "FPS  = " + (60 / fps_divder);
+    });
+}
+function btclick() {
+    console.log("button press!");
+    var ui = document.getElementById("ui");
+    while (ui.firstChild) {
+        ui.removeChild(ui.firstChild);
+    }
 }

@@ -7,10 +7,12 @@ import { color_rgba} from 'webgl-plot'
 import { lineGroup } from 'webgl-plot'
 import * as noUiSlider from 'nouislider';
 
+import {brown} from './brown';
+
 import Statsjs = require("stats.js");
 
 
-
+let b = new brown();
 
 let canv = <HTMLCanvasElement>document.getElementById("my_canvas");
 
@@ -48,6 +50,8 @@ let slider_fps: noUiSlider.Instance;
 
 let display_lines: HTMLSpanElement;
 let display_yscale: HTMLSpanElement;
+let display_new_data_size: HTMLSpanElement;
+let display_fps: HTMLSpanElement;
 
 createUI();
 
@@ -59,48 +63,27 @@ createUI();
 
 /*;
 
-noUiSlider.create(slider_new_data, {
-   start: [1],
-   step: 1,
-   connect: [true, false],
-   //tooltips: [false, wNumb({decimals: 1}), true],
-   range: {
-     min: 1,
-     max: 100
-   }
-});
 
-noUiSlider.create(slider_fps, {
-   start: [1],
-   step: 1,
-   connect: [true, false],
-   //tooltips: [false, wNumb({decimals: 1}), true],
-   range: {
-     min: 1,
-     max: 10
-   }
-});
+
+
 
 
 
 
  
 
- slider_new_data.noUiSlider.on("update", function(values, handle) {
-   new_num = parseFloat(values[handle]);
-   (<HTMLParagraphElement>document.getElementById("display_new_data_size")).innerHTML = new_num.toString();
- });
+ 
 
- slider_fps.noUiSlider.on("update", function(values, handle) {
-   fps_divder = parseFloat(values[handle]);
-   (<HTMLParagraphElement>document.getElementById("display_fps")).innerHTML = (60/fps_divder).toString();
- });*/
+ */
 
 let resizeId;
  window.addEventListener('resize', function() {
      clearTimeout(resizeId);
      resizeId = setTimeout(doneResizing, 500);
  });
+
+let bt = <HTMLButtonElement>document.getElementById("bt");
+bt.addEventListener("click",btclick);
 
  init();
 
@@ -212,7 +195,7 @@ function createUI() {
 
   slider_lines.noUiSlider.on("update", function(values, handle) {
     line_num = line_num_list[parseFloat(values[handle])];
-    display_lines.innerHTML = `Line number: ${line_num.toString()}`;
+    display_lines.innerHTML = `Line number: ${line_num}`;
     line_num.toString();
   });
 
@@ -242,7 +225,66 @@ function createUI() {
 
   slider_yscale.noUiSlider.on("update", function(values, handle) {
     yscale = parseFloat(values[handle]);
-    display_yscale.innerHTML = yscale.toString();
+    display_yscale.innerHTML = `Y scale = ${yscale}`;
+  });
+
+  /****** slider new data */
+  slider_new_data = document.createElement("div") as noUiSlider.Instance;
+  slider_new_data.style = "width: 100%";
+  
+  noUiSlider.create(slider_new_data, {
+    start: [1],
+    step: 1,
+    connect: [true, false],
+    //tooltips: [false, wNumb({decimals: 1}), true],
+    range: {
+      min: 1,
+      max: 100
+    }
+  });
+
+  display_new_data_size = document.createElement("span");
+  ui.appendChild(slider_new_data);
+  ui.appendChild(display_new_data_size);
+  ui.appendChild(document.createElement("p"));
+
+  slider_new_data.noUiSlider.on("update", function(values, handle) {
+    new_num = parseFloat(values[handle]);
+    display_new_data_size.innerHTML = `New data per frame = ${new_num}`;
+  });
+
+  /**** slider fps */
+  slider_fps = document.createElement("div") as noUiSlider.Instance;
+  slider_fps.style = "width: 100%";
+
+  noUiSlider.create(slider_fps, {
+    start: [1],
+    step: 1,
+    connect: [true, false],
+    //tooltips: [false, wNumb({decimals: 1}), true],
+    range: {
+      min: 1,
+      max: 10
+    }
+  });
+
+  display_fps = document.createElement("span");
+  ui.appendChild(slider_fps);
+  ui.appendChild(display_fps);
+  ui.appendChild(document.createElement("p"));
+  
+  slider_fps.noUiSlider.on("update", function(values, handle) {
+    fps_divder = parseFloat(values[handle]);
+    display_fps.innerHTML = `FPS  = ${(60/fps_divder)}`;
   });
 
 }
+
+function btclick() {
+  console.log("button press!");
+  let ui = <HTMLDivElement>document.getElementById("ui");
+  while (ui.firstChild) {
+    ui.removeChild(ui.firstChild);
+  }
+}
+
