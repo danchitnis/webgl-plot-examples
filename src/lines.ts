@@ -1,8 +1,8 @@
 
 
-import { webGLplot} from "./webGLplot"
-import { color_rgba} from "./webGLplot"
-import { lineGroup } from "./webGLplot"
+import { webGLplot} from "webgl-plot"
+import { color_rgba} from "webgl-plot"
+import { lineGroup } from "webgl-plot"
 import * as noUiSlider from 'nouislider';
 
 import Statsjs = require("stats.js");

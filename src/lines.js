@@ -1,8 +1,8 @@
 "use strict";
 exports.__esModule = true;
-var webGLplot_1 = require("./webGLplot");
-var webGLplot_2 = require("./webGLplot");
-var webGLplot_3 = require("./webGLplot");
+var webgl_plot_1 = require("webgl-plot");
+var webgl_plot_2 = require("webgl-plot");
+var webgl_plot_3 = require("webgl-plot");
 var noUiSlider = require("nouislider");
 var Statsjs = require("stats.js");
 var line_num = 1;
@@ -45,10 +45,10 @@ function new_frame() {
 }
 window.requestAnimationFrame(new_frame);
 function init() {
-    wglp = new webGLplot_1.webGLplot(canv);
+    wglp = new webgl_plot_1.webGLplot(canv);
     for (var i = 0; i < line_num; i++) {
-        var color = new webGLplot_2.color_rgba(Math.random(), Math.random(), Math.random(), 1);
-        var line = new webGLplot_3.lineGroup(color, num);
+        var color = new webgl_plot_2.color_rgba(Math.random(), Math.random(), Math.random(), 1);
+        var line = new webgl_plot_3.lineGroup(color, num);
         line.linespaceX();
         wglp.add_line(line);
     }
