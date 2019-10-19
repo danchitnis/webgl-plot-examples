@@ -32,7 +32,9 @@ let slider_lines: noUiSlider.Instance;
 
 let display_lines: HTMLSpanElement;
 
-
+let stats = new Statsjs();
+stats.showPanel(0);
+document.body.appendChild( stats.dom );
 
 createUI();
 
@@ -52,6 +54,8 @@ function new_frame() {
 
   if (fps_counter==0) {
     
+    stats.begin();
+    
     wglp.linegroups.forEach(line => {
       let k = 2*Math.random()-1;
       line.constY(k);
@@ -59,8 +63,9 @@ function new_frame() {
     });
     
     wglp.update();
-
     wglp.scaleY = yscale;
+
+    stats.end();
 
   }
 
@@ -127,8 +132,5 @@ function createUI() {
     init();
   });
 
-
-
- 
 
 }
