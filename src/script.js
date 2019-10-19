@@ -7,9 +7,7 @@ var webgl_plot_1 = require("webgl-plot");
 var webgl_plot_2 = require("webgl-plot");
 var webgl_plot_3 = require("webgl-plot");
 var noUiSlider = require("nouislider");
-var brown_1 = require("./brown");
 var Statsjs = require("stats.js");
-var b = new brown_1.brown();
 var canv = document.getElementById("my_canvas");
 var devicePixelRatio = window.devicePixelRatio || 1;
 var num = Math.round(canv.clientWidth * devicePixelRatio);
@@ -36,29 +34,13 @@ var display_yscale;
 var display_new_data_size;
 var display_fps;
 createUI();
-//sliders
-/**/
-/*;
-
-
-
-
-
-
-
-
- 
-
- 
-
- */
 var resizeId;
 window.addEventListener('resize', function () {
     clearTimeout(resizeId);
     resizeId = setTimeout(doneResizing, 500);
 });
-var bt = document.getElementById("bt");
-bt.addEventListener("click", btclick);
+/*let bt = <HTMLButtonElement>document.getElementById("bt");
+bt.addEventListener("click",btclick);*/
 init();
 function new_frame() {
     if (fps_counter == 0) {
@@ -202,10 +184,10 @@ function createUI() {
         display_fps.innerHTML = "FPS  = " + (60 / fps_divder);
     });
 }
-function btclick() {
-    console.log("button press!");
-    var ui = document.getElementById("ui");
-    while (ui.firstChild) {
-        ui.removeChild(ui.firstChild);
-    }
-}
+/*function btclick() {
+  console.log("button press!");
+  let ui = <HTMLDivElement>document.getElementById("ui");
+  while (ui.firstChild) {
+    ui.removeChild(ui.firstChild);
+  }
+}*/

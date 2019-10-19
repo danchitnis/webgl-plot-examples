@@ -7,12 +7,10 @@ import { color_rgba} from 'webgl-plot'
 import { lineGroup } from 'webgl-plot'
 import * as noUiSlider from 'nouislider';
 
-import {brown} from './brown';
-
 import Statsjs = require("stats.js");
 
+  
 
-let b = new brown();
 
 let canv = <HTMLCanvasElement>document.getElementById("my_canvas");
 
@@ -56,36 +54,17 @@ let display_fps: HTMLSpanElement;
 createUI();
 
 
-//sliders
-
-
-/**/
-
-/*;
-
-
-
-
-
-
-
-
- 
-
- 
-
- */
 
 let resizeId;
- window.addEventListener('resize', function() {
-     clearTimeout(resizeId);
-     resizeId = setTimeout(doneResizing, 500);
- });
+window.addEventListener('resize', function() {
+    clearTimeout(resizeId);
+    resizeId = setTimeout(doneResizing, 500);
+});
 
-let bt = <HTMLButtonElement>document.getElementById("bt");
-bt.addEventListener("click",btclick);
+/*let bt = <HTMLButtonElement>document.getElementById("bt");
+bt.addEventListener("click",btclick);*/
 
- init();
+init();
 
 
 
@@ -170,6 +149,8 @@ function doneResizing() {
   wglp.viewport(0, 0, canv.width, canv.height);
   console.log(window.innerWidth);
 }
+
+
 
 function createUI() {
   let ui = <HTMLDivElement>document.getElementById("ui");
@@ -280,11 +261,13 @@ function createUI() {
 
 }
 
-function btclick() {
+/*function btclick() {
   console.log("button press!");
   let ui = <HTMLDivElement>document.getElementById("ui");
   while (ui.firstChild) {
     ui.removeChild(ui.firstChild);
   }
-}
+}*/
+
+
 
