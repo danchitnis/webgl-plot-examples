@@ -86,7 +86,7 @@ function init() {
   wglp = new webGLplot(canv);
 
   for (let i=0;i<line_num;i++) {
-    let color = new color_rgba(Math.random(),Math.random(),Math.random(),1);
+    let color = new color_rgba(Math.random(), Math.random(), Math.random(), 0.5);
     let line = new lineGroup(color, num);
     line.linespaceX();
     wglp.add_line(line);

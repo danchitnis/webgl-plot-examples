@@ -47,7 +47,7 @@ window.requestAnimationFrame(new_frame);
 function init() {
     wglp = new webgl_plot_1.webGLplot(canv);
     for (var i = 0; i < line_num; i++) {
-        var color = new webgl_plot_2.color_rgba(Math.random(), Math.random(), Math.random(), 1);
+        var color = new webgl_plot_2.color_rgba(Math.random(), Math.random(), Math.random(), 0.5);
         var line = new webgl_plot_3.lineGroup(color, num);
         line.linespaceX();
         wglp.add_line(line);
