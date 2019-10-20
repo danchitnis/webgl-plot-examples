@@ -15,4 +15,13 @@ module.exports = [{
     filename: 'lines.js',
     path: path.resolve(__dirname, 'dist')
   }
-}];
+},
+{
+  entry: './src/histogram.js',
+  mode: 'development',
+  output: {
+    filename: 'histogram.js',
+    path: path.resolve(__dirname, 'dist')
+  }
+}
+];
