@@ -8,19 +8,37 @@ var Statsjs = require("stats.js");
 var line_num = 1;
 var canv = document.getElementById("my_canvas");
 var devicePixelRatio = window.devicePixelRatio || 1;
-var num = Math.round(canv.clientWidth * devicePixelRatio);
+//let num = Math.round(canv.clientWidth * devicePixelRatio);
 var yscale = 1;
 var fps_divder = 1;
 var fps_counter = 0;
 var wglp;
+var line;
 var line_num_list = [1, 2, 5, 10, 20, 50, 100, 200, 500, 1000, 2000, 5000];
 var slider_lines;
 var display_lines;
 var stats = new Statsjs();
 stats.showPanel(0);
 document.body.appendChild(stats.dom);
+var num_bins = 100;
 createUI();
 init();
+var X = new Float32Array(10000);
+randn_array(X);
+//console.log(X);
+var xbins = new Float32Array(num_bins);
+for (var i = 0; i < xbins.length; i++) {
+    xbins[i] = 0;
+}
+for (var i = 0; i < X.length; i++) {
+    var bin = Math.floor(X[i]);
+    xbins[bin]++;
+}
+console.log(xbins);
+for (var i = 0; i < xbins.length; i++) {
+    line.setY(i, xbins[i] / 1000);
+}
+wglp.update();
 var resizeId;
 window.addEventListener('resize', function () {
     clearTimeout(resizeId);
@@ -29,12 +47,18 @@ window.addEventListener('resize', function () {
 function new_frame() {
     if (fps_counter == 0) {
         stats.begin();
-        wglp.linegroups.forEach(function (line) {
-            var k = 2 * Math.random() - 1;
-            line.constY(k);
-        });
+        randn_array(X);
+        for (var i = 0; i < xbins.length; i++) {
+            xbins[i] = 0;
+        }
+        for (var i = 0; i < X.length; i++) {
+            var bin = Math.floor(X[i]);
+            xbins[bin]++;
+        }
+        for (var i = 0; i < xbins.length; i++) {
+            line.setY(i, xbins[i] / 1000);
+        }
         wglp.update();
-        wglp.scaleY = yscale;
         stats.end();
     }
     fps_counter++;
@@ -46,11 +70,30 @@ function new_frame() {
 window.requestAnimationFrame(new_frame);
 function init() {
     wglp = new webgl_plot_1.webGLplot(canv);
-    for (var i = 0; i < line_num; i++) {
-        var color = new webgl_plot_2.color_rgba(Math.random(), Math.random(), Math.random(), 0.5);
-        var line = new webgl_plot_3.lineGroup(color, num);
-        line.linespaceX();
-        wglp.add_line(line);
+    var color = new webgl_plot_2.color_rgba(1, 1, 0, 0.5);
+    line = new webgl_plot_3.lineGroup(color, num_bins);
+    line.linespaceX();
+    wglp.add_line(line);
+}
+/** https://stackoverflow.com/questions/25582882/javascript-math-random-normal-distribution-gaussian-bell-curve */
+function randn_bm(min, max, skew) {
+    var u = 0, v = 0;
+    while (u === 0)
+        u = Math.random(); //Converting [0,1) to (0,1)
+    while (v === 0)
+        v = Math.random();
+    var num = Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
+    num = num / 10.0 + 0.5; // Translate to 0 -> 1
+    if (num > 1 || num < 0)
+        num = randn_bm(min, max, skew); // resample between 0 and 1 if out of range
+    num = Math.pow(num, skew); // Skew
+    num *= max - min; // Stretch to fill range
+    num += min; // offset to min
+    return num;
+}
+function randn_array(array) {
+    for (var i = 0; i < array.length; i++) {
+        array[i] = randn_bm(0, num_bins, 1);
     }
 }
 function doneResizing() {
