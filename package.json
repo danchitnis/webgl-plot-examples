@@ -4,7 +4,7 @@
   "description": "webgl-plot examples",
   "main": "./src/script.js",
   "scripts": {
-    "build": "tsc ./src/script.ts ./src/lines.ts  && webpack"
+    "build": "tsc ./src/script.ts ./src/lines.ts ./src/histogram.ts  && webpack"
   },
   "repository": {
     "type": "git",
