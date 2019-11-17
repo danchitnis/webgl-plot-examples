@@ -41,7 +41,7 @@ createUI();
 init();
 
 
-let resizeId;
+let resizeId:number;
 window.addEventListener('resize', function() {
     clearTimeout(resizeId);
     resizeId = setTimeout(doneResizing, 500);
