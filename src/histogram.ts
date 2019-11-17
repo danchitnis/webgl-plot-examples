@@ -9,8 +9,8 @@ import Statsjs = require("stats.js");
 
 
 
-let line_num = 1;
-
+let uNoise = 1;
+let randXSize = 10;
 
 
 const canv =  document.getElementById("my_canvas") as HTMLCanvasElement;
@@ -18,52 +18,52 @@ const canv =  document.getElementById("my_canvas") as HTMLCanvasElement;
 const devicePixelRatio = window.devicePixelRatio || 1;
 // let num = Math.round(canv.clientWidth * devicePixelRatio);
 
-const yscale = 1;
+const yScale = 1;
 
-let fps_divder = 1;
-let fps_counter = 0;
+let fpsDivder = 1;
+let fpsCounter = 0;
 
 
 let wglp: webGLplot;
 let line: lineGroup;
 
-let line_num_list = [1, 2, 5, 10, 20, 50, 100, 200, 500, 1000, 2000, 5000];
+const randXSizeList = [10, 20, 50, 100, 200, 500, 1000, 2000, 5000, 10000, 20000];
 
-let slider_lines: noUiSlider.Instance;
+let sliderYNoise: noUiSlider.Instance;
 
-let display_lines: HTMLSpanElement;
+let displayYNoise: HTMLSpanElement;
 
 const stats = new Statsjs();
 stats.showPanel(0);
 document.body.appendChild( stats.dom );
 
-let num_bins = 100;
+let numBins = 100;
 
 createUI();
 
 init();
 
-const X = new Float32Array(10000);
-randn_array(X);
+let X: Float32Array;
+
 // console.log(X);
 
-const xbins = new Float32Array(num_bins);
+const xbins = new Float32Array(numBins);
 for (let i = 0; i < xbins.length; i++) {
   xbins[i] = 0;
 
 }
 
-for (let i = 0; i < X.length; i++) {
+/*for (let i = 0; i < X.length; i++) {
   const bin = Math.floor(X[i]);
   xbins[bin]++;
-}
+}*/
 
 console.log(xbins);
 
 
-for (let i = 0; i < xbins.length; i++) {
-  line.setY(i, xbins[i] / 1000);
-}
+/*for (let i = 0; i < xbins.length; i++) {
+  line.setY(i, xbins[i] / randXSize);
+}*/
 
 wglp.update();
 
@@ -80,10 +80,11 @@ window.addEventListener("resize", () => {
 function new_frame() {
 
 
-  if (fps_counter == 0) {
+  if (fpsCounter === 0) {
 
     stats.begin();
 
+    X = new Float32Array(randXSize);
     randn_array(X);
 
     for (let i = 0; i < xbins.length; i++) {
@@ -95,9 +96,9 @@ function new_frame() {
       const bin = Math.floor(X[i]);
       xbins[bin]++;
     }
-
+    // Normalize ?
     for (let i = 0; i < xbins.length; i++) {
-      line.setY(i, xbins[i] / 1000);
+      line.setY(i, (xbins[i] / randXSize) * 10);
     }
     wglp.update();
 
@@ -105,10 +106,10 @@ function new_frame() {
 
   }
 
-  fps_counter++;
+  fpsCounter++;
 
-  if (fps_counter >= fps_divder) {
-    fps_counter = 0;
+  if (fpsCounter >= fpsDivder) {
+    fpsCounter = 0;
   }
 
   window.requestAnimationFrame(new_frame);
@@ -122,8 +123,8 @@ function init() {
   wglp = new webGLplot(canv);
 
 
-  let color = new color_rgba(1, 1, 0, 0.5);
-  line = new lineGroup(color, num_bins);
+  const color = new color_rgba(1, 1, 0, 0.5);
+  line = new lineGroup(color, numBins);
   line.linespaceX();
   wglp.add_line(line);
 
@@ -148,15 +149,9 @@ function randn_bm(min: number, max: number, skew: number): number {
 
 function randn_array(array: Float32Array) {
   for (let i = 0; i < array.length; i++) {
-    array[i] = randn_bm(0, num_bins, 1);
+    array[i] = randn_bm(0, numBins, 1);
   }
 }
-
-
-
-
-
-
 
 
 
@@ -175,30 +170,30 @@ function createUI() {
   const ui =  document.getElementById("ui") as HTMLDivElement;
 
   // ******slider lines */
-  slider_lines =  document.createElement("div") as unknown as noUiSlider.Instance;
-  slider_lines.style.width = "100%";
-  noUiSlider.create(slider_lines, {
+  sliderYNoise =  document.createElement("div") as unknown as noUiSlider.Instance;
+  sliderYNoise.style.width = "100%";
+  noUiSlider.create(sliderYNoise, {
     start: [0],
     step: 1,
     connect: [true, false],
     // tooltips: [false, wNumb({decimals: 1}), true],
     range: {
       min: 0,
-      max: 11,
+      max: randXSizeList.length - 1,
     },
   });
 
-  display_lines = document.createElement("span");
-  ui.appendChild(slider_lines);
-  ui.appendChild(display_lines);
+  displayYNoise = document.createElement("span");
+  ui.appendChild(sliderYNoise);
+  ui.appendChild(displayYNoise);
   ui.appendChild(document.createElement("p"));
 
-  slider_lines.noUiSlider.on("update", function(values, handle) {
-    line_num = line_num_list[parseFloat(values[handle])];
-    display_lines.innerHTML = `Line number: ${line_num}`;
+  sliderYNoise.noUiSlider.on("update", (values, handle) => {
+    randXSize = randXSizeList[parseFloat(values[handle])];
+    displayYNoise.innerHTML = `Line number: ${randXSize}`;
   });
 
-  slider_lines.noUiSlider.on("set", function(values, handle) {
+  sliderYNoise.noUiSlider.on("set", (values, handle) => {
     init();
   });
 
