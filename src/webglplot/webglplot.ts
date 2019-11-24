@@ -6,17 +6,22 @@
  * https://www.tutorialspoint.com/webgl/webgl_modes_of_drawing.htm
  */
 
-import {lineGroup} from "./lineGroup";
+import {ColorRGBA} from "./color_rgba";
+import {WebglLine} from "./WbglLine";
+import {WebglStep} from "./WbglStep";
+import {WebglBaseLine} from "./WebglBaseLine";
+
+export {WebglLine, ColorRGBA, WebglStep};
 
 
-export class webGLplot {
+export class WebGLplot {
 
-   public gl: WebGLRenderingContext;
+   public webgl: WebGLRenderingContext;
 
    public scaleX: number;
    public scaleY: number;
 
-   public linegroups: lineGroup[];
+   public lines: WebglBaseLine[];
 
 
 
@@ -33,14 +38,14 @@ export class webGLplot {
       canv.width = canv.clientWidth * devicePixelRatio;
       canv.height = canv.clientHeight * devicePixelRatio;
 
-      const gl =  canv.getContext("webgl", {
+      const webgl =  canv.getContext("webgl", {
          antialias: true,
          transparent: false,
       }) as WebGLRenderingContext;
 
-      this.linegroups = [];
+      this.lines = [];
 
-      this.gl = gl;
+      this.webgl = webgl;
 
       this.scaleX = 1;
       this.scaleY = 1;
@@ -49,39 +54,36 @@ export class webGLplot {
 
       // Clear the canvas  //??????????????????
       // gl.clearColor(0.1, 0.1, 0.1, 1.0);
-      gl.clearColor(0.1, 0.1, 0.1, 1.0);
+      webgl.clearColor(0.1, 0.1, 0.1, 1.0);
 
       // Enable the depth test
-      gl.enable(gl.DEPTH_TEST);
+      webgl.enable(webgl.DEPTH_TEST);
 
       // Clear the color and depth buffer
-      gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+      webgl.clear(webgl.COLOR_BUFFER_BIT || webgl.DEPTH_BUFFER_BIT);
 
       // Set the view port
-      gl.viewport(0, 0, canv.width, canv.height);
+      webgl.viewport(0, 0, canv.width, canv.height);
 
     }
 
-   /**
-   * update
-   */
 
    public update() {
-      const gl = this.gl;
+      const webgl = this.webgl;
 
-      this.linegroups.forEach((lg) => {
-         if (lg.visible) {
-            gl.useProgram(lg.prog);
+      this.lines.forEach((line) => {
+         if (line.visible) {
+            webgl.useProgram(line.prog);
 
-            const uscale = gl.getUniformLocation(lg.prog, "uscale");
-            gl.uniformMatrix2fv(uscale, false, new Float32Array([this.scaleX, 0, 0, this.scaleY]));
+            const uscale = webgl.getUniformLocation(line.prog, "uscale");
+            webgl.uniformMatrix2fv(uscale, false, new Float32Array([this.scaleX, 0, 0, this.scaleY]));
 
-            const uColor = gl.getUniformLocation(lg.prog,"uColor");
-            gl.uniform4fv(uColor, [lg.present_color().r, lg.present_color().g, lg.present_color().b, lg.present_color().a]);
+            const uColor = webgl.getUniformLocation(line.prog,"uColor");
+            webgl.uniform4fv(uColor, [line.color.r, line.color.g, line.color.b, line.color.a]);
 
-            gl.bufferData(gl.ARRAY_BUFFER,  lg.xy as ArrayBuffer, gl.STREAM_DRAW);
+            webgl.bufferData(webgl.ARRAY_BUFFER, line.xy as ArrayBuffer, webgl.STREAM_DRAW);
 
-            gl.drawArrays(gl.LINE_STRIP, 0, lg.num_points);
+            webgl.drawArrays(webgl.LINE_STRIP, 0, line.webglNumPoints);
          }
 
       });
@@ -90,15 +92,15 @@ export class webGLplot {
 
    public clear() {
       // Clear the canvas  //??????????????????
-      this.gl.clearColor(0.1, 0.1, 0.1, 1.0);
-      this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
+      this.webgl.clearColor(0.1, 0.1, 0.1, 1.0);
+      this.webgl.clear(this.webgl.COLOR_BUFFER_BIT || this.webgl.DEPTH_BUFFER_BIT);
    }
 
-   public add_line(line: lineGroup) {
+   public add_line(line: WebglBaseLine) {
 
-      line.vbuffer = ( this.gl.createBuffer() as WebGLBuffer);
-      this.gl.bindBuffer(this.gl.ARRAY_BUFFER, line.vbuffer);
-      this.gl.bufferData(this.gl.ARRAY_BUFFER,  line.xy as ArrayBuffer, this.gl.STREAM_DRAW);
+      line.vbuffer = ( this.webgl.createBuffer() as WebGLBuffer);
+      this.webgl.bindBuffer(this.webgl.ARRAY_BUFFER, line.vbuffer);
+      this.webgl.bufferData(this.webgl.ARRAY_BUFFER,  line.xy as ArrayBuffer, this.webgl.STREAM_DRAW);
 
       const vertCode = `
       attribute vec2 coordinates;
@@ -108,13 +110,13 @@ export class webGLplot {
       }`;
 
       // Create a vertex shader object
-      const vertShader = this.gl.createShader(this.gl.VERTEX_SHADER);
+      const vertShader = this.webgl.createShader(this.webgl.VERTEX_SHADER);
 
       // Attach vertex shader source code
-      this.gl.shaderSource( vertShader as WebGLShader, vertCode);
+      this.webgl.shaderSource( vertShader as WebGLShader, vertCode);
 
       // Compile the vertex shader
-      this.gl.compileShader( vertShader as WebGLShader);
+      this.webgl.compileShader( vertShader as WebGLShader);
 
       // Fragment shader source code
       const fragCode = `
@@ -125,25 +127,25 @@ export class webGLplot {
          }`;
 
 
-      const fragShader = this.gl.createShader(this.gl.FRAGMENT_SHADER);
-      this.gl.shaderSource( fragShader as WebGLShader, fragCode);
-      this.gl.compileShader( fragShader as WebGLShader);
-      line.prog = ( this.gl.createProgram() as WebGLProgram);
-      this.gl.attachShader(line.prog,  vertShader as WebGLShader);
-      this.gl.attachShader(line.prog,  fragShader as WebGLShader);
-      this.gl.linkProgram(line.prog);
+      const fragShader = this.webgl.createShader(this.webgl.FRAGMENT_SHADER);
+      this.webgl.shaderSource( fragShader as WebGLShader, fragCode);
+      this.webgl.compileShader( fragShader as WebGLShader);
+      line.prog = ( this.webgl.createProgram() as WebGLProgram);
+      this.webgl.attachShader(line.prog,  vertShader as WebGLShader);
+      this.webgl.attachShader(line.prog,  fragShader as WebGLShader);
+      this.webgl.linkProgram(line.prog);
 
-      this.gl.bindBuffer(this.gl.ARRAY_BUFFER, line.vbuffer);
+      this.webgl.bindBuffer(this.webgl.ARRAY_BUFFER, line.vbuffer);
 
-      line.coord = this.gl.getAttribLocation(line.prog, "coordinates");
-      this.gl.vertexAttribPointer(line.coord, 2, this.gl.FLOAT, false, 0, 0);
-      this.gl.enableVertexAttribArray(line.coord);
+      line.coord = this.webgl.getAttribLocation(line.prog, "coordinates");
+      this.webgl.vertexAttribPointer(line.coord, 2, this.webgl.FLOAT, false, 0, 0);
+      this.webgl.enableVertexAttribArray(line.coord);
 
-      this.linegroups.push(line);
+      this.lines.push(line);
    }
 
    public viewport(a: number, b: number, c: number, d: number) {
-      this.gl.viewport(a, b, c, d);
+      this.webgl.viewport(a, b, c, d);
    }
 
    private combine_xy(x: Float32Array, y: Float32Array): Float32Array {

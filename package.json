@@ -20,8 +20,10 @@
     "@types/stats.js": "^0.17.0",
     "nouislider": "^14.0.2",
     "stats.js": "^0.17.0",
-    "tslint": "^5.20.1",
-    "typescript": "^3.7.2",
     "webgl-plot": "^0.1.6"
+  },
+  "devDependencies": {
+    "tslint": "^5.20.1",
+    "typescript": "^3.7.2"
   }
 }

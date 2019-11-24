@@ -1,15 +1,14 @@
 
 
 import * as noUiSlider from "nouislider";
-import { webGLplot} from "webgl-plot";
-import { color_rgba} from "webgl-plot";
-import { lineGroup } from "webgl-plot";
+
+import { ColorRGBA, WebGLplot, WebglStep} from "./webglplot/webglplot";
 
 import Statsjs = require("stats.js");
 
 
 
-let uNoise = 1;
+const uNoise = 1;
 let randXSize = 10;
 
 
@@ -20,12 +19,12 @@ const devicePixelRatio = window.devicePixelRatio || 1;
 
 const yScale = 1;
 
-let fpsDivder = 1;
+const fpsDivder = 1;
 let fpsCounter = 0;
 
 
-let wglp: webGLplot;
-let line: lineGroup;
+let wglp: WebGLplot;
+let line: WebglStep;
 
 const randXSizeList = [10, 20, 50, 100, 200, 500, 1000, 2000, 5000, 10000, 20000];
 
@@ -37,7 +36,7 @@ const stats = new Statsjs();
 stats.showPanel(0);
 document.body.appendChild( stats.dom );
 
-let numBins = 100;
+const numBins = 100;
 
 createUI();
 
@@ -120,11 +119,11 @@ window.requestAnimationFrame(new_frame);
 
 
 function init() {
-  wglp = new webGLplot(canv);
+  wglp = new WebGLplot(canv);
 
 
-  const color = new color_rgba(1, 1, 0, 0.5);
-  line = new lineGroup(color, numBins);
+  const color = new ColorRGBA(1, 1, 0, 0.5);
+  line = new WebglStep(color, numBins);
   line.linespaceX();
   wglp.add_line(line);
 
