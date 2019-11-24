@@ -1,4 +1,4 @@
-import {ColorRGBA} from "./color_rgba";
+import {ColorRGBA} from "./ColorRGBA";
 
 export class WebglBaseLine {
 

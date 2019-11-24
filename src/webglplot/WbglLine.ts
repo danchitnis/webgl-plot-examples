@@ -1,5 +1,5 @@
 
-import {ColorRGBA} from "./color_rgba";
+import {ColorRGBA} from "./ColorRGBA";
 import {WebglBaseLine} from "./WebglBaseLine";
 
 export class WebglLine extends WebglBaseLine {
@@ -57,22 +57,18 @@ export class WebglLine extends WebglBaseLine {
    }
 
    public shift_add(data: Float32Array) {
-      let shift_size = data.length;
+      const shiftSize = data.length;
 
-      for (let i = 0; i < this.numPoints - shift_size; i++) {
-         this.setY(i, this.getY(i + shift_size));
+      for (let i = 0; i < this.numPoints - shiftSize; i++) {
+         this.setY(i, this.getY(i + shiftSize));
       }
 
-      for (let i = 0; i < shift_size; i++) {
-         this.setY(i + this.numPoints - shift_size, data[i]);
+      for (let i = 0; i < shiftSize; i++) {
+         this.setY(i + this.numPoints - shiftSize, data[i]);
       }
 
    }
 
-
-   public present_color(): ColorRGBA {
-      return this.color;
-   }
 
 
  }

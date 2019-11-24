@@ -3,9 +3,7 @@
  */
 
 import * as noUiSlider from "nouislider";
-import { webGLplot} from "webgl-plot";
-import { color_rgba} from "webgl-plot";
-import { lineGroup } from "webgl-plot";
+import { ColorRGBA, WebglLine, WebGLplot} from "./webglplot/webglplot";
 
 import Statsjs = require("stats.js");
 
@@ -27,10 +25,10 @@ document.body.appendChild( stats.dom );
 
 let line_num = 100;
 let yscale = 1;
-let line_colors: color_rgba[];
-let lines: lineGroup[];
+let line_colors: ColorRGBA[];
+let lines: WebglLine[];
 
-let wglp: webGLplot;
+let wglp: WebGLplot;
 
 let fps_divder = 1;
 let fps_counter = 0;
@@ -120,11 +118,11 @@ function init() {
   lines = [];
 
   for (let i = 0; i < line_num; i++) {
-    line_colors.push(new color_rgba(Math.random(), Math.random(), Math.random(), 0.5));
-    lines.push(new lineGroup(line_colors[i], num));
+    line_colors.push(new ColorRGBA(Math.random(), Math.random(), Math.random(), 0.5));
+    lines.push(new WebglLine(line_colors[i], num));
   }
 
-  wglp = new webGLplot(canv);
+  wglp = new WebGLplot(canv);
 
 
   lines.forEach((line) => {

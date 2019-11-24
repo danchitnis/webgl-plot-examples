@@ -1,5 +1,5 @@
 
-import {ColorRGBA} from "./color_rgba";
+import {ColorRGBA} from "./ColorRGBA";
 import {WebglBaseLine} from "./WebglBaseLine";
 
 export class WebglStep extends WebglBaseLine {

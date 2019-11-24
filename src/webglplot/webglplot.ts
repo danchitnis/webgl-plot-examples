@@ -6,7 +6,7 @@
  * https://www.tutorialspoint.com/webgl/webgl_modes_of_drawing.htm
  */
 
-import {ColorRGBA} from "./color_rgba";
+import {ColorRGBA} from "./ColorRGBA";
 import {WebglLine} from "./WbglLine";
 import {WebglStep} from "./WbglStep";
 import {WebglBaseLine} from "./WebglBaseLine";
@@ -146,17 +146,6 @@ export class WebGLplot {
 
    public viewport(a: number, b: number, c: number, d: number) {
       this.webgl.viewport(a, b, c, d);
-   }
-
-   private combine_xy(x: Float32Array, y: Float32Array): Float32Array {
-      const xy = new Float32Array(2 * y.length);
-      let j = 0;
-      for (let i = 0; i < y.length; i++) {
-         xy[j] = x[i];
-         xy[j + 1] = y[i];
-         j = j + 2;
-      }
-      return xy;
    }
 
 

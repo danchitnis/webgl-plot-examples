@@ -1,9 +1,7 @@
 
 
 import * as noUiSlider from "nouislider";
-import { webGLplot} from "webgl-plot";
-import { color_rgba} from "webgl-plot";
-import { lineGroup } from "webgl-plot";
+import { ColorRGBA, WebglLine, WebGLplot} from "./webglplot/webglplot";
 
 import Statsjs = require("stats.js");
 
@@ -24,7 +22,8 @@ let fps_divder = 1;
 let fps_counter = 0;
 
 
-let wglp: webGLplot;
+let wglp: WebGLplot;
+let lines: WebglLine[];
 
 let line_num_list = [1, 2, 5, 10, 20, 50, 100, 200, 500, 1000, 2000, 5000];
 
@@ -56,7 +55,7 @@ function new_frame() {
 
     stats.begin();
 
-    wglp.linegroups.forEach((line) => {
+    lines.forEach((line) => {
       const k = 2 * Math.random() - 1;
       line.constY(k);
 
@@ -83,14 +82,20 @@ window.requestAnimationFrame(new_frame);
 
 
 function init() {
-  wglp = new webGLplot(canv);
+  lines = [];
 
   for (let i = 0; i < line_num; i++) {
-    const color = new color_rgba(Math.random(), Math.random(), Math.random(), 0.5);
-    const line = new lineGroup(color, num);
+    const color = new ColorRGBA(Math.random(), Math.random(), Math.random(), 1);
+    lines.push(new WebglLine(color, num));
+  }
+
+  wglp = new WebGLplot(canv);
+
+
+  lines.forEach((line) => {
     line.linespaceX();
     wglp.add_line(line);
-  }
+  });
 }
 
 

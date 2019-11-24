@@ -1,19 +1,7 @@
 const path = require('path');
 
-module.exports = [{
 
-  entry: './dist/histogram.js',
-  mode: 'development',
-  output: {
-    filename: 'histogram.js',
-    path: path.resolve(__dirname, 'prod')
-  }
-}
-];
-
-
-/**
- * module.exports = [{
+  module.exports = [{
   entry: './dist/script.js',
   mode: 'development',
   output: {
@@ -38,7 +26,3 @@ module.exports = [{
   }
 }
 ];
-
- * 
- * 
- */

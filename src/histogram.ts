@@ -172,7 +172,7 @@ function createUI() {
   sliderYNoise =  document.createElement("div") as unknown as noUiSlider.Instance;
   sliderYNoise.style.width = "100%";
   noUiSlider.create(sliderYNoise, {
-    start: [0],
+    start: [3],
     step: 1,
     connect: [true, false],
     // tooltips: [false, wNumb({decimals: 1}), true],
