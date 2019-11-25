@@ -1,5 +1,5 @@
 
-export class color_rgba {
+export class ColorRGBA {
    public r: number;
    public g: number;
    public b: number;

@@ -11,5 +11,7 @@
   },
   "include": [
     "src/**/*"
+    //"src/histogram.ts",
+    //"src/webglplot/*"
   ]
 }

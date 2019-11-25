@@ -1,6 +1,7 @@
 const path = require('path');
 
-module.exports = [{
+
+  module.exports = [{
   entry: './dist/script.js',
   mode: 'development',
   output: {
