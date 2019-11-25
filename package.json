@@ -18,9 +18,9 @@
   "dependencies": {
     "@types/nouislider": "^9.0.5",
     "@types/stats.js": "^0.17.0",
-    "nouislider": "^14.0.2",
+    "nouislider": "^14.0.3",
     "stats.js": "^0.17.0",
-    "webgl-plot": "^0.1.6"
+    "webgl-plot": "^0.1.9"
   },
   "devDependencies": {
     "tslint": "^5.20.1",

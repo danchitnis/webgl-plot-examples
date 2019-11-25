@@ -3,8 +3,7 @@
 # WebGL-plot-examples
 Examples for the WebGL-plot package
 
-## prerequisite
+## build
 ```bash
-npm install -g tsc
-npm install -g webpack
+npm i
 ```
