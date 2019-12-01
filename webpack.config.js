@@ -10,10 +10,10 @@ const path = require('path');
   }
 },
 {
-  entry: './dist/lines.js',
+  entry: './dist/sine.js',
   mode: 'development',
   output: {
-    filename: 'lines.js',
+    filename: 'sine.js',
     path: path.resolve(__dirname, 'prod')
   }
 },
