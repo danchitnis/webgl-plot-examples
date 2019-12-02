@@ -10,6 +10,13 @@ import Statsjs = require("stats.js");
 
 const uNoise = 1;
 let randXSize = 10;
+let maxY = 0;
+let xmin = 0;
+let xmax = 100;
+let numBins = 100;
+let Xmin = 25;
+let Xmax = 75;
+let Xskew = 1;
 
 
 const canv =  document.getElementById("my_canvas") as HTMLCanvasElement;
@@ -17,56 +24,40 @@ const canv =  document.getElementById("my_canvas") as HTMLCanvasElement;
 const devicePixelRatio = window.devicePixelRatio || 1;
 // let num = Math.round(canv.clientWidth * devicePixelRatio);
 
-const yScale = 1;
+let scaleY = 1;
 
-const fpsDivder = 1;
-let fpsCounter = 0;
 
+let X: Float32Array;
+let xbins: Float32Array;
+let ybins: Float32Array;
 
 let wglp: WebGLplot;
 let line: WebglStep;
 
-const randXSizeList = [10, 20, 50, 100, 200, 500, 1000, 2000, 5000, 10000, 20000];
+const randXSizeList = [10, 20, 50, 100, 200, 500, 1000, 2000, 5000, 10000, 20000, 50000, 100000];
+const binSizeNumber = [2, 5, 10, 20, 50, 100, 200, 500, 1000];
 
-let sliderYNoise: noUiSlider.Instance;
+let sliderXsize: noUiSlider.Instance;
+let sliderXrange: noUiSlider.Instance;
+let sliderYScale: noUiSlider.Instance;
+let sliderBinNum: noUiSlider.Instance;
+let sliderSkew: noUiSlider.Instance;
 
-let displayYNoise: HTMLSpanElement;
+let displayXsize: HTMLSpanElement;
+let displayXrange: HTMLSpanElement;
+let displayYScale: HTMLSpanElement;
+let displayBinNum: HTMLSpanElement;
+let displaySkew: HTMLSpanElement;
 
 const stats = new Statsjs();
 stats.showPanel(0);
 document.body.appendChild( stats.dom );
 
-const numBins = 100;
+
 
 createUI();
 
 init();
-
-let X: Float32Array;
-
-// console.log(X);
-
-const xbins = new Float32Array(numBins);
-for (let i = 0; i < xbins.length; i++) {
-  xbins[i] = 0;
-
-}
-
-/*for (let i = 0; i < X.length; i++) {
-  const bin = Math.floor(X[i]);
-  xbins[bin]++;
-}*/
-
-console.log(xbins);
-
-
-/*for (let i = 0; i < xbins.length; i++) {
-  line.setY(i, xbins[i] / randXSize);
-}*/
-
-wglp.update();
-
-
 
 let resizeId: number;
 window.addEventListener("resize", () => {
@@ -78,38 +69,15 @@ window.addEventListener("resize", () => {
 
 function new_frame() {
 
+  stats.begin();
 
-  if (fpsCounter === 0) {
+  update();
+  wglp.scaleY = scaleY;
+  wglp.update();
 
-    stats.begin();
+  stats.end();
 
-    X = new Float32Array(randXSize);
-    randn_array(X);
 
-    for (let i = 0; i < xbins.length; i++) {
-      xbins[i] = 0;
-
-    }
-
-    for (let i = 0; i < X.length; i++) {
-      const bin = Math.floor(X[i]);
-      xbins[bin]++;
-    }
-    // Normalize ?
-    for (let i = 0; i < xbins.length; i++) {
-      line.setY(i, (xbins[i] / randXSize) * 10);
-    }
-    wglp.update();
-
-    stats.end();
-
-  }
-
-  fpsCounter++;
-
-  if (fpsCounter >= fpsDivder) {
-    fpsCounter = 0;
-  }
 
   window.requestAnimationFrame(new_frame);
 }
@@ -120,14 +88,55 @@ window.requestAnimationFrame(new_frame);
 
 function init() {
   wglp = new WebGLplot(canv);
+  xbins = new Float32Array(numBins);
+  ybins = new Float32Array(numBins);
 
+  for (let i = 0; i < xbins.length; i++) {
+    xbins[i] = i * (xmax - xmin) / numBins + xmin;
+  }
 
   const color = new ColorRGBA(1, 1, 0, 0.5);
   line = new WebglStep(color, numBins);
   line.linespaceX();
   wglp.add_line(line);
-
 }
+
+
+
+function update() {
+
+  X = new Float32Array(randXSize);
+  randn_array(X);
+
+  for (let i = 0; i < ybins.length; i++) {
+    ybins[i] = 0;
+  }
+
+  for (let i = 0; i < X.length; i++) {
+    const bin = (X[i]);
+
+    if (bin < xmin) {
+      ybins[0]++;
+    } else {
+      if (bin > xmax) {
+        ybins[numBins-1]++;
+      } else {
+        const index = numBins * (bin - xmin) / (xmax - xmin);
+        ybins[Math.floor(index)]++;
+      }
+
+    }
+  }
+
+  // Normalize ?
+  for (let i = 0; i < ybins.length; i++) {
+    const y = (ybins[i] / randXSize) * numBins;
+    line.setY(i, y * 0.01);
+  }
+}
+
+
+
 
 /** https://stackoverflow.com/questions/25582882/javascript-math-random-normal-distribution-gaussian-bell-curve */
 function randn_bm(min: number, max: number, skew: number): number {
@@ -148,7 +157,7 @@ function randn_bm(min: number, max: number, skew: number): number {
 
 function randn_array(array: Float32Array) {
   for (let i = 0; i < array.length; i++) {
-    array[i] = randn_bm(0, numBins, 1);
+    array[i] = randn_bm(Xmin, Xmax, Xskew);
   }
 }
 
@@ -160,7 +169,6 @@ function randn_array(array: Float32Array) {
 
 function doneResizing() {
   wglp.viewport(0, 0, canv.width, canv.height);
-  console.log(window.innerWidth);
 }
 
 
@@ -168,10 +176,10 @@ function doneResizing() {
 function createUI() {
   const ui =  document.getElementById("ui") as HTMLDivElement;
 
-  // ******slider lines */
-  sliderYNoise =  document.createElement("div") as unknown as noUiSlider.Instance;
-  sliderYNoise.style.width = "100%";
-  noUiSlider.create(sliderYNoise, {
+  // ******slider X size */
+  sliderXsize =  document.createElement("div") as unknown as noUiSlider.Instance;
+  sliderXsize.style.width = "100%";
+  noUiSlider.create(sliderXsize, {
     start: [3],
     step: 1,
     connect: [true, false],
@@ -182,19 +190,123 @@ function createUI() {
     },
   });
 
-  displayYNoise = document.createElement("span");
-  ui.appendChild(sliderYNoise);
-  ui.appendChild(displayYNoise);
+  displayXsize = document.createElement("span");
+  ui.appendChild(sliderXsize);
+  ui.appendChild(displayXsize);
   ui.appendChild(document.createElement("p"));
 
-  sliderYNoise.noUiSlider.on("update", (values, handle) => {
+  sliderXsize.noUiSlider.on("update", (values, handle) => {
     randXSize = randXSizeList[parseFloat(values[handle])];
-    displayYNoise.innerHTML = `Line number: ${randXSize}`;
+    displayXsize.innerHTML = `X random size: ${randXSize}`;
   });
 
-  sliderYNoise.noUiSlider.on("set", (values, handle) => {
+  sliderXsize.noUiSlider.on("set", (values, handle) => {
     init();
   });
+
+
+  // ************ slider X range
+  sliderXrange =  document.createElement("div") as unknown as noUiSlider.Instance;
+  sliderXrange.style.width = "100%";
+  noUiSlider.create(sliderXrange, {
+    start: [40, 60],
+    connect: true,
+    // tooltips: [false, wNumb({decimals: 1}), true],
+    range: {
+      min: 0,
+      max: 100,
+    },
+  });
+
+  displayXrange = document.createElement("span");
+  ui.appendChild(sliderXrange);
+  ui.appendChild(displayXrange);
+  ui.appendChild(document.createElement("p"));
+
+  sliderXrange.noUiSlider.on("update", (values, handle) => {
+    Xmin = parseFloat(values[0]);
+    Xmax = parseFloat(values[1]);
+    displayXrange.innerHTML = `X range is between ${Xmin} and ${Xmax}`;
+  });
+
+
+  // ******slider Y Scale */
+  sliderYScale =  document.createElement("div") as unknown as noUiSlider.Instance;
+  sliderYScale.style.width = "100%";
+  noUiSlider.create(sliderYScale, {
+    start: [1],
+    connect: [true, false],
+    // tooltips: [false, wNumb({decimals: 1}), true],
+    range: {
+      min: 0.01,
+      max: 10,
+    },
+  });
+
+  displayYScale = document.createElement("span");
+  ui.appendChild(sliderYScale);
+  ui.appendChild(displayYScale);
+  ui.appendChild(document.createElement("p"));
+
+  sliderYScale.noUiSlider.on("update", (values, handle) => {
+    scaleY = parseFloat(values[handle]);
+    displayYScale.innerHTML = `Y scale = ${scaleY}`;
+  });
+
+
+  // ******slider Bin size */
+  sliderBinNum =  document.createElement("div") as unknown as noUiSlider.Instance;
+  sliderBinNum.style.width = "100%";
+  noUiSlider.create(sliderBinNum, {
+    start: [5],
+    step: 1,
+    connect: [true, false],
+    // tooltips: [false, wNumb({decimals: 1}), true],
+    range: {
+      min: 0,
+      max: binSizeNumber.length - 1,
+    },
+  });
+
+  displayBinNum = document.createElement("span");
+  ui.appendChild(sliderBinNum);
+  ui.appendChild(displayBinNum);
+  ui.appendChild(document.createElement("p"));
+
+  sliderBinNum.noUiSlider.on("update", (values, handle) => {
+    displayBinNum.innerHTML = `Number of bins = ${binSizeNumber[parseFloat(values[handle])]}`;
+  });
+
+  sliderBinNum.noUiSlider.on("set", (values, handle) => {
+    numBins = binSizeNumber[parseFloat(values[handle])];
+    init();
+  });
+
+
+  // ******slider skew */
+  sliderSkew =  document.createElement("div") as unknown as noUiSlider.Instance;
+  sliderSkew.style.width = "100%";
+  noUiSlider.create(sliderSkew, {
+    start: [1],
+    connect: [true, false],
+    // tooltips: [false, wNumb({decimals: 1}), true],
+    range: {
+      min: 0.1,
+      max: 10,
+    },
+  });
+
+  displaySkew = document.createElement("span");
+  ui.appendChild(sliderSkew);
+  ui.appendChild(displaySkew);
+  ui.appendChild(document.createElement("p"));
+
+  sliderSkew.noUiSlider.on("update", (values, handle) => {
+    Xskew = parseFloat(values[handle]);
+    displaySkew.innerHTML = `Skew is = ${Xskew}`;
+  });
+
+
 
 
 }
