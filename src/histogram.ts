@@ -2,7 +2,7 @@
 
 import * as noUiSlider from "nouislider";
 
-import { ColorRGBA, WebGLplot, WebglStep} from "webgl-plot";
+import { ColorRGBA, WebGLplot, WebglStep} from "./webglplot/webglplot";
 
 import Statsjs = require("stats.js");
 
@@ -91,6 +91,8 @@ function init() {
   xbins = new Float32Array(numBins);
   ybins = new Float32Array(numBins);
 
+  wglp.offsetY = -1;
+
   for (let i = 0; i < xbins.length; i++) {
     xbins[i] = i * (xmax - xmin) / numBins + xmin;
   }
@@ -131,7 +133,7 @@ function update() {
   // Normalize ?
   for (let i = 0; i < ybins.length; i++) {
     const y = (ybins[i] / randXSize) * numBins;
-    line.setY(i, y * 0.01);
+    line.setY(i, y * 0.02);
   }
 }
 
