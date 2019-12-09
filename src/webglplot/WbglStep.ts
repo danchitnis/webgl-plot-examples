@@ -34,11 +34,11 @@ export class WebglStep extends WebglBaseLine {
       return this.xy[index * 4 + 1];
    }
 
-   public linespaceX() {
+   public linespaceX(start: number, stepsize: number) {
       for (let i = 0; i < this.numPoints; i++) {
          // set x to -num/2:1:+num/2
-         this.xy[i * 4] = 2 * (i / this.numPoints) - 1;
-         this.xy[i * 4 + 2] = 2 * ((i+1) / this.numPoints) - 1;
+         this.xy[i * 4] = start + 2 * (i *  stepsize / this.numPoints) - 1;
+         this.xy[i * 4 + 2] = start +  2 * ((i * stepsize + 1) / this.numPoints) - 1;
       }
    }
 

@@ -87,7 +87,7 @@ window.requestAnimationFrame(new_frame);
 
 
 function init() {
-  wglp = new WebGLplot(canv);
+  wglp = new WebGLplot(canv, new ColorRGBA(0.1, 0.1, 0.1, 1));
   xbins = new Float32Array(numBins);
   ybins = new Float32Array(numBins);
 
@@ -99,7 +99,7 @@ function init() {
 
   const color = new ColorRGBA(1, 1, 0, 0.5);
   line = new WebglStep(color, numBins);
-  line.linespaceX();
+  line.linespaceX(0, 1);
   wglp.add_line(line);
 }
 

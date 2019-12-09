@@ -42,10 +42,10 @@ export class WebglLine extends WebglBaseLine {
       return this.xy[index * 2 + 1];
    }
 
-   public linespaceX() {
+   public linespaceX(start: number, stepsize: number) {
       for (let i = 0; i < this.numPoints; i++) {
          // set x to -num/2:1:+num/2
-         this.setX(i, 2 * i / this.numPoints - 1);
+         this.setX(i, start + 2 * stepsize * i / this.numPoints - 1);
       }
    }
 

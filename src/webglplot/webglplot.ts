@@ -24,6 +24,7 @@ export class WebGLplot {
    public offsetY: number;
 
    public lines: WebglBaseLine[];
+   public backgroundColor: ColorRGBA;
 
 
 
@@ -32,7 +33,7 @@ export class WebGLplot {
     * @param canv
     * @param array
     */
-   constructor(canv: HTMLCanvasElement) {
+   constructor(canv: HTMLCanvasElement, backgroundColor: ColorRGBA) {
 
       const devicePixelRatio = window.devicePixelRatio || 1;
 
@@ -54,10 +55,12 @@ export class WebGLplot {
       this.offsetX = 0;
       this.offsetY = 0;
 
+      this.backgroundColor = backgroundColor;
 
-      // Clear the canvas  //??????????????????
-      // gl.clearColor(0.1, 0.1, 0.1, 1.0);
-      webgl.clearColor(0.1, 0.1, 0.1, 1.0);
+
+
+      // Clear the canvas
+      webgl.clearColor(this.backgroundColor.r, this.backgroundColor.g, this.backgroundColor.b, this.backgroundColor.a);
 
       // Enable the depth test
       webgl.enable(webgl.DEPTH_TEST);
