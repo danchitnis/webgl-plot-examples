@@ -2,10 +2,10 @@ const path = require('path');
 
 
   module.exports = [{
-  entry: './dist/script.js',
+  entry: './dist/randomness.js',
   mode: 'development',
   output: {
-    filename: 'index.js',
+    filename: 'randomness.js',
     path: path.resolve(__dirname, 'prod')
   }
 },

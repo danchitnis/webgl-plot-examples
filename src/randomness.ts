@@ -3,7 +3,7 @@
  */
 
 import * as noUiSlider from "nouislider";
-import { ColorRGBA, WebglLine, WebGLplot} from "webgl-plot";
+import { ColorRGBA, WebglLine, WebGLplot} from "./webglplot/webglplot";
 
 import Statsjs = require("stats.js");
 
@@ -14,8 +14,8 @@ const canv =  document.getElementById("my_canvas") as HTMLCanvasElement;
 
 
 const devicePixelRatio = window.devicePixelRatio || 1;
-const num = Math.round(canv.clientWidth * devicePixelRatio);
-// let num=1000;
+const numX = Math.round(canv.clientWidth * devicePixelRatio);
+
 
 const stats = new Statsjs();
 stats.showPanel(0);
@@ -25,7 +25,6 @@ document.body.appendChild( stats.dom );
 
 let numLines = 100;
 let scaleY = 1;
-let lineColors: ColorRGBA[];
 let lines: WebglLine[];
 
 let wglp: WebGLplot;
@@ -34,7 +33,7 @@ let fpsDivder = 1;
 let fpsCounter = 0;
 
 // new data per frame
-let new_num = 1;
+let newDataSize = 1;
 
 
 const lineNumList = [1, 2, 5, 10, 20, 50, 100, 200, 500, 1000, 2000, 5000];
@@ -72,7 +71,7 @@ function new_frame() {
   if (fpsCounter === 0) {
     stats.begin();
 
-    plot(new_num);
+    plot(newDataSize);
 
     wglp.scaleY = scaleY;
     wglp.update();
@@ -96,7 +95,7 @@ window.requestAnimationFrame(new_frame);
 function plot(shiftSize: number) {
 
   lines.forEach((line) => {
-    const yArray = random_walk(line.getY(num - 1), shiftSize);
+    const yArray = random_walk(line.getY(numX - 1), shiftSize);
     line.shift_add(yArray);
   });
 
@@ -114,15 +113,15 @@ function random_walk(initial: number, walkSize: number): Float32Array {
 
 
 function init() {
-  lineColors = [];
+
   lines = [];
 
   for (let i = 0; i < numLines; i++) {
     const color = new ColorRGBA(Math.random(), Math.random(), Math.random(), 0.5);
-    lines.push(new WebglLine(color, num));
+    lines.push(new WebglLine(color, numX));
   }
 
-  wglp = new WebGLplot(canv);
+  wglp = new WebGLplot(canv, new ColorRGBA(0.1, 0.1, 0.1, 1));
 
 
   lines.forEach((line) => {
@@ -131,13 +130,11 @@ function init() {
 
 
 
-  console.log(num);
 
-
-  for (let i = 0; i < num; i++) {
+  for (let i = 0; i < numX; i++) {
     // set x to -num/2:1:+num/2
     lines.forEach((line) => {
-      line.linespaceX();
+      line.linespaceX(-1, 2  / numX);
     });
   }
 
@@ -145,7 +142,6 @@ function init() {
 
 function doneResizing() {
   wglp.viewport(0, 0, canv.width, canv.height);
-  console.log(window.innerWidth);
 }
 
 
@@ -227,8 +223,8 @@ function createUI() {
   ui.appendChild(document.createElement("p"));
 
   sliderNewData.noUiSlider.on("update", (values, handle) => {
-    new_num = parseFloat(values[handle]);
-    displayNewDataSize.innerHTML = `New data per frame = ${new_num}`;
+    newDataSize = parseFloat(values[handle]);
+    displayNewDataSize.innerHTML = `New data per frame = ${newDataSize}`;
   });
 
   /**** slider fps */

@@ -13,10 +13,10 @@ export class WebglLine extends WebglBaseLine {
 
 
 
-   constructor(c: ColorRGBA, num: number) {
+   constructor(c: ColorRGBA, numPoints: number) {
       super();
-      this.webglNumPoints = num;
-      this.numPoints = num;
+      this.webglNumPoints = numPoints;
+      this.numPoints = numPoints;
       this.color = c;
       this.intenisty = 1;
       this.xy = new Float32Array(2 * this.webglNumPoints);
@@ -45,7 +45,7 @@ export class WebglLine extends WebglBaseLine {
    public linespaceX(start: number, stepsize: number) {
       for (let i = 0; i < this.numPoints; i++) {
          // set x to -num/2:1:+num/2
-         this.setX(i, start + 2 * stepsize * i / this.numPoints - 1);
+         this.setX(i, start + stepsize * i);
       }
    }
 
