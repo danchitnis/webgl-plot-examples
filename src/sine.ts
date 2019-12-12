@@ -16,8 +16,11 @@ let freq = 0.01;
 
 const canv =  document.getElementById("my_canvas") as HTMLCanvasElement;
 
-const devicePixelRatio = window.devicePixelRatio || 1;
-const num = Math.round(canv.clientWidth * devicePixelRatio);
+
+
+let numX: number;
+
+
 
 const scaleY = 1;
 
@@ -73,18 +76,26 @@ window.requestAnimationFrame(new_frame);
 
 
 function init() {
+
+  const devicePixelRatio = window.devicePixelRatio || 1;
+  numX = Math.round(canv.clientWidth * devicePixelRatio);
+
+
   lines = [];
 
   for (let i = 0; i < numLines; i++) {
     const color = new ColorRGBA(Math.random(), Math.random(), Math.random(), 1);
-    lines.push(new WebglLine(color, num));
+    lines.push(new WebglLine(color, numX));
   }
 
-  wglp = new WebGLplot(canv);
+  wglp = new WebGLplot(canv, new ColorRGBA(0.1, 0.1, 0.1, 1));
+
+  // wglp.offsetX = -1;
+  // wglp.scaleX = 2;
 
 
   lines.forEach((line) => {
-    line.linespaceX();
+    line.linespaceX(-1, 2  / numX);
     wglp.add_line(line);
   });
 }

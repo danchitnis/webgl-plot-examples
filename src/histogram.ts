@@ -8,11 +8,10 @@ import Statsjs = require("stats.js");
 
 
 
-const uNoise = 1;
 let randXSize = 10;
 let maxY = 0;
-let xmin = 0;
-let xmax = 100;
+const xmin = 0;
+const xmax = 100;
 let numBins = 100;
 let Xmin = 25;
 let Xmax = 75;
@@ -22,7 +21,7 @@ let Xskew = 1;
 const canv =  document.getElementById("my_canvas") as HTMLCanvasElement;
 
 const devicePixelRatio = window.devicePixelRatio || 1;
-// let num = Math.round(canv.clientWidth * devicePixelRatio);
+
 
 let scaleY = 1;
 
@@ -87,9 +86,13 @@ window.requestAnimationFrame(new_frame);
 
 
 function init() {
-  wglp = new WebGLplot(canv);
+  wglp = new WebGLplot(canv, new ColorRGBA(0.1, 0.1, 0.1, 1));
   xbins = new Float32Array(numBins);
   ybins = new Float32Array(numBins);
+
+  wglp.offsetY = -1;
+  wglp.offsetX = -1;
+  wglp.scaleX = 2 / numBins;
 
   for (let i = 0; i < xbins.length; i++) {
     xbins[i] = i * (xmax - xmin) / numBins + xmin;
@@ -97,7 +100,9 @@ function init() {
 
   const color = new ColorRGBA(1, 1, 0, 0.5);
   line = new WebglStep(color, numBins);
-  line.linespaceX();
+  // line.linespaceX(-1, 2 / numBins);
+  // instead of line above we are applying offsetX and scaleX
+  line.linespaceX(0, 1);
   wglp.add_line(line);
 }
 
@@ -131,7 +136,7 @@ function update() {
   // Normalize ?
   for (let i = 0; i < ybins.length; i++) {
     const y = (ybins[i] / randXSize) * numBins;
-    line.setY(i, y * 0.01);
+    line.setY(i, y * 0.02);
   }
 }
 
