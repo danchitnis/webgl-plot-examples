@@ -57,7 +57,7 @@ window.addEventListener("resize", () => {
 
 
 
-function new_frame() {
+function newFrame(): void {
 
   stats.begin();
 
@@ -68,14 +68,14 @@ function new_frame() {
 
   stats.end();
 
-  window.requestAnimationFrame(new_frame);
+  window.requestAnimationFrame(newFrame);
 }
 
-window.requestAnimationFrame(new_frame);
+window.requestAnimationFrame(newFrame);
 
 
 
-function init() {
+function init(): void {
 
   const devicePixelRatio = window.devicePixelRatio || 1;
   numX = Math.round(canv.clientWidth * devicePixelRatio);
@@ -100,7 +100,7 @@ function init() {
   });
 }
 
-function update() {
+function update(): void {
 
   for (let j = 0; j < lines.length; j++) {
     for (let i = 0; i < lines[j].numPoints; i++) {
@@ -112,13 +112,13 @@ function update() {
 }
 
 
-function doneResizing() {
+function doneResizing(): void {
   wglp.viewport(0, 0, canv.width, canv.height);
 }
 
 
 
-function createUI() {
+function createUI(): void {
   const ui =  document.getElementById("ui") as HTMLDivElement;
 
   // ******slider lines */
@@ -145,7 +145,7 @@ function createUI() {
     displayLines.innerHTML = `Line number: ${numLines}`;
   });
 
-  sliderLines.noUiSlider.on("set", (values, handle) => {
+  sliderLines.noUiSlider.on("set", () => {
     init();
   });
 

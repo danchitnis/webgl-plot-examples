@@ -66,7 +66,7 @@ window.addEventListener("resize", () => {
 
 
 
-function new_frame() {
+function newFrame(): void {
 
   stats.begin();
 
@@ -78,14 +78,14 @@ function new_frame() {
 
 
 
-  window.requestAnimationFrame(new_frame);
+  window.requestAnimationFrame(newFrame);
 }
 
-window.requestAnimationFrame(new_frame);
+window.requestAnimationFrame(newFrame);
 
 
 
-function init() {
+function init(): void {
   wglp = new WebGLplot(canv, new ColorRGBA(0.1, 0.1, 0.1, 1));
   xbins = new Float32Array(numBins);
   ybins = new Float32Array(numBins);
@@ -108,10 +108,10 @@ function init() {
 
 
 
-function update() {
+function update(): void {
 
   X = new Float32Array(randXSize);
-  randn_array(X);
+  randnArray(X);
 
   for (let i = 0; i < ybins.length; i++) {
     ybins[i] = 0;
@@ -144,7 +144,7 @@ function update() {
 
 
 /** https://stackoverflow.com/questions/25582882/javascript-math-random-normal-distribution-gaussian-bell-curve */
-function randn_bm(min: number, max: number, skew: number): number {
+function randnBM(min: number, max: number, skew: number): number {
   let u = 0;
   let v = 0;
   while (u === 0) { u = Math.random(); } // Converting [0,1) to (0,1)
@@ -152,7 +152,7 @@ function randn_bm(min: number, max: number, skew: number): number {
   let num = Math.sqrt( -2.0 * Math.log( u ) ) * Math.cos( 2.0 * Math.PI * v );
 
   num = num / 10.0 + 0.5; // Translate to 0 -> 1
-  if (num > 1 || num < 0) { num = randn_bm(min, max, skew); } // resample between 0 and 1 if out of range
+  if (num > 1 || num < 0) { num = randnBM(min, max, skew); } // resample between 0 and 1 if out of range
   num = Math.pow(num, skew); // Skew
   num *= max - min; // Stretch to fill range
   num += min; // offset to min
@@ -160,9 +160,9 @@ function randn_bm(min: number, max: number, skew: number): number {
 }
 
 
-function randn_array(array: Float32Array) {
+function randnArray(array: Float32Array): void {
   for (let i = 0; i < array.length; i++) {
-    array[i] = randn_bm(Xmin, Xmax, Xskew);
+    array[i] = randnBM(Xmin, Xmax, Xskew);
   }
 }
 
@@ -172,13 +172,13 @@ function randn_array(array: Float32Array) {
 
 
 
-function doneResizing() {
+function doneResizing(): void {
   wglp.viewport(0, 0, canv.width, canv.height);
 }
 
 
 
-function createUI() {
+function createUI(): void {
   const ui =  document.getElementById("ui") as HTMLDivElement;
 
   // ******slider X size */
@@ -205,7 +205,7 @@ function createUI() {
     displayXsize.innerHTML = `X random size: ${randXSize}`;
   });
 
-  sliderXsize.noUiSlider.on("set", (values, handle) => {
+  sliderXsize.noUiSlider.on("set", () => {
     init();
   });
 
@@ -228,7 +228,7 @@ function createUI() {
   ui.appendChild(displayXrange);
   ui.appendChild(document.createElement("p"));
 
-  sliderXrange.noUiSlider.on("update", (values, handle) => {
+  sliderXrange.noUiSlider.on("update", (values) => {
     Xmin = parseFloat(values[0]);
     Xmax = parseFloat(values[1]);
     displayXrange.innerHTML = `X range is between ${Xmin} and ${Xmax}`;

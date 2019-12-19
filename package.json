@@ -18,14 +18,16 @@
   "dependencies": {
     "@types/nouislider": "^9.0.5",
     "@types/stats.js": "^0.17.0",
-    "nouislider": "^14.0.3",
+    "nouislider": "^14.1.1",
     "stats.js": "^0.17.0",
     "webgl-plot": "^0.2.1"
   },
   "devDependencies": {
-    "tslint": "^5.20.1",
+    "@typescript-eslint/eslint-plugin": "^2.12.0",
+    "@typescript-eslint/parser": "^2.12.0",
+    "eslint": "^6.7.2",
     "typescript": "^3.7.3",
-    "webpack": "^4.41.2",
+    "webpack": "^4.41.3",
     "webpack-cli": "^3.3.10"
   }
 }
