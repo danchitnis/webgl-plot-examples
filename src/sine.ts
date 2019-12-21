@@ -1,7 +1,7 @@
 
 
 import * as noUiSlider from "nouislider";
-import { ColorRGBA, WebglLine, WebGLplot} from "webgl-plot";
+import { ColorRGBA, WebglLine, WebGLplot} from "./webglplot/webglplot";
 
 import Statsjs = require("stats.js");
 
@@ -96,7 +96,7 @@ function init(): void {
 
   lines.forEach((line) => {
     line.linespaceX(-1, 2  / numX);
-    wglp.add_line(line);
+    wglp.addLine(line);
   });
 }
 

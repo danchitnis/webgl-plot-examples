@@ -5,7 +5,7 @@
  
 
 import * as noUiSlider from "nouislider";
-import { ColorRGBA, WebglLine, WebGLplot} from "webgl-plot";
+import { ColorRGBA, WebglLine, WebGLplot} from "./webglplot/webglplot";
 
 import Statsjs = require("stats.js");
 
@@ -98,7 +98,7 @@ function plot(shiftSize: number): void {
 
   lines.forEach((line) => {
     const yArray = randomWalk(line.getY(numX - 1), shiftSize);
-    line.shift_add(yArray);
+    line.shiftAdd(yArray);
   });
 
 }
@@ -127,7 +127,7 @@ function init(): void {
 
 
   lines.forEach((line) => {
-    wglp.add_line(line);
+    wglp.addLine(line);
   });
 
 

@@ -2,14 +2,14 @@
 
 import * as noUiSlider from "nouislider";
 
-import { ColorRGBA, WebGLplot, WebglStep} from "webgl-plot";
+import { ColorRGBA, WebGLplot, WebglStep} from "./webglplot/webglplot";
 
 import Statsjs = require("stats.js");
 
 
 
 let randXSize = 10;
-let maxY = 0;
+//let maxY = 0;
 const xmin = 0;
 const xmax = 100;
 let numBins = 100;
@@ -103,7 +103,7 @@ function init(): void {
   // line.linespaceX(-1, 2 / numBins);
   // instead of line above we are applying offsetX and scaleX
   line.linespaceX(0, 1);
-  wglp.add_line(line);
+  wglp.addLine(line);
 }
 
 
