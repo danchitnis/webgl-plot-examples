@@ -2,6 +2,8 @@
  * Author Danial Chitnis 2019
  */
 
+ 
+
 import * as noUiSlider from "nouislider";
 import { ColorRGBA, WebglLine, WebGLplot} from "webgl-plot";
 
@@ -65,7 +67,7 @@ init();
 
 
 
-function new_frame() {
+function newFrame(): void {
 
 
   if (fpsCounter === 0) {
@@ -85,24 +87,24 @@ function new_frame() {
     fpsCounter = 0;
   }
 
-  window.requestAnimationFrame(new_frame);
+  window.requestAnimationFrame(newFrame);
 }
 
-window.requestAnimationFrame(new_frame);
+window.requestAnimationFrame(newFrame);
 
 
 
-function plot(shiftSize: number) {
+function plot(shiftSize: number): void {
 
   lines.forEach((line) => {
-    const yArray = random_walk(line.getY(numX - 1), shiftSize);
-    line.shift_add(yArray);
+    const yArray = randomWalk(line.getY(numX - 1), shiftSize);
+    line.shiftAdd(yArray);
   });
 
 }
 
 
-function random_walk(initial: number, walkSize: number): Float32Array {
+function randomWalk(initial: number, walkSize: number): Float32Array {
   const y = new Float32Array(walkSize);
   y[0] = initial + 0.01 * (Math.round(Math.random()) - 0.5);
   for (let i = 1; i < walkSize; i++) {
@@ -112,7 +114,7 @@ function random_walk(initial: number, walkSize: number): Float32Array {
 }
 
 
-function init() {
+function init(): void {
 
   lines = [];
 
@@ -125,7 +127,7 @@ function init() {
 
 
   lines.forEach((line) => {
-    wglp.add_line(line);
+    wglp.addLine(line);
   });
 
 
@@ -140,13 +142,13 @@ function init() {
 
 }
 
-function doneResizing() {
+function doneResizing(): void {
   wglp.viewport(0, 0, canv.width, canv.height);
 }
 
 
 
-function createUI() {
+function createUI(): void {
   const ui =  document.getElementById("ui") as HTMLDivElement;
 
   // ******slider lines */
@@ -173,7 +175,7 @@ function createUI() {
     displayLines.innerHTML = `Line number: ${numLines}`;
   });
 
-  sliderLines.noUiSlider.on("set", (values, handle) => {
+  sliderLines.noUiSlider.on("set", () => {
     init();
   });
 
