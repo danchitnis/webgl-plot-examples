@@ -225,7 +225,7 @@ function createUI(): void {
   sliderNoise.noUiSlider.on("update", (values, handle) => {
     const k = 0.1;
     noise = k * parseFloat(values[handle]);
-    displayNoise.innerHTML = `Signal Amplitude: ${noise / k}`;
+    displayNoise.innerHTML = `Noise Amplitude: ${noise / k}`;
   });
 
 }
