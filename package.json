@@ -20,14 +20,14 @@
     "@types/stats.js": "^0.17.0",
     "nouislider": "^14.1.1",
     "stats.js": "^0.17.0",
-    "webgl-plot": "^0.2.1"
+    "webgl-plot": "^0.2.2"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^2.12.0",
     "@typescript-eslint/parser": "^2.12.0",
-    "eslint": "^6.7.2",
-    "typescript": "^3.7.3",
-    "webpack": "^4.41.3",
+    "eslint": "^6.8.0",
+    "typescript": "^3.7.4",
+    "webpack": "^4.41.4",
     "webpack-cli": "^3.3.10"
   }
 }
