@@ -1,9 +1,10 @@
 
 
 import * as noUiSlider from "nouislider";
+
 import { ColorRGBA, WebglLine, WebGLplot} from "webgl-plot";
 
-import Statsjs = require("stats.js");
+import * as Statsjs from "stats.js";
 
 
 

@@ -1,6 +1,8 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
+    "module": "ES2015",
+    "target": "ES2017",
+    "moduleResolution": "node",
     "noImplicitAny": true,
     "sourceMap": true,
     "outDir": "dist",
@@ -10,8 +12,8 @@
     }
   },
   "include": [
-    "src/**/*"
-    //"src/histogram.ts",
+    "src/**/*",
+    //"node_modules/webgl-plot/dist/*",
     //"src/webglplot/*"
   ]
 }
