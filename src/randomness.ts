@@ -5,9 +5,11 @@
  
 
 import * as noUiSlider from "nouislider";
-import { ColorRGBA, WebglLine, WebGLplot} from "webgl-plot";
+import {WebGLplot, WebglLine, ColorRGBA} from "webgl-plot";
 
-import Statsjs = require("stats.js");
+//import Statsjs = require("stats.js");
+
+import * as Stats from "stats.js";
 
 
 
@@ -19,7 +21,7 @@ const devicePixelRatio = window.devicePixelRatio || 1;
 const numX = Math.round(canv.clientWidth * devicePixelRatio);
 
 
-const stats = new Statsjs();
+const stats = new Stats();
 stats.showPanel(0);
 document.body.appendChild( stats.dom );
 
