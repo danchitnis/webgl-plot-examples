@@ -77,7 +77,7 @@ function newFrame(): void {
 
     plot(newDataSize);
 
-    wglp.scaleY = scaleY;
+    wglp.gScaleY = scaleY;
     wglp.update();
 
     stats.end();

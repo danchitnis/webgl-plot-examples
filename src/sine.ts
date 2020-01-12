@@ -4,6 +4,7 @@ import * as noUiSlider from "nouislider";
 
 import { ColorRGBA, WebglLine, WebGLplot} from "webgl-plot";
 
+
 import * as Statsjs from "stats.js";
 
 
@@ -21,10 +22,7 @@ const canv =  document.getElementById("my_canvas") as HTMLCanvasElement;
 
 let numX: number;
 
-
-
-const scaleY = 1;
-
+let segView = false;
 
 let wglp: WebGLplot;
 let lines: WebglLine[];
@@ -65,7 +63,7 @@ function newFrame(): void {
   update();
 
   wglp.update();
-  wglp.scaleY = scaleY;
+  //wglp.gScaleY = scaleY;
 
   stats.end();
 
@@ -117,6 +115,25 @@ function doneResizing(): void {
   wglp.viewport(0, 0, canv.width, canv.height);
 }
 
+
+function changeView(): void {
+  if (segView) {
+    for (let i=0; i<lines.length; i++) {
+      lines[i].offsetY = 0;
+      lines[i].scaleY = 1
+    }
+    segView = false;
+  }
+  else {
+    for (let i=0; i<lines.length; i++) {
+      lines[i].offsetY = 1.5*(i/lines.length - 0.5);
+      lines[i].scaleY = 1.5 / lines.length;
+    }
+    segView = true;
+  }
+  
+  
+}
 
 
 function createUI(): void {
@@ -227,6 +244,15 @@ function createUI(): void {
     const k = 0.1;
     noise = k * parseFloat(values[handle]);
     displayNoise.innerHTML = `Noise Amplitude: ${noise / k}`;
+  });
+
+
+  const btView = document.createElement("button");
+  btView.className = "button";
+  btView.innerHTML = "Change View"
+  ui.appendChild(btView);
+  btView.addEventListener("click", () => {
+    changeView();
   });
 
 }

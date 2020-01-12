@@ -4,6 +4,7 @@ import * as noUiSlider from "nouislider";
 
 import { ColorRGBA, WebGLplot, WebglStep} from "webgl-plot";
 
+
 import * as Statsjs from "stats.js";
 
 
@@ -71,7 +72,7 @@ function newFrame(): void {
   stats.begin();
 
   update();
-  wglp.scaleY = scaleY;
+  wglp.gScaleY = scaleY;
   wglp.update();
 
   stats.end();
@@ -90,9 +91,9 @@ function init(): void {
   xbins = new Float32Array(numBins);
   ybins = new Float32Array(numBins);
 
-  wglp.offsetY = -1;
-  wglp.offsetX = -1;
-  wglp.scaleX = 2 / numBins;
+  wglp.gOffsetY = -1;
+  wglp.gOffsetX = -1;
+  wglp.gScaleX = 2 / numBins;
 
   for (let i = 0; i < xbins.length; i++) {
     xbins[i] = i * (xmax - xmin) / numBins + xmin;
