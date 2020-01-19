@@ -18,6 +18,14 @@ const path = require('path');
   }
 },
 {
+  entry: './dist/polar.js',
+  mode: 'development',
+  output: {
+    filename: 'polar.js',
+    path: path.resolve(__dirname, 'prod')
+  }
+},
+{
   entry: './dist/histogram.js',
   mode: 'development',
   output: {
