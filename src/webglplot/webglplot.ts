@@ -9,9 +9,10 @@
 import {ColorRGBA} from "./ColorRGBA";
 import {WebglLine} from "./WbglLine";
 import {WebglStep} from "./WbglStep";
+import {WebglPolar} from "./WbglPolar";
 import {WebglBaseLine} from "./WebglBaseLine";
 
-export {WebglLine, ColorRGBA, WebglStep};
+export {WebglLine, ColorRGBA, WebglStep, WebglPolar};
 
 
 export class WebGLplot {

@@ -2,7 +2,7 @@
 
 import * as noUiSlider from "nouislider";
 
-import { ColorRGBA, WebglLine, WebGLplot} from "./webglplot/webglplot"
+import { ColorRGBA, WebglPolar, WebGLplot} from "./webglplot/webglplot"
 
 
 import * as Statsjs from "stats.js";
@@ -24,7 +24,7 @@ let numPoints = 100;
 let segView = false;
 
 let wglp: WebGLplot;
-let line: WebglLine;
+let line: WebglPolar;
 
 const lineNumList = [1, 2, 5, 10, 20, 50, 100, 200, 500, 1000, 2000, 5000];
 
@@ -50,7 +50,7 @@ init();
 let resizeId: number;
 window.addEventListener("resize", () => {
     clearTimeout(resizeId);
-    resizeId = setTimeout(doneResizing, 500);
+    resizeId = setTimeout(doneResizing, 100);
 });
 
 
@@ -80,7 +80,7 @@ function init(): void {
   const numY = Math.round(canv.clientHeight * devicePixelRatio);
 
   const color = new ColorRGBA(Math.random(), Math.random(), Math.random(), 1);
-  line = new WebglLine(color, numPoints);
+  line = new WebglPolar(color, numPoints);
 
 
   wglp = new WebGLplot(canv, new ColorRGBA(0.1, 0.1, 0.1, 1));
@@ -98,21 +98,20 @@ function init(): void {
 
 function update(): void {
 
-
+  line.offsetTheta = 10*noise;
   
-  for (let i = 0; i < line.numPoints; i++) {
-    const r = Math.cos(2*Math.PI*freq*i*0.01);
-    const theta = i + 10 * noise
-    const x = r * Math.cos(2*Math.PI*theta/line.numPoints);
-    const y = r * Math.sin(2*Math.PI*theta/line.numPoints);
-    line.setX(i, amp *  x);
-    line.setY(i, amp *  y);
+  for (let i=0; i < line.numPoints; i++) {
+    const theta = i * line.thetaSteps;
+    const r = Math.cos(2*Math.PI*freq*(theta)/360);
+    
+    line.setRtheta(i, theta, r);
   }
 }
 
 
 function doneResizing(): void {
   wglp.viewport(0, 0, canv.width, canv.height);
+  init();
 }
 
 
