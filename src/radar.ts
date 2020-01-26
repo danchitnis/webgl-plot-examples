@@ -13,6 +13,7 @@ let amp = 0.5;
 let noise  = 0.1;
 let freq = 0.01;
 
+let preR = 0.5;
 
 const canv =  document.getElementById("my_canvas") as HTMLCanvasElement;
 
@@ -99,13 +100,21 @@ function init(): void {
 function update(): void {
 
   line.offsetTheta = 10*noise;
+
+  //preR form previous update
   
   for (let i=0; i < line.numPoints; i++) {
     const theta = i * 360 / line.numPoints;
-    const r = Math.cos(2*Math.PI*freq*(theta)/360);
-    
+    let r = amp * (Math.random()-0.5) + preR;
+    //const r = 1;
     line.setRtheta(i, theta, r);
+
+
+    r = (r<1)?r:1;
+    r = (r>0)?r:0;
+    preR = r;
   }
+
 }
 
 
@@ -197,13 +206,13 @@ function createUI(): void {
   sliderAmp =  document.createElement("div") as unknown as noUiSlider.Instance;
   sliderAmp.style.width = "100%";
   noUiSlider.create(sliderAmp, {
-    start: [1],
+    start: [0.5],
     step: 0.001,
     connect: [true, false],
     // tooltips: [false, wNumb({decimals: 1}), true],
     range: {
       min: 0,
-      max: 2,
+      max: 1,
     },
   });
 

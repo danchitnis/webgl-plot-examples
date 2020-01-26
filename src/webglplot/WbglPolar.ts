@@ -5,7 +5,6 @@ import {WebglBaseLine} from "./WebglBaseLine";
 export class WebglPolar extends WebglBaseLine {
 
    public numPoints: number;
-   public thetaSteps: number;
    public xy: Float32Array;
    public color: ColorRGBA;
    public intenisty: number;
@@ -27,23 +26,33 @@ export class WebglPolar extends WebglBaseLine {
       this.coord = 0;
       this.visible = true;
 
-      this.thetaSteps = 360/numPoints;
       this.offsetTheta = 0;
       
    }
    /**
-    * 
-    * @param theta : in deg
-    * @param r 
+    * @param index: index of the line
+    * @param theta : angle in deg
+    * @param r : radius
     */
    public setRtheta(index: number, theta: number, r: number): void {
+      //const rA = Math.abs(r);
+      //const thetaA = theta % 360;
       const x = r * Math.cos(2 * Math.PI * (theta + this.offsetTheta) / 360);
       const y = r * Math.sin(2 * Math.PI * (theta + this.offsetTheta) / 360);
       //const index = Math.round( ((theta % 360)/360) * this.numPoints );
       this.setX(index, x);
       this.setY(index, y);
    }
+
+   public getTheta(index: number): number {
+      //return Math.tan
+      return 0;
+   }
    
+   public getR(index: number): number {
+      //return Math.tan
+      return Math.sqrt( Math.pow(this.getX(index),2) + Math.pow(this.getY(index),2) );
+   }
    
    private setX(index: number, x: number): void {
       this.xy[index * 2] = x;
@@ -68,12 +77,12 @@ export class WebglPolar extends WebglBaseLine {
       }
    }*/
 
-   public constR(c: number): void {
+   /*public constR(c: number): void {
       for (let i = 0; i < this.numPoints; i++) {
          // set x to -num/2:1:+num/2
          this.setRtheta(i, i*this.thetaSteps, c);
       }
-   }
+   }*/
 
    /*public shiftAdd(data: Float32Array): void {
       const shiftSize = data.length;

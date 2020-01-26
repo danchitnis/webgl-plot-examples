@@ -26,6 +26,14 @@ const path = require('path');
   }
 },
 {
+  entry: './dist/radar.js',
+  mode: 'development',
+  output: {
+    filename: 'radar.js',
+    path: path.resolve(__dirname, 'prod')
+  }
+},
+{
   entry: './dist/histogram.js',
   mode: 'development',
   output: {
