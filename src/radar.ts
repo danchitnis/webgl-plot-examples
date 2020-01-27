@@ -2,7 +2,7 @@
 
 import * as noUiSlider from "nouislider";
 
-import { ColorRGBA, WebglPolar, WebGLplot} from "./webglplot/webglplot"
+import { ColorRGBA, WebglPolar, WebGLplot, WebglLine} from "./webglplot/webglplot"
 
 
 import * as Statsjs from "stats.js";
@@ -17,8 +17,10 @@ let preR = 0.5;
 
 const canv =  document.getElementById("my_canvas") as HTMLCanvasElement;
 
+let fpsDivder = 1;
+let fpsCounter = 0;
 
-
+let indexNow = 0;
 
 let numPoints = 100;
 
@@ -26,8 +28,10 @@ let segView = false;
 
 let wglp: WebGLplot;
 let line: WebglPolar;
+let line2: WebglLine;
+const lineColor = new ColorRGBA(Math.random(), Math.random(), Math.random(), 1);
 
-const lineNumList = [1, 2, 5, 10, 20, 50, 100, 200, 500, 1000, 2000, 5000];
+const lineNumList = [3, 4, 5, 6, 7, 8, 10, 20, 50, 100, 200, 500, 1000, 2000, 5000];
 
 let sliderLines: noUiSlider.Instance;
 let sliderFreq: noUiSlider.Instance;
@@ -43,10 +47,6 @@ const stats = new Statsjs();
 stats.showPanel(0);
 document.body.appendChild( stats.dom );
 
-createUI();
-
-init();
-
 
 let resizeId: number;
 window.addEventListener("resize", () => {
@@ -54,20 +54,40 @@ window.addEventListener("resize", () => {
     resizeId = setTimeout(doneResizing, 100);
 });
 
+let timer = setInterval( () => {
+  update();
+}, noise*10);
 
+createUI();
+
+init();
+
+
+
+/****************************************/
 
 function newFrame(): void {
 
-  stats.begin();
+  if (fpsCounter===0) {
+    stats.begin();
 
-  update();
+  //update();
 
   wglp.update();
   //wglp.gScaleY = scaleY;
 
   stats.end();
 
+  
+  }
+  fpsCounter++;
+
+  if (fpsCounter >= fpsDivder) {
+    fpsCounter = 0;
+  }
+
   window.requestAnimationFrame(newFrame);
+  
 }
 
 window.requestAnimationFrame(newFrame);
@@ -80,8 +100,12 @@ function init(): void {
   const numX = Math.round(canv.clientWidth * devicePixelRatio);
   const numY = Math.round(canv.clientHeight * devicePixelRatio);
 
-  const color = new ColorRGBA(Math.random(), Math.random(), Math.random(), 1);
-  line = new WebglPolar(color, numPoints);
+  line = new WebglPolar(lineColor, numPoints);
+  line.loop = true;
+
+  line2 = new WebglLine(new ColorRGBA(0.9,0.9,0.9,1), 2);
+  line2.xy = new Float32Array([0,0,1,1]);
+
 
 
   wglp = new WebGLplot(canv, new ColorRGBA(0.1, 0.1, 0.1, 1));
@@ -92,28 +116,44 @@ function init(): void {
 
 
 
+
   //line.linespaceX(-1, 2  / numX);
   wglp.addLine(line);
+  wglp.addLine(line2);
+
+  for (let i=0; i < line.numPoints; i++) {
+    const theta = i * 360 / line.numPoints;
+    const r = amp * 1;
+    //const r = 1;
+    line.setRtheta(i, theta, r);
+
+  }
 
 }
 
 function update(): void {
 
-  line.offsetTheta = 10*noise;
+  //line.offsetTheta = 10*noise;
 
   //preR form previous update
-  
-  for (let i=0; i < line.numPoints; i++) {
-    const theta = i * 360 / line.numPoints;
-    let r = amp * (Math.random()-0.5) + preR;
-    //const r = 1;
-    line.setRtheta(i, theta, r);
 
+  if (indexNow < line.numPoints) {
+    const theta = indexNow * 360 / line.numPoints;
+    let r = amp * (Math.random()-0.5) + preR;
+    line.setRtheta(indexNow, theta, r);
+
+    line2.setX(1,line.getX(indexNow));
+    line2.setY(1,line.getY(indexNow));
 
     r = (r<1)?r:1;
     r = (r>0)?r:0;
     preR = r;
+
+    indexNow++;
+  } else {
+    indexNow = 0;
   }
+  
 
 }
 
@@ -157,7 +197,7 @@ function createUI(): void {
     // tooltips: [false, wNumb({decimals: 1}), true],
     range: {
       min: 0,
-      max: 11,
+      max: lineNumList.length,
     },
   });
 
@@ -234,12 +274,12 @@ function createUI(): void {
   sliderNoise.style.width = "100%";
   noUiSlider.create(sliderNoise, {
     start: [1],
-    step: 0.001,
+    step: 1,
     connect: [true, false],
     // tooltips: [false, wNumb({decimals: 1}), true],
     range: {
-      min: 0,
-      max: 5,
+      min: 1,
+      max: 100,
     },
   });
 
@@ -251,7 +291,10 @@ function createUI(): void {
   sliderNoise.noUiSlider.on("update", (values, handle) => {
     const k = 1;
     noise = k * parseFloat(values[handle]);
+    //fpsDivder = k * parseFloat(values[handle]);
     displayNoise.innerHTML = `Noise Amplitude: ${noise / k}`;
+    clearInterval(timer);
+    timer = setInterval( update, noise);
   });
 
 

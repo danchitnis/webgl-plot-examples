@@ -93,7 +93,8 @@ export class WebGLplot {
 
             webgl.bufferData(webgl.ARRAY_BUFFER, line.xy as ArrayBuffer, webgl.STREAM_DRAW);
 
-            webgl.drawArrays(webgl.LINE_STRIP, 0, line.webglNumPoints);
+
+            webgl.drawArrays( (line.loop)?webgl.LINE_LOOP:webgl.LINE_STRIP , 0, line.webglNumPoints);
          }
 
       });

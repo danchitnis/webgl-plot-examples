@@ -11,6 +11,7 @@ export class WebglPolar extends WebglBaseLine {
    public visible: boolean;
    public coord: number;
    public offsetTheta: number;
+   
 
 
 
@@ -62,11 +63,11 @@ export class WebglPolar extends WebglBaseLine {
       this.xy[index * 2 + 1] = y;
    }
 
-   private getX(index: number): number {
+   public getX(index: number): number {
       return this.xy[index * 2];
    }
 
-   private getY(index: number): number {
+   public getY(index: number): number {
       return this.xy[index * 2 + 1];
    }
 
