@@ -28,7 +28,7 @@ let segView = false;
 
 let wglp: WebGLplot;
 let line: WebglPolar;
-let line2: WebglLine;
+let line2: WebglPolar;
 const lineColor = new ColorRGBA(Math.random(), Math.random(), Math.random(), 1);
 
 const lineNumList = [3, 4, 5, 6, 7, 8, 10, 20, 50, 100, 200, 500, 1000, 2000, 5000];
@@ -103,12 +103,12 @@ function init(): void {
   line = new WebglPolar(lineColor, numPoints);
   line.loop = true;
 
-  line2 = new WebglLine(new ColorRGBA(0.9,0.9,0.9,1), 2);
+  line2 = new WebglPolar(new ColorRGBA(0.9,0.9,0.9,1), 2);
   line2.xy = new Float32Array([0,0,1,1]);
 
 
 
-  wglp = new WebGLplot(canv, new ColorRGBA(0.1, 0.1, 0.1, 1));
+  wglp = new WebGLplot(canv);
 
   //wglp.offsetX = -1;
   wglp.gScaleX = numY/numX;
@@ -142,8 +142,11 @@ function update(): void {
     let r = amp * (Math.random()-0.5) + preR;
     line.setRtheta(indexNow, theta, r);
 
-    line2.setX(1,line.getX(indexNow));
-    line2.setY(1,line.getY(indexNow));
+    line2.setRtheta(0, 0, 0);
+    line2.setRtheta(1, theta, 1);
+    
+    //line2.setX(1,line.getX(indexNow));
+    //line2.setY(1,line.getY(indexNow));
 
     r = (r<1)?r:1;
     r = (r>0)?r:0;

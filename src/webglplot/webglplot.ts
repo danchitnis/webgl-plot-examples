@@ -15,26 +15,51 @@ import {WebglBaseLine} from "./WebglBaseLine";
 export {WebglLine, ColorRGBA, WebglStep, WebglPolar};
 
 
+/**
+ * The main class for the webgl-plot framework
+ */
 export class WebGLplot {
 
-   public webgl: WebGLRenderingContext;
+   private webgl: WebGLRenderingContext;
 
+   /**
+    * Global horizontal scale factor
+    * @default = 1.0
+    */
    public gScaleX: number;
+   
+   /**
+    * Global vertical scale factor
+    * @default = 1.0
+    */
    public gScaleY: number;
+
+   /**
+    * Global horizontal offset
+    * @default = 0
+    */
    public gOffsetX: number;
+
+   /**
+    * Global vertical offset
+    * @default = 0
+    */
    public gOffsetY: number;
 
+   /**
+    * collection of lines in the plot
+    */
    public lines: WebglBaseLine[];
-   public backgroundColor: ColorRGBA;
+   
+   //public backgroundColor: ColorRGBA;
 
 
 
    /**
-    *
-    * @param canv
-    * @param array
+    * Create a webgl-plot instance
+    * @param canv: the canvas in which the plot appears
     */
-   constructor(canv: HTMLCanvasElement, backgroundColor: ColorRGBA) {
+   constructor(canv: HTMLCanvasElement) {
 
       const devicePixelRatio = window.devicePixelRatio || 1;
 
@@ -56,12 +81,12 @@ export class WebGLplot {
       this.gOffsetX = 0;
       this.gOffsetY = 0;
 
-      this.backgroundColor = backgroundColor;
+      //this.backgroundColor = new ColorRGBA(255,0,0,1);
 
 
 
       // Clear the canvas
-      webgl.clearColor(this.backgroundColor.r, this.backgroundColor.g, this.backgroundColor.b, this.backgroundColor.a);
+      //webgl.clearColor(this.backgroundColor.r, this.backgroundColor.g, this.backgroundColor.b, this.backgroundColor.a);
 
       // Enable the depth test
       webgl.enable(webgl.DEPTH_TEST);
@@ -74,7 +99,9 @@ export class WebGLplot {
 
    }
 
-
+   /**
+    * update and redraws the content
+    */
    public update(): void {
       const webgl = this.webgl;
 
@@ -101,12 +128,17 @@ export class WebGLplot {
 
    }
 
+
    public clear(): void {
       // Clear the canvas  //??????????????????
-      this.webgl.clearColor(0.1, 0.1, 0.1, 1.0);
+      //this.webgl.clearColor(0.1, 0.1, 0.1, 1.0);
       this.webgl.clear(this.webgl.COLOR_BUFFER_BIT || this.webgl.DEPTH_BUFFER_BIT);
    }
 
+   /**
+    * adds a line to the plot
+    * @param line : this could be any of line, linestep, histogram, or polar
+    */
    public addLine(line: WebglBaseLine): void {
 
       line.vbuffer = ( this.webgl.createBuffer() as WebGLBuffer);

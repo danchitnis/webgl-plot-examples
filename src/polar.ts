@@ -83,7 +83,7 @@ function init(): void {
   line = new WebglPolar(color, numPoints);
 
 
-  wglp = new WebGLplot(canv, new ColorRGBA(0.1, 0.1, 0.1, 1));
+  wglp = new WebGLplot(canv);
 
   //wglp.offsetX = -1;
   wglp.gScaleX = numY/numX;

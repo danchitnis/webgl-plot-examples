@@ -7,7 +7,7 @@ export class WebglBaseLine {
 
     public webglNumPoints: number;
 
-    public intenisty: number;
+    public intensity: number;
     public visible: boolean;
     public coord: number;
 
