@@ -87,7 +87,7 @@ window.requestAnimationFrame(newFrame);
 
 
 function init(): void {
-  wglp = new WebGLplot(canv, new ColorRGBA(0.1, 0.1, 0.1, 1));
+  wglp = new WebGLplot(canv);
   xbins = new Float32Array(numBins);
   ybins = new Float32Array(numBins);
 
