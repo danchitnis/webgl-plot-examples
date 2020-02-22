@@ -87,7 +87,7 @@ function init(): void {
     lines.push(new WebglLine(color, numX));
   }
 
-  wglp = new WebGLplot(canv, new ColorRGBA(0.1, 0.1, 0.1, 1));
+  wglp = new WebGLplot(canv);
 
   // wglp.offsetX = -1;
   // wglp.scaleX = 2;

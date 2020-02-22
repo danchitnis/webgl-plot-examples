@@ -2,7 +2,7 @@
 
 import * as noUiSlider from "nouislider";
 
-import { ColorRGBA, WebglPolar, WebGLplot, WebglLine} from "./webglplot/webglplot"
+import { ColorRGBA, WebglPolar, WebGLplot} from "webgl-plot"
 
 
 import * as Statsjs from "stats.js";
@@ -10,21 +10,16 @@ import * as Statsjs from "stats.js";
 
 
 let amp = 0.5;
-let noise  = 0.1;
-let freq = 0.01;
+let updateRate  = 0.1;
 
 let preR = 0.5;
 
 const canv =  document.getElementById("my_canvas") as HTMLCanvasElement;
 
-let fpsDivder = 1;
-let fpsCounter = 0;
-
 let indexNow = 0;
 
 let numPoints = 100;
 
-let segView = false;
 
 let wglp: WebGLplot;
 let line: WebglPolar;
@@ -34,14 +29,12 @@ const lineColor = new ColorRGBA(Math.random(), Math.random(), Math.random(), 1);
 const lineNumList = [3, 4, 5, 6, 7, 8, 10, 20, 50, 100, 200, 500, 1000, 2000, 5000];
 
 let sliderLines: noUiSlider.Instance;
-let sliderFreq: noUiSlider.Instance;
 let sliderAmp: noUiSlider.Instance;
-let sliderNoise: noUiSlider.Instance;
+let sliderUpdateRate: noUiSlider.Instance;
 
 let displayLines: HTMLSpanElement;
-let displayFreq: HTMLSpanElement;
 let displayAmp: HTMLSpanElement;
-let displayNoise: HTMLSpanElement;
+let displayUpdateRate: HTMLSpanElement;
 
 const stats = new Statsjs();
 stats.showPanel(0);
@@ -56,7 +49,7 @@ window.addEventListener("resize", () => {
 
 let timer = setInterval( () => {
   update();
-}, noise*10);
+}, updateRate*10);
 
 createUI();
 
@@ -68,28 +61,15 @@ init();
 
 function newFrame(): void {
 
-  if (fpsCounter===0) {
-    stats.begin();
-
-  //update();
+  stats.begin();
 
   wglp.update();
-  //wglp.gScaleY = scaleY;
 
-  stats.end();
-
-  
-  }
-  fpsCounter++;
-
-  if (fpsCounter >= fpsDivder) {
-    fpsCounter = 0;
-  }
+  stats.end();  
 
   window.requestAnimationFrame(newFrame);
   
 }
-
 window.requestAnimationFrame(newFrame);
 
 
@@ -149,7 +129,7 @@ function update(): void {
     //line2.setY(1,line.getY(indexNow));
 
     r = (r<1)?r:1;
-    r = (r>0)?r:0;
+    r = (r>0.1)?r:0.1;
     preR = r;
 
     indexNow++;
@@ -167,25 +147,6 @@ function doneResizing(): void {
 }
 
 
-/*function changeView(): void {
-  if (segView) {
-
-      lines[i].offsetY = 0;
-      lines[i].scaleY = 1
-    }
-    segView = false;
-  }
-  else {
-    for (let i=0; i<lines.length; i++) {
-      lines[i].offsetY = 1.5*(i/lines.length - 0.5);
-      lines[i].scaleY = 1.5 / lines.length;
-    }
-    segView = true;
-  }
-  
-  
-}*/
-
 
 function createUI(): void {
   const ui =  document.getElementById("ui") as HTMLDivElement;
@@ -194,13 +155,13 @@ function createUI(): void {
   sliderLines =  document.createElement("div") as unknown as noUiSlider.Instance;
   sliderLines.style.width = "100%";
   noUiSlider.create(sliderLines, {
-    start: [2],
+    start: [8],
     step: 1,
     connect: [true, false],
     // tooltips: [false, wNumb({decimals: 1}), true],
     range: {
       min: 0,
-      max: lineNumList.length,
+      max: lineNumList.length - 1,
     },
   });
 
@@ -218,31 +179,6 @@ function createUI(): void {
     init();
   });
 
-
-  // ******slider Freq */
-  sliderFreq =  document.createElement("div") as unknown as noUiSlider.Instance;
-  sliderFreq.style.width = "100%";
-  noUiSlider.create(sliderFreq, {
-    start: [1],
-    step: 0.01,
-    connect: [true, false],
-    // tooltips: [false, wNumb({decimals: 1}), true],
-    range: {
-      min: 0,
-      max: 3,
-    },
-  });
-
-  displayFreq = document.createElement("span");
-  ui.appendChild(sliderFreq);
-  ui.appendChild(displayFreq);
-  ui.appendChild(document.createElement("p"));
-
-  sliderFreq.noUiSlider.on("update", (values, handle) => {
-    const k = 1;
-    freq = k * parseFloat(values[handle]);
-    displayFreq.innerHTML = `Frequency: ${freq / k}`;
-  });
 
 
   // ******slider amp */
@@ -267,15 +203,15 @@ function createUI(): void {
   sliderAmp.noUiSlider.on("update", (values, handle) => {
     const k = 0.5;
     amp = k * parseFloat(values[handle]);
-    displayAmp.innerHTML = `Signal Amplitude: ${amp / k}`;
+    displayAmp.innerHTML = `Randomness Amplitude: ${amp / k}`;
   });
 
 
 
   // ******slider noise */
-  sliderNoise =  document.createElement("div") as unknown as noUiSlider.Instance;
-  sliderNoise.style.width = "100%";
-  noUiSlider.create(sliderNoise, {
+  sliderUpdateRate =  document.createElement("div") as unknown as noUiSlider.Instance;
+  sliderUpdateRate.style.width = "100%";
+  noUiSlider.create(sliderUpdateRate, {
     start: [1],
     step: 1,
     connect: [true, false],
@@ -286,27 +222,20 @@ function createUI(): void {
     },
   });
 
-  displayNoise = document.createElement("span");
-  ui.appendChild(sliderNoise);
-  ui.appendChild(displayNoise);
+  displayUpdateRate = document.createElement("span");
+  ui.appendChild(sliderUpdateRate);
+  ui.appendChild(displayUpdateRate);
   ui.appendChild(document.createElement("p"));
 
-  sliderNoise.noUiSlider.on("update", (values, handle) => {
+  sliderUpdateRate.noUiSlider.on("update", (values, handle) => {
     const k = 1;
-    noise = k * parseFloat(values[handle]);
+    updateRate = k * parseFloat(values[handle]);
     //fpsDivder = k * parseFloat(values[handle]);
-    displayNoise.innerHTML = `Noise Amplitude: ${noise / k}`;
+    displayUpdateRate.innerHTML = `Update Rate: ${updateRate / k}`;
     clearInterval(timer);
-    timer = setInterval( update, noise);
+    timer = setInterval( update, updateRate);
   });
 
 
-  const btView = document.createElement("button");
-  btView.className = "button";
-  btView.innerHTML = "Change View"
-  ui.appendChild(btView);
-  btView.addEventListener("click", () => {
-    //changeView();
-  });
 
 }

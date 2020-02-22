@@ -5,7 +5,7 @@
  
 
 import * as noUiSlider from "nouislider";
-import {WebGLplot, WebglLine, ColorRGBA} from "./webglplot/webglplot";
+import {WebGLplot, WebglLine, ColorRGBA} from "webgl-plot";
 
 //import Statsjs = require("stats.js");
 

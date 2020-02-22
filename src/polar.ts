@@ -2,7 +2,7 @@
 
 import * as noUiSlider from "nouislider";
 
-import { ColorRGBA, WebglPolar, WebGLplot} from "./webglplot/webglplot"
+import { ColorRGBA, WebglPolar, WebGLplot} from "webgl-plot"
 
 
 import * as Statsjs from "stats.js";
@@ -21,8 +21,6 @@ const canv =  document.getElementById("my_canvas") as HTMLCanvasElement;
 
 let numPoints = 100;
 
-let segView = false;
-
 let wglp: WebGLplot;
 let line: WebglPolar;
 
@@ -30,13 +28,11 @@ const lineNumList = [1, 2, 5, 10, 20, 50, 100, 200, 500, 1000, 2000, 5000];
 
 let sliderLines: noUiSlider.Instance;
 let sliderFreq: noUiSlider.Instance;
-let sliderAmp: noUiSlider.Instance;
-let sliderNoise: noUiSlider.Instance;
+let sliderRotation: noUiSlider.Instance;
 
 let displayLines: HTMLSpanElement;
 let displayFreq: HTMLSpanElement;
-let displayAmp: HTMLSpanElement;
-let displayNoise: HTMLSpanElement;
+let displayRotation: HTMLSpanElement;
 
 const stats = new Statsjs();
 stats.showPanel(0);
@@ -62,7 +58,6 @@ function newFrame(): void {
   update();
 
   wglp.update();
-  //wglp.gScaleY = scaleY;
 
   stats.end();
 
@@ -85,13 +80,10 @@ function init(): void {
 
   wglp = new WebGLplot(canv);
 
-  //wglp.offsetX = -1;
   wglp.gScaleX = numY/numX;
   wglp.gScaleY = 1;
 
 
-
-  //line.linespaceX(-1, 2  / numX);
   wglp.addLine(line);
 
 }
@@ -114,25 +106,6 @@ function doneResizing(): void {
   init();
 }
 
-
-/*function changeView(): void {
-  if (segView) {
-
-      lines[i].offsetY = 0;
-      lines[i].scaleY = 1
-    }
-    segView = false;
-  }
-  else {
-    for (let i=0; i<lines.length; i++) {
-      lines[i].offsetY = 1.5*(i/lines.length - 0.5);
-      lines[i].scaleY = 1.5 / lines.length;
-    }
-    segView = true;
-  }
-  
-  
-}*/
 
 
 function createUI(): void {
@@ -193,37 +166,11 @@ function createUI(): void {
   });
 
 
-  // ******slider amp */
-  sliderAmp =  document.createElement("div") as unknown as noUiSlider.Instance;
-  sliderAmp.style.width = "100%";
-  noUiSlider.create(sliderAmp, {
-    start: [1],
-    step: 0.001,
-    connect: [true, false],
-    // tooltips: [false, wNumb({decimals: 1}), true],
-    range: {
-      min: 0,
-      max: 2,
-    },
-  });
 
-  displayAmp = document.createElement("span");
-  ui.appendChild(sliderAmp);
-  ui.appendChild(displayAmp);
-  ui.appendChild(document.createElement("p"));
-
-  sliderAmp.noUiSlider.on("update", (values, handle) => {
-    const k = 0.5;
-    amp = k * parseFloat(values[handle]);
-    displayAmp.innerHTML = `Signal Amplitude: ${amp / k}`;
-  });
-
-
-
-  // ******slider noise */
-  sliderNoise =  document.createElement("div") as unknown as noUiSlider.Instance;
-  sliderNoise.style.width = "100%";
-  noUiSlider.create(sliderNoise, {
+  // ******slider Rotation */
+  sliderRotation =  document.createElement("div") as unknown as noUiSlider.Instance;
+  sliderRotation.style.width = "100%";
+  noUiSlider.create(sliderRotation, {
     start: [1],
     step: 0.001,
     connect: [true, false],
@@ -234,24 +181,16 @@ function createUI(): void {
     },
   });
 
-  displayNoise = document.createElement("span");
-  ui.appendChild(sliderNoise);
-  ui.appendChild(displayNoise);
+  displayRotation = document.createElement("span");
+  ui.appendChild(sliderRotation);
+  ui.appendChild(displayRotation);
   ui.appendChild(document.createElement("p"));
 
-  sliderNoise.noUiSlider.on("update", (values, handle) => {
+  sliderRotation.noUiSlider.on("update", (values, handle) => {
     const k = 1;
     noise = k * parseFloat(values[handle]);
-    displayNoise.innerHTML = `Noise Amplitude: ${noise / k}`;
+    displayRotation.innerHTML = `Rotation: ${noise / k}`;
   });
 
-
-  const btView = document.createElement("button");
-  btView.className = "button";
-  btView.innerHTML = "Change View"
-  ui.appendChild(btView);
-  btView.addEventListener("click", () => {
-    //changeView();
-  });
 
 }
