@@ -1,23 +1,14 @@
-
-
 import * as noUiSlider from "nouislider";
 
-import { ColorRGBA, WebglPolar, WebGLplot} from "webgl-plot"
-
+import WebGLplot, { ColorRGBA, WebglPolar } from "webgl-plot";
 
 import * as Statsjs from "stats.js";
 
-
-
 let amp = 0.5;
-let noise  = 0.1;
+let noise = 0.1;
 let freq = 0.01;
 
-
-const canv =  document.getElementById("my_canvas") as HTMLCanvasElement;
-
-
-
+const canv = document.getElementById("my_canvas") as HTMLCanvasElement;
 
 let numPoints = 100;
 
@@ -36,23 +27,19 @@ let displayRotation: HTMLSpanElement;
 
 const stats = new Statsjs();
 stats.showPanel(0);
-document.body.appendChild( stats.dom );
+document.body.appendChild(stats.dom);
 
 createUI();
 
 init();
 
-
 let resizeId: number;
 window.addEventListener("resize", () => {
-    clearTimeout(resizeId);
-    resizeId = setTimeout(doneResizing, 100);
+  clearTimeout(resizeId);
+  resizeId = setTimeout(doneResizing, 100);
 });
 
-
-
 function newFrame(): void {
-
   stats.begin();
 
   update();
@@ -66,10 +53,7 @@ function newFrame(): void {
 
 window.requestAnimationFrame(newFrame);
 
-
-
 function init(): void {
-
   const devicePixelRatio = window.devicePixelRatio || 1;
   const numX = Math.round(canv.clientWidth * devicePixelRatio);
   const numY = Math.round(canv.clientHeight * devicePixelRatio);
@@ -77,42 +61,35 @@ function init(): void {
   const color = new ColorRGBA(Math.random(), Math.random(), Math.random(), 1);
   line = new WebglPolar(color, numPoints);
 
-
   wglp = new WebGLplot(canv);
 
-  wglp.gScaleX = numY/numX;
+  wglp.gScaleX = numY / numX;
   wglp.gScaleY = 1;
 
-
   wglp.addLine(line);
-
 }
 
 function update(): void {
+  line.offsetTheta = 10 * noise;
 
-  line.offsetTheta = 10*noise;
-  
-  for (let i=0; i < line.numPoints; i++) {
-    const theta = i * 360 / line.numPoints;
-    const r = Math.cos(2*Math.PI*freq*(theta)/360);
-    
+  for (let i = 0; i < line.numPoints; i++) {
+    const theta = (i * 360) / line.numPoints;
+    const r = Math.cos((2 * Math.PI * freq * theta) / 360);
+
     line.setRtheta(i, theta, r);
   }
 }
-
 
 function doneResizing(): void {
   wglp.viewport(0, 0, canv.width, canv.height);
   init();
 }
 
-
-
 function createUI(): void {
-  const ui =  document.getElementById("ui") as HTMLDivElement;
+  const ui = document.getElementById("ui") as HTMLDivElement;
 
   // ******slider lines */
-  sliderLines =  document.createElement("div") as unknown as noUiSlider.Instance;
+  sliderLines = (document.createElement("div") as unknown) as noUiSlider.Instance;
   sliderLines.style.width = "100%";
   noUiSlider.create(sliderLines, {
     start: [2],
@@ -139,9 +116,8 @@ function createUI(): void {
     init();
   });
 
-
   // ******slider Freq */
-  sliderFreq =  document.createElement("div") as unknown as noUiSlider.Instance;
+  sliderFreq = (document.createElement("div") as unknown) as noUiSlider.Instance;
   sliderFreq.style.width = "100%";
   noUiSlider.create(sliderFreq, {
     start: [1],
@@ -165,10 +141,8 @@ function createUI(): void {
     displayFreq.innerHTML = `Frequency: ${freq / k}`;
   });
 
-
-
   // ******slider Rotation */
-  sliderRotation =  document.createElement("div") as unknown as noUiSlider.Instance;
+  sliderRotation = (document.createElement("div") as unknown) as noUiSlider.Instance;
   sliderRotation.style.width = "100%";
   noUiSlider.create(sliderRotation, {
     start: [1],
@@ -191,6 +165,4 @@ function createUI(): void {
     noise = k * parseFloat(values[handle]);
     displayRotation.innerHTML = `Rotation: ${noise / k}`;
   });
-
-
 }

@@ -2,30 +2,21 @@
  * Author Danial Chitnis 2019
  */
 
- 
-
 import * as noUiSlider from "nouislider";
-import {WebGLplot, WebglLine, ColorRGBA} from "webgl-plot";
+import WebGLplot, { WebglLine, ColorRGBA } from "webgl-plot";
 
 //import Statsjs = require("stats.js");
 
 import * as Stats from "stats.js";
 
-
-
-
-const canv =  document.getElementById("my_canvas") as HTMLCanvasElement;
-
+const canv = document.getElementById("my_canvas") as HTMLCanvasElement;
 
 const devicePixelRatio = window.devicePixelRatio || 1;
 const numX = Math.round(canv.clientWidth * devicePixelRatio);
 
-
 const stats = new Stats();
 stats.showPanel(0);
-document.body.appendChild( stats.dom );
-
-
+document.body.appendChild(stats.dom);
 
 let numLines = 100;
 let scaleY = 1;
@@ -38,7 +29,6 @@ let fpsCounter = 0;
 
 // new data per frame
 let newDataSize = 1;
-
 
 const lineNumList = [1, 2, 5, 10, 20, 50, 100, 200, 500, 1000, 2000, 5000];
 
@@ -54,12 +44,10 @@ let displayFps: HTMLSpanElement;
 
 createUI();
 
-
-
 let resizeId: number;
 window.addEventListener("resize", () => {
-    clearTimeout(resizeId);
-    resizeId = setTimeout(doneResizing, 500);
+  clearTimeout(resizeId);
+  resizeId = setTimeout(doneResizing, 500);
 });
 
 /*let bt = <HTMLButtonElement>document.getElementById("bt");
@@ -67,11 +55,7 @@ bt.addEventListener("click",btclick);*/
 
 init();
 
-
-
 function newFrame(): void {
-
-
   if (fpsCounter === 0) {
     stats.begin();
 
@@ -94,17 +78,12 @@ function newFrame(): void {
 
 window.requestAnimationFrame(newFrame);
 
-
-
 function plot(shiftSize: number): void {
-
   lines.forEach((line) => {
     const yArray = randomWalk(line.getY(numX - 1), shiftSize);
     line.shiftAdd(yArray);
   });
-
 }
-
 
 function randomWalk(initial: number, walkSize: number): Float32Array {
   const y = new Float32Array(walkSize);
@@ -115,9 +94,7 @@ function randomWalk(initial: number, walkSize: number): Float32Array {
   return y;
 }
 
-
 function init(): void {
-
   lines = [];
 
   for (let i = 0; i < numLines; i++) {
@@ -127,34 +104,27 @@ function init(): void {
 
   wglp = new WebGLplot(canv);
 
-
   lines.forEach((line) => {
     wglp.addLine(line);
   });
 
-
-
-
   for (let i = 0; i < numX; i++) {
     // set x to -num/2:1:+num/2
     lines.forEach((line) => {
-      line.linespaceX(-1, 2  / numX);
+      line.lineSpaceX(-1, 2 / numX);
     });
   }
-
 }
 
 function doneResizing(): void {
   wglp.viewport(0, 0, canv.width, canv.height);
 }
 
-
-
 function createUI(): void {
-  const ui =  document.getElementById("ui") as HTMLDivElement;
+  const ui = document.getElementById("ui") as HTMLDivElement;
 
   // ******slider lines */
-  sliderLines =  document.createElement("div") as unknown as noUiSlider.Instance;
+  sliderLines = (document.createElement("div") as unknown) as noUiSlider.Instance;
   sliderLines.style.width = "100%";
   noUiSlider.create(sliderLines, {
     start: [0],
@@ -181,10 +151,8 @@ function createUI(): void {
     init();
   });
 
-
-
   /*****slider yscale */
-  sliderYScale =  document.createElement("div") as unknown as noUiSlider.Instance;
+  sliderYScale = (document.createElement("div") as unknown) as noUiSlider.Instance;
   sliderYScale.style.width = "100%";
   noUiSlider.create(sliderYScale, {
     start: [1],
@@ -207,7 +175,7 @@ function createUI(): void {
   });
 
   /****** slider new data */
-  sliderNewData =  document.createElement("div") as unknown as noUiSlider.Instance;
+  sliderNewData = (document.createElement("div") as unknown) as noUiSlider.Instance;
   sliderNewData.style.width = "100%";
 
   noUiSlider.create(sliderNewData, {
@@ -232,7 +200,7 @@ function createUI(): void {
   });
 
   /**** slider fps */
-  sliderFps =  document.createElement("div") as unknown as noUiSlider.Instance;
+  sliderFps = (document.createElement("div") as unknown) as noUiSlider.Instance;
   sliderFps.style.width = "100%";
 
   noUiSlider.create(sliderFps, {
@@ -253,9 +221,8 @@ function createUI(): void {
 
   sliderFps.noUiSlider.on("update", (values, handle) => {
     fpsDivder = parseFloat(values[handle]);
-    displayFps.innerHTML = `FPS  = ${(60 / fpsDivder)}`;
+    displayFps.innerHTML = `FPS  = ${60 / fpsDivder}`;
   });
-
 }
 
 /*function btclick() {
@@ -265,6 +232,3 @@ function createUI(): void {
     ui.removeChild(ui.firstChild);
   }
 }*/
-
-
-

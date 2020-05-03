@@ -1,13 +1,8 @@
-
-
 import * as noUiSlider from "nouislider";
 
-import { ColorRGBA, WebGLplot, WebglStep} from "webgl-plot";
-
+import WebGLplot, { ColorRGBA, WebglStep } from "webgl-plot";
 
 import * as Statsjs from "stats.js";
-
-
 
 let randXSize = 10;
 //let maxY = 0;
@@ -18,14 +13,11 @@ let Xmin = 25;
 let Xmax = 75;
 let Xskew = 1;
 
-
-const canv =  document.getElementById("my_canvas") as HTMLCanvasElement;
+const canv = document.getElementById("my_canvas") as HTMLCanvasElement;
 
 const devicePixelRatio = window.devicePixelRatio || 1;
 
-
 let scaleY = 1;
-
 
 let X: Float32Array;
 let xbins: Float32Array;
@@ -51,9 +43,7 @@ let displaySkew: HTMLSpanElement;
 
 const stats = new Statsjs();
 stats.showPanel(0);
-document.body.appendChild( stats.dom );
-
-
+document.body.appendChild(stats.dom);
 
 createUI();
 
@@ -61,14 +51,11 @@ init();
 
 let resizeId: number;
 window.addEventListener("resize", () => {
-    clearTimeout(resizeId);
-    resizeId = setTimeout(doneResizing, 500);
+  clearTimeout(resizeId);
+  resizeId = setTimeout(doneResizing, 500);
 });
 
-
-
 function newFrame(): void {
-
   stats.begin();
 
   update();
@@ -77,14 +64,10 @@ function newFrame(): void {
 
   stats.end();
 
-
-
   window.requestAnimationFrame(newFrame);
 }
 
 window.requestAnimationFrame(newFrame);
-
-
 
 function init(): void {
   wglp = new WebGLplot(canv);
@@ -96,21 +79,18 @@ function init(): void {
   wglp.gScaleX = 2 / numBins;
 
   for (let i = 0; i < xbins.length; i++) {
-    xbins[i] = i * (xmax - xmin) / numBins + xmin;
+    xbins[i] = (i * (xmax - xmin)) / numBins + xmin;
   }
 
   const color = new ColorRGBA(1, 1, 0, 0.5);
   line = new WebglStep(color, numBins);
   // line.linespaceX(-1, 2 / numBins);
   // instead of line above we are applying offsetX and scaleX
-  line.linespaceX(0, 1);
+  line.lineSpaceX(0, 1);
   wglp.addLine(line);
 }
 
-
-
 function update(): void {
-
   X = new Float32Array(randXSize);
   randnArray(X);
 
@@ -119,18 +99,17 @@ function update(): void {
   }
 
   for (let i = 0; i < X.length; i++) {
-    const bin = (X[i]);
+    const bin = X[i];
 
     if (bin < xmin) {
       ybins[0]++;
     } else {
       if (bin > xmax) {
-        ybins[numBins-1]++;
+        ybins[numBins - 1]++;
       } else {
-        const index = numBins * (bin - xmin) / (xmax - xmin);
+        const index = (numBins * (bin - xmin)) / (xmax - xmin);
         ybins[Math.floor(index)]++;
       }
-
     }
   }
 
@@ -141,25 +120,27 @@ function update(): void {
   }
 }
 
-
-
-
 /** https://stackoverflow.com/questions/25582882/javascript-math-random-normal-distribution-gaussian-bell-curve */
 function randnBM(min: number, max: number, skew: number): number {
   let u = 0;
   let v = 0;
-  while (u === 0) { u = Math.random(); } // Converting [0,1) to (0,1)
-  while (v === 0) { v = Math.random(); }
-  let num = Math.sqrt( -2.0 * Math.log( u ) ) * Math.cos( 2.0 * Math.PI * v );
+  while (u === 0) {
+    u = Math.random();
+  } // Converting [0,1) to (0,1)
+  while (v === 0) {
+    v = Math.random();
+  }
+  let num = Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
 
   num = num / 10.0 + 0.5; // Translate to 0 -> 1
-  if (num > 1 || num < 0) { num = randnBM(min, max, skew); } // resample between 0 and 1 if out of range
+  if (num > 1 || num < 0) {
+    num = randnBM(min, max, skew);
+  } // resample between 0 and 1 if out of range
   num = Math.pow(num, skew); // Skew
   num *= max - min; // Stretch to fill range
   num += min; // offset to min
   return num;
 }
-
 
 function randnArray(array: Float32Array): void {
   for (let i = 0; i < array.length; i++) {
@@ -167,23 +148,15 @@ function randnArray(array: Float32Array): void {
   }
 }
 
-
-
-
-
-
-
 function doneResizing(): void {
   wglp.viewport(0, 0, canv.width, canv.height);
 }
 
-
-
 function createUI(): void {
-  const ui =  document.getElementById("ui") as HTMLDivElement;
+  const ui = document.getElementById("ui") as HTMLDivElement;
 
   // ******slider X size */
-  sliderXsize =  document.createElement("div") as unknown as noUiSlider.Instance;
+  sliderXsize = (document.createElement("div") as unknown) as noUiSlider.Instance;
   sliderXsize.style.width = "100%";
   noUiSlider.create(sliderXsize, {
     start: [3],
@@ -210,9 +183,8 @@ function createUI(): void {
     init();
   });
 
-
   // ************ slider X range
-  sliderXrange =  document.createElement("div") as unknown as noUiSlider.Instance;
+  sliderXrange = (document.createElement("div") as unknown) as noUiSlider.Instance;
   sliderXrange.style.width = "100%";
   noUiSlider.create(sliderXrange, {
     start: [40, 60],
@@ -235,9 +207,8 @@ function createUI(): void {
     displayXrange.innerHTML = `X range is between ${Xmin} and ${Xmax}`;
   });
 
-
   // ******slider Y Scale */
-  sliderYScale =  document.createElement("div") as unknown as noUiSlider.Instance;
+  sliderYScale = (document.createElement("div") as unknown) as noUiSlider.Instance;
   sliderYScale.style.width = "100%";
   noUiSlider.create(sliderYScale, {
     start: [1],
@@ -259,9 +230,8 @@ function createUI(): void {
     displayYScale.innerHTML = `Y scale = ${scaleY}`;
   });
 
-
   // ******slider Bin size */
-  sliderBinNum =  document.createElement("div") as unknown as noUiSlider.Instance;
+  sliderBinNum = (document.createElement("div") as unknown) as noUiSlider.Instance;
   sliderBinNum.style.width = "100%";
   noUiSlider.create(sliderBinNum, {
     start: [5],
@@ -288,9 +258,8 @@ function createUI(): void {
     init();
   });
 
-
   // ******slider skew */
-  sliderSkew =  document.createElement("div") as unknown as noUiSlider.Instance;
+  sliderSkew = (document.createElement("div") as unknown) as noUiSlider.Instance;
   sliderSkew.style.width = "100%";
   noUiSlider.create(sliderSkew, {
     start: [1],
@@ -311,8 +280,4 @@ function createUI(): void {
     Xskew = parseFloat(values[handle]);
     displaySkew.innerHTML = `Skew is = ${Xskew}`;
   });
-
-
-
-
 }

@@ -1,25 +1,19 @@
-
-
 import * as noUiSlider from "nouislider";
 
-import { ColorRGBA, WebglPolar, WebGLplot} from "webgl-plot"
-
+import WebGLplot, { ColorRGBA, WebglPolar } from "webgl-plot";
 
 import * as Statsjs from "stats.js";
 
-
-
 let amp = 0.5;
-let updateRate  = 0.1;
+let updateRate = 0.1;
 
 let preR = 0.5;
 
-const canv =  document.getElementById("my_canvas") as HTMLCanvasElement;
+const canv = document.getElementById("my_canvas") as HTMLCanvasElement;
 
 let indexNow = 0;
 
 let numPoints = 100;
-
 
 let wglp: WebGLplot;
 let line: WebglPolar;
@@ -38,44 +32,36 @@ let displayUpdateRate: HTMLSpanElement;
 
 const stats = new Statsjs();
 stats.showPanel(0);
-document.body.appendChild( stats.dom );
-
+document.body.appendChild(stats.dom);
 
 let resizeId: number;
 window.addEventListener("resize", () => {
-    clearTimeout(resizeId);
-    resizeId = setTimeout(doneResizing, 100);
+  clearTimeout(resizeId);
+  resizeId = setTimeout(doneResizing, 100);
 });
 
-let timer = setInterval( () => {
+let timer = setInterval(() => {
   update();
-}, updateRate*10);
+}, updateRate * 10);
 
 createUI();
 
 init();
 
-
-
 /****************************************/
 
 function newFrame(): void {
-
   stats.begin();
 
   wglp.update();
 
-  stats.end();  
+  stats.end();
 
   window.requestAnimationFrame(newFrame);
-  
 }
 window.requestAnimationFrame(newFrame);
 
-
-
 function init(): void {
-
   const devicePixelRatio = window.devicePixelRatio || 1;
   const numX = Math.round(canv.clientWidth * devicePixelRatio);
   const numY = Math.round(canv.clientHeight * devicePixelRatio);
@@ -83,76 +69,63 @@ function init(): void {
   line = new WebglPolar(lineColor, numPoints);
   line.loop = true;
 
-  line2 = new WebglPolar(new ColorRGBA(0.9,0.9,0.9,1), 2);
-  line2.xy = new Float32Array([0,0,1,1]);
-
-
+  line2 = new WebglPolar(new ColorRGBA(0.9, 0.9, 0.9, 1), 2);
+  line2.xy = new Float32Array([0, 0, 1, 1]);
 
   wglp = new WebGLplot(canv);
 
   //wglp.offsetX = -1;
-  wglp.gScaleX = numY/numX;
+  wglp.gScaleX = numY / numX;
   wglp.gScaleY = 1;
-
-
-
 
   //line.linespaceX(-1, 2  / numX);
   wglp.addLine(line);
   wglp.addLine(line2);
 
-  for (let i=0; i < line.numPoints; i++) {
-    const theta = i * 360 / line.numPoints;
+  for (let i = 0; i < line.numPoints; i++) {
+    const theta = (i * 360) / line.numPoints;
     const r = amp * 1;
     //const r = 1;
     line.setRtheta(i, theta, r);
-
   }
-
 }
 
 function update(): void {
-
   //line.offsetTheta = 10*noise;
 
   //preR form previous update
 
   if (indexNow < line.numPoints) {
-    const theta = indexNow * 360 / line.numPoints;
-    let r = amp * (Math.random()-0.5) + preR;
+    const theta = (indexNow * 360) / line.numPoints;
+    let r = amp * (Math.random() - 0.5) + preR;
     line.setRtheta(indexNow, theta, r);
 
     line2.setRtheta(0, 0, 0);
     line2.setRtheta(1, theta, 1);
-    
+
     //line2.setX(1,line.getX(indexNow));
     //line2.setY(1,line.getY(indexNow));
 
-    r = (r<1)?r:1;
-    r = (r>0.1)?r:0.1;
+    r = r < 1 ? r : 1;
+    r = r > 0.1 ? r : 0.1;
     preR = r;
 
     indexNow++;
   } else {
     indexNow = 0;
   }
-  
-
 }
-
 
 function doneResizing(): void {
   wglp.viewport(0, 0, canv.width, canv.height);
   init();
 }
 
-
-
 function createUI(): void {
-  const ui =  document.getElementById("ui") as HTMLDivElement;
+  const ui = document.getElementById("ui") as HTMLDivElement;
 
   // ******slider lines */
-  sliderLines =  document.createElement("div") as unknown as noUiSlider.Instance;
+  sliderLines = (document.createElement("div") as unknown) as noUiSlider.Instance;
   sliderLines.style.width = "100%";
   noUiSlider.create(sliderLines, {
     start: [8],
@@ -179,10 +152,8 @@ function createUI(): void {
     init();
   });
 
-
-
   // ******slider amp */
-  sliderAmp =  document.createElement("div") as unknown as noUiSlider.Instance;
+  sliderAmp = (document.createElement("div") as unknown) as noUiSlider.Instance;
   sliderAmp.style.width = "100%";
   noUiSlider.create(sliderAmp, {
     start: [0.5],
@@ -206,10 +177,8 @@ function createUI(): void {
     displayAmp.innerHTML = `Randomness Amplitude: ${amp / k}`;
   });
 
-
-
   // ******slider noise */
-  sliderUpdateRate =  document.createElement("div") as unknown as noUiSlider.Instance;
+  sliderUpdateRate = (document.createElement("div") as unknown) as noUiSlider.Instance;
   sliderUpdateRate.style.width = "100%";
   noUiSlider.create(sliderUpdateRate, {
     start: [1],
@@ -233,9 +202,6 @@ function createUI(): void {
     //fpsDivder = k * parseFloat(values[handle]);
     displayUpdateRate.innerHTML = `Update Rate: ${updateRate / k}`;
     clearInterval(timer);
-    timer = setInterval( update, updateRate);
+    timer = setInterval(update, updateRate);
   });
-
-
-
 }

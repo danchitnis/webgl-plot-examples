@@ -1,24 +1,16 @@
-
-
 import * as noUiSlider from "nouislider";
 
-import { ColorRGBA, WebglLine, WebGLplot} from "webgl-plot";
-
+import WebGLplot, { ColorRGBA, WebglLine } from "webgl-plot";
 
 import * as Statsjs from "stats.js";
-
-
 
 let numLines = 1;
 
 let amp = 0.5;
-let noise  = 0.1;
+let noise = 0.1;
 let freq = 0.01;
 
-
-const canv =  document.getElementById("my_canvas") as HTMLCanvasElement;
-
-
+const canv = document.getElementById("my_canvas") as HTMLCanvasElement;
 
 let numX: number;
 
@@ -41,23 +33,19 @@ let displayNoise: HTMLSpanElement;
 
 const stats = new Statsjs();
 stats.showPanel(0);
-document.body.appendChild( stats.dom );
+document.body.appendChild(stats.dom);
 
 createUI();
 
 init();
 
-
 let resizeId: number;
 window.addEventListener("resize", () => {
-    clearTimeout(resizeId);
-    resizeId = setTimeout(doneResizing, 500);
+  clearTimeout(resizeId);
+  resizeId = setTimeout(doneResizing, 500);
 });
 
-
-
 function newFrame(): void {
-
   stats.begin();
 
   update();
@@ -72,13 +60,9 @@ function newFrame(): void {
 
 window.requestAnimationFrame(newFrame);
 
-
-
 function init(): void {
-
   const devicePixelRatio = window.devicePixelRatio || 1;
   numX = Math.round(canv.clientWidth * devicePixelRatio);
-
 
   lines = [];
 
@@ -92,55 +76,47 @@ function init(): void {
   // wglp.offsetX = -1;
   // wglp.scaleX = 2;
 
-
   lines.forEach((line) => {
-    line.linespaceX(-1, 2  / numX);
+    line.lineSpaceX(-1, 2 / numX);
     wglp.addLine(line);
   });
 }
 
 function update(): void {
-
   for (let j = 0; j < lines.length; j++) {
     for (let i = 0; i < lines[j].numPoints; i++) {
-      const ySin = Math.sin(Math.PI * i * freq + (j  / lines.length) * Math.PI * 2);
+      const ySin = Math.sin(Math.PI * i * freq + (j / lines.length) * Math.PI * 2);
       const yNoise = Math.random() - 0.5;
-      lines[j].setY(i,  ySin * amp + yNoise * noise);
+      lines[j].setY(i, ySin * amp + yNoise * noise);
     }
   }
 }
-
 
 function doneResizing(): void {
   wglp.viewport(0, 0, canv.width, canv.height);
 }
 
-
 function changeView(): void {
   if (segView) {
-    for (let i=0; i<lines.length; i++) {
+    for (let i = 0; i < lines.length; i++) {
       lines[i].offsetY = 0;
-      lines[i].scaleY = 1
+      lines[i].scaleY = 1;
     }
     segView = false;
-  }
-  else {
-    for (let i=0; i<lines.length; i++) {
-      lines[i].offsetY = 1.5*(i/lines.length - 0.5);
+  } else {
+    for (let i = 0; i < lines.length; i++) {
+      lines[i].offsetY = 1.5 * (i / lines.length - 0.5);
       lines[i].scaleY = 1.5 / lines.length;
     }
     segView = true;
   }
-  
-  
 }
 
-
 function createUI(): void {
-  const ui =  document.getElementById("ui") as HTMLDivElement;
+  const ui = document.getElementById("ui") as HTMLDivElement;
 
   // ******slider lines */
-  sliderLines =  document.createElement("div") as unknown as noUiSlider.Instance;
+  sliderLines = (document.createElement("div") as unknown) as noUiSlider.Instance;
   sliderLines.style.width = "100%";
   noUiSlider.create(sliderLines, {
     start: [0],
@@ -167,9 +143,8 @@ function createUI(): void {
     init();
   });
 
-
   // ******slider Freq */
-  sliderFreq =  document.createElement("div") as unknown as noUiSlider.Instance;
+  sliderFreq = (document.createElement("div") as unknown) as noUiSlider.Instance;
   sliderFreq.style.width = "100%";
   noUiSlider.create(sliderFreq, {
     start: [1],
@@ -193,9 +168,8 @@ function createUI(): void {
     displayFreq.innerHTML = `Frequency: ${freq / k}`;
   });
 
-
   // ******slider amp */
-  sliderAmp =  document.createElement("div") as unknown as noUiSlider.Instance;
+  sliderAmp = (document.createElement("div") as unknown) as noUiSlider.Instance;
   sliderAmp.style.width = "100%";
   noUiSlider.create(sliderAmp, {
     start: [1],
@@ -219,10 +193,8 @@ function createUI(): void {
     displayAmp.innerHTML = `Signal Amplitude: ${amp / k}`;
   });
 
-
-
   // ******slider noise */
-  sliderNoise =  document.createElement("div") as unknown as noUiSlider.Instance;
+  sliderNoise = (document.createElement("div") as unknown) as noUiSlider.Instance;
   sliderNoise.style.width = "100%";
   noUiSlider.create(sliderNoise, {
     start: [1],
@@ -246,13 +218,11 @@ function createUI(): void {
     displayNoise.innerHTML = `Noise Amplitude: ${noise / k}`;
   });
 
-
   const btView = document.createElement("button");
   btView.className = "button";
-  btView.innerHTML = "Change View"
+  btView.innerHTML = "Change View";
   ui.appendChild(btView);
   btView.addEventListener("click", () => {
     changeView();
   });
-
 }
