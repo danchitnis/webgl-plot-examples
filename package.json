@@ -18,7 +18,7 @@
   "dependencies": {
     "@types/nouislider": "^9.0.6",
     "@types/stats.js": "^0.17.0",
-    "nouislider": "^14.2.0",
+    "nouislider": "^14.4.0",
     "stats.js": "^0.17.0",
     "webgl-plot": "^0.3.0"
   },
