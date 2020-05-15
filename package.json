@@ -16,7 +16,7 @@
   },
   "homepage": "https://github.com/danchitnis/WebGL-plot-examples#readme",
   "dependencies": {
-    "@types/nouislider": "^9.0.6",
+    "@types/nouislider": "^9.0.7",
     "@types/stats.js": "^0.17.0",
     "nouislider": "^14.2.0",
     "stats.js": "^0.17.0",
