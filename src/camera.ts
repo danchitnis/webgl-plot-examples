@@ -74,9 +74,9 @@ function init(): void {
   //numX = Math.round(canv.clientWidth * devicePixelRatio);
   numX = camera.width;
 
-  lineR = new WebglLine(new ColorRGBA(0.9, 0.1, 0.1, 1), numX);
-  lineG = new WebglLine(new ColorRGBA(0.1, 0.9, 0.1, 1), numX);
-  lineB = new WebglLine(new ColorRGBA(0.1, 0.1, 0.9, 1), numX);
+  lineR = new WebglLine(new ColorRGBA(0.9, 0.2, 0.2, 1), numX);
+  lineG = new WebglLine(new ColorRGBA(0.2, 0.9, 0.2, 1), numX);
+  lineB = new WebglLine(new ColorRGBA(0.2, 0.2, 0.9, 1), numX);
 
   wglp = new WebGLplot(canv);
 

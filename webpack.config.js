@@ -49,4 +49,12 @@ module.exports = [
       path: path.resolve(__dirname, "prod"),
     },
   },
+  {
+    entry: "./dist/microphone.js",
+    mode: "development",
+    output: {
+      filename: "microphone.js",
+      path: path.resolve(__dirname, "prod"),
+    },
+  },
 ];
