@@ -3,13 +3,15 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>Webgl line plotting framework - Lines</title>
+    <title>Webgl line plotting framework - Radar</title>
     <link rel="stylesheet" href="style.css" type="text/css" />
     <link rel="stylesheet" href="./prod/nouislider.min.css" type="text/css" />
   </head>
 
   <body>
     <div>
+      <video id="player" autoplay></video>
+      <canvas id="camera"></canvas>
       <canvas class="canvas" id="my_canvas"></canvas>
     </div>
 
@@ -17,9 +19,9 @@
       <a href="./index.html">Random</a>
       <a href="./sine.html">Sine</a>
       <a href="./histogram.html">Histogram</a>
-      <a href="./ploar.html"><b>Polar</b></a>
+      <a href="./ploar.html">Polar</a>
       <a href="./radar.html">Radar</a>
-      <a href="./camera.html">Camera</a>
+      <a href="./camera.html"><b>Camera</b></a>
     </div>
 
     <p></p>
@@ -27,5 +29,5 @@
     <div id="ui" class="items"></div>
   </body>
 
-  <script src="./prod/polar.js"></script>
+  <script src="./prod/camera.js"></script>
 </html>
