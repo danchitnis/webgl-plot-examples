@@ -107,7 +107,7 @@ function init(): void {
 
   wglp.gOffsetY = 0;
 
-  lineTime.offsetY = -1;
+  lineTime.offsetY = 0;
 
   lineTime.lineSpaceX(-1, 2 / numX);
   lineFreq.lineSpaceX(-1, 2 / numX);
@@ -123,10 +123,13 @@ function update(): void {
   for (let i = 0; i < dataArray.length; i++) {
     //line.setY(i, buffer[i]);
     lineFreq.setY(i, dataArray[i] / 255);
+    //max = Math.max(buffer.);
   }
-  analyser.getByteTimeDomainData(dataArray);
-  for (let i = 0; i < dataArray.length; i++) {
-    lineTime.setY(i, dataArray[i] / 128);
+
+  const buffer = new Float32Array(bufferLength);
+  analyser.getFloatTimeDomainData(buffer);
+  for (let i = 0; i < buffer.length; i++) {
+    lineTime.setY(i, buffer[i]);
   }
 }
 
