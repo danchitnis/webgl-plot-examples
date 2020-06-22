@@ -42,10 +42,10 @@ module.exports = [
     },
   },
   {
-    entry: "./dist/camera.js",
+    entry: "./dist/camera_hist.js",
     mode: "development",
     output: {
-      filename: "camera.js",
+      filename: "camera_hist.js",
       path: path.resolve(__dirname, "prod"),
     },
   },

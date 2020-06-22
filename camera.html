@@ -11,7 +11,7 @@
   <body>
     <div>
       <video id="player" autoplay muted></video>
-      <canvas id="camera"></canvas>
+      <canvas class="camera" id="camera"></canvas>
       <canvas class="canvas" id="my_canvas"></canvas>
     </div>
 
@@ -28,7 +28,14 @@
     <p></p>
 
     <div id="ui" class="items"></div>
+
+    <style>
+      .camera {
+        position: absolute;
+        z-index: -1;
+      }
+    </style>
   </body>
 
-  <script src="./prod/camera.js"></script>
+  <script src="./prod/camera_hist.js"></script>
 </html>
