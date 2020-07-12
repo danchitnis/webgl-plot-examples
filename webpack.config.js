@@ -57,4 +57,12 @@ module.exports = [
       path: path.resolve(__dirname, "prod"),
     },
   },
+  {
+    entry: "./dist/static.js",
+    mode: "development",
+    output: {
+      filename: "static.js",
+      path: path.resolve(__dirname, "prod"),
+    },
+  },
 ];
