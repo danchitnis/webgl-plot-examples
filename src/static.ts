@@ -16,6 +16,9 @@ let wglp: WebGLplot;
 let lines: WebglLine[];
 
 let scale = 1;
+let offset = 0;
+let pinchZoom = false;
+let drag = false;
 
 createUI();
 
@@ -41,7 +44,7 @@ window.requestAnimationFrame(newFrame);
 function init(): void {
   const devicePixelRatio = window.devicePixelRatio || 1;
   //numX = Math.round(canv.clientWidth * devicePixelRatio);
-  numX = 1000000;
+  numX = 100000;
 
   lines = [];
 
@@ -60,31 +63,35 @@ function init(): void {
     wglp.addLine(line);
   });
 
-  for (let j = 0; j < lines.length; j++) {
+  /*for (let j = 0; j < lines.length; j++) {
     for (let i = 0; i < lines[j].numPoints; i++) {
       const ySin = Math.sin(Math.PI * i * freq + (j / lines.length) * Math.PI * 2);
       const yNoise = Math.random() - 0.5;
       lines[j].setY(i, ySin * amp + yNoise * noise);
     }
-  }
+  }*/
 
-  /*for (let j = 0; j < lines.length; j++) {
+  for (let j = 0; j < lines.length; j++) {
     for (let i = 1; i < lines[j].numPoints; i++) {
-      let y = lines[j].getY(i - 1) + 0.1 * (Math.round(Math.random()) - 0.5);
-      if (y > 1) {
+      let y = lines[j].getY(i - 1) + 0.01 * (Math.round(Math.random()) - 0.5);
+      if (y > 0.9) {
         y = 0.9;
       }
-      if (y < -1) {
+      if (y < -0.9) {
         y = -0.9;
       }
       lines[j].setY(i, y);
     }
-  }*/
+  }
 
   //wglp.viewport(0, 0, 1000, 1000);
   wglp.gScaleX = 1;
 
   canv.addEventListener("wheel", zoomEvent);
+  canv.addEventListener("touchstart", touchStart);
+  canv.addEventListener("touchmove", touchMove);
+  canv.addEventListener("touchend", touchEnd);
+
   //window.addEventListener("keydown", keyEvent);
 }
 
@@ -97,16 +104,73 @@ function update(): void {
 function zoomEvent(e: WheelEvent) {
   e.preventDefault();
 
-  scale += e.deltaY * -0.01;
-
   // Restrict scale
-  scale = Math.min(Math.max(1, scale), 100);
 
   if (e.shiftKey) {
-    wglp.gOffsetX = 0.1 * scale;
+    offset += e.deltaY * 0.1;
+    wglp.gOffsetX = 0.1 * offset;
   } else {
+    scale += e.deltaY * -0.01;
+    scale = Math.min(100, scale);
+    scale = Math.max(1, scale);
     wglp.gScaleX = 1 * Math.pow(scale, 1.5);
   }
+}
+
+/*
+ * Pinch and Zoom
+ **/
+
+let initialX = 0;
+
+function touchStart(e: TouchEvent) {
+  //
+  e.preventDefault();
+  log("touched");
+  if (e.touches.length == 2) {
+    pinchZoom = true;
+    drag = false;
+    initialX = e.touches[0].pageX - e.touches[1].pageX;
+    log("pinch started");
+  }
+  if (e.touches.length == 1) {
+    drag = true;
+    pinchZoom = false;
+    initialX = e.touches[0].pageX;
+  }
+}
+
+function touchMove(e: TouchEvent) {
+  e.preventDefault();
+  if (pinchZoom) {
+    const newX = e.touches[0].pageX - e.touches[1].pageX;
+
+    const deltaX = (initialX - newX) / 10;
+
+    scale = scale + deltaX;
+    scale = Math.min(100, scale);
+    scale = Math.max(1, scale);
+    wglp.gScaleX = 1 * Math.pow(scale, 1.5);
+
+    //log(diffX.toFixed(2));
+    initialX = newX;
+  }
+  if (drag) {
+    const newX = e.touches[0].pageX;
+    const deltaX = initialX - newX;
+    offset = offset - deltaX;
+    offset = Math.min(1000, offset);
+    offset = Math.max(-1000, offset);
+    wglp.gOffsetX = offset / 100;
+    initialX = newX;
+  }
+}
+
+function touchEnd(e: TouchEvent) {
+  //
+  e.preventDefault();
+  pinchZoom = false;
+  drag = false;
 }
 
 function doneResizing(): void {
@@ -119,4 +183,8 @@ function createUI(): void {
   display = document.createElement("p") as HTMLParagraphElement;
   display.innerHTML = "hello😉";
   ui.appendChild(display);
+}
+
+function log(str: string) {
+  display.innerHTML = str;
 }
