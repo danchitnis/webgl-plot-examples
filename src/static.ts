@@ -19,6 +19,7 @@ let scale = 1;
 let offset = 0;
 let pinchZoom = false;
 let drag = false;
+let move = false;
 
 createUI();
 
@@ -92,6 +93,14 @@ function init(): void {
   canv.addEventListener("touchmove", touchMove);
   canv.addEventListener("touchend", touchEnd);
 
+  canv.addEventListener("mousedown", mouseDown);
+  canv.addEventListener("mousemove", mouseMove);
+  canv.addEventListener("mouseup", mouseUp);
+
+  canv.addEventListener("dblclick", dblClick);
+
+  canv.style.cursor = "zoom-in";
+
   //window.addEventListener("keydown", keyEvent);
 }
 
@@ -99,6 +108,37 @@ function update(): void {
   if (wglp) {
     display.innerHTML = wglp.gScaleX.toFixed(2) + ", " + wglp.gOffsetX.toFixed(2);
   }
+}
+
+function dblClick(e: MouseEvent) {
+  e.preventDefault();
+  wglp.gScaleX = 1;
+  wglp.gOffsetX = 0;
+}
+
+let moveInitialX = 0;
+let offsetOld = 0;
+
+function mouseDown(e: MouseEvent) {
+  move = true;
+  canv.style.cursor = "pointer";
+  moveInitialX = e.clientX;
+  offsetOld = wglp.gOffsetX;
+  console.log(offsetOld);
+}
+
+function mouseMove(e: MouseEvent) {
+  if (move) {
+    const moveX = e.clientX - moveInitialX;
+    const offsetX = (wglp.gScaleY * moveX) / 1000;
+    wglp.gOffsetX = offsetX + offsetOld;
+  }
+}
+
+function mouseUp(e: MouseEvent) {
+  move = false;
+  canv.style.cursor = "zoom-in";
+  moveInitialX = 0;
 }
 
 function zoomEvent(e: WheelEvent) {
