@@ -1,5 +1,7 @@
 {
-    "eslint.enable": true,
-    "typescript.tsdk": "node_modules\\typescript\\lib",
-    "liveServer.settings.port": 5501
+  "eslint.enable": true,
+  "typescript.tsdk": ".yarn/sdks/typescript/lib",
+  "liveServer.settings.port": 5501,
+  "eslint.nodePath": ".yarn/sdks",
+  "typescript.enablePromptUseWorkspaceTsdk": true
 }
