@@ -14,12 +14,18 @@ let display: HTMLParagraphElement;
 
 let wglp: WebGLplot;
 let lines: WebglLine[];
+let Rect: WebglLine;
 
 let scale = 1;
 let offset = 0;
 let pinchZoom = false;
 let drag = false;
 let move = false;
+
+let moveInitialX = 0;
+let offsetOld = 0;
+
+let initialX = 0;
 
 createUI();
 
@@ -34,8 +40,9 @@ window.addEventListener("resize", () => {
 function newFrame(): void {
   update();
 
+  //wglp.clear();
+
   wglp.update();
-  //wglp.gScaleY = scaleY;
 
   window.requestAnimationFrame(newFrame);
 }
@@ -63,6 +70,11 @@ function init(): void {
     line.lineSpaceX(-1, 2 / numX);
     wglp.addLine(line);
   });
+
+  // add zoom rectangle
+  Rect = new WebglLine(new ColorRGBA(0.9, 0.9, 0.9, 1), numX);
+  Rect.xy = new Float32Array([-0.5, -1, -0.5, 1, 0.5, 1, 0.5, -1]);
+  wglp.addLine(Rect);
 
   /*for (let j = 0; j < lines.length; j++) {
     for (let i = 0; i < lines[j].numPoints; i++) {
@@ -116,10 +128,41 @@ function dblClick(e: MouseEvent) {
   wglp.gOffsetX = 0;
 }
 
-let moveInitialX = 0;
-let offsetOld = 0;
-
 function mouseDown(e: MouseEvent) {
+  move = true;
+  canv.style.cursor = "pointer";
+  moveInitialX = (2 * (e.clientX - canv.width / 2)) / canv.width;
+  //offsetOld = wglp.gOffsetX;
+  //console.log(offsetOld);
+  Rect.visible = true;
+}
+
+function mouseMove(e: MouseEvent) {
+  if (move) {
+    //const moveX = e.clientX - moveInitialX;
+    const cursorOffsetX = (2 * (e.clientX - canv.width / 2)) / canv.width;
+    Rect.xy = new Float32Array([
+      moveInitialX,
+      -1,
+      moveInitialX,
+      1,
+      cursorOffsetX,
+      1,
+      cursorOffsetX,
+      -1,
+    ]);
+  }
+}
+
+function mouseUp(e: MouseEvent) {
+  e.preventDefault();
+  move = false;
+  canv.style.cursor = "zoom-in";
+  moveInitialX = 0;
+  Rect.visible = false;
+}
+
+/*function mouseDown(e: MouseEvent) {
   move = true;
   canv.style.cursor = "pointer";
   moveInitialX = e.clientX;
@@ -136,15 +179,17 @@ function mouseMove(e: MouseEvent) {
 }
 
 function mouseUp(e: MouseEvent) {
+  e.preventDefault();
   move = false;
   canv.style.cursor = "zoom-in";
   moveInitialX = 0;
-}
+}*/
 
 function zoomEvent(e: WheelEvent) {
   e.preventDefault();
 
-  // Restrict scale
+  const cursorOffsetX = (-2 * (e.clientX - canv.width / 2)) / canv.width;
+  console.log(cursorOffsetX);
 
   if (e.shiftKey) {
     offset += e.deltaY * 0.1;
@@ -153,15 +198,21 @@ function zoomEvent(e: WheelEvent) {
     scale += e.deltaY * -0.01;
     scale = Math.min(100, scale);
     scale = Math.max(1, scale);
+    const gScaleXOld = wglp.gScaleX;
+
     wglp.gScaleX = 1 * Math.pow(scale, 1.5);
+    if (scale > 1 && scale < 100) {
+      wglp.gOffsetX = ((wglp.gOffsetX + cursorOffsetX) * wglp.gScaleX) / gScaleXOld;
+    }
+    if (scale <= 1) {
+      wglp.gOffsetX = 0;
+    }
   }
 }
 
 /*
  * Pinch and Zoom
  **/
-
-let initialX = 0;
 
 function touchStart(e: TouchEvent) {
   //
@@ -211,6 +262,10 @@ function touchEnd(e: TouchEvent) {
   e.preventDefault();
   pinchZoom = false;
   drag = false;
+}
+
+function updateZoomRect(x1: number, x2: number): void {
+  //
 }
 
 function doneResizing(): void {
