@@ -20,10 +20,10 @@ let scale = 1;
 let offset = 0;
 let pinchZoom = false;
 let drag = false;
-let move = false;
+let zoom = false;
 
-let moveInitialX = 0;
-let offsetOld = 0;
+let dragInitialX = 0;
+let dragOffsetOld = 0;
 
 let initialX = 0;
 
@@ -72,9 +72,17 @@ function init(): void {
   });
 
   // add zoom rectangle
-  Rect = new WebglLine(new ColorRGBA(0.9, 0.9, 0.9, 1), numX);
+  Rect = new WebglLine(new ColorRGBA(0.9, 0.9, 0.9, 1), 4);
+  Rect.loop = true;
   Rect.xy = new Float32Array([-0.5, -1, -0.5, 1, 0.5, 1, 0.5, -1]);
+  Rect.visible = false;
   wglp.addLine(Rect);
+
+  // test rec
+  const testRect = new WebglLine(new ColorRGBA(0.1, 0.9, 0.9, 1), 4);
+  testRect.loop = true;
+  testRect.xy = new Float32Array([-0.7, -0.8, -0.7, 0.8, -0.6, 0.8, -0.6, -0.8]);
+  wglp.addLine(testRect);
 
   /*for (let j = 0; j < lines.length; j++) {
     for (let i = 0; i < lines[j].numPoints; i++) {
@@ -111,6 +119,8 @@ function init(): void {
 
   canv.addEventListener("dblclick", dblClick);
 
+  canv.addEventListener("contextmenu", contextMenu);
+
   canv.style.cursor = "zoom-in";
 
   //window.addEventListener("keydown", keyEvent);
@@ -128,62 +138,73 @@ function dblClick(e: MouseEvent) {
   wglp.gOffsetX = 0;
 }
 
+function contextMenu(e: Event) {
+  e.preventDefault();
+}
+
+let cursorDownX = 0;
+
 function mouseDown(e: MouseEvent) {
-  move = true;
-  canv.style.cursor = "pointer";
-  moveInitialX = (2 * (e.clientX - canv.width / 2)) / canv.width;
-  //offsetOld = wglp.gOffsetX;
-  //console.log(offsetOld);
-  Rect.visible = true;
+  e.preventDefault();
+  if (e.button == 0) {
+    zoom = true;
+    canv.style.cursor = "pointer";
+    cursorDownX = (2 * (e.clientX - canv.width / 2)) / canv.width;
+    //cursorDownX = (cursorDownX - wglp.gOffsetX) / wglp.gScaleX;
+
+    Rect.visible = true;
+  }
+  if (e.button == 2) {
+    drag = true;
+    canv.style.cursor = "grabbing";
+    dragInitialX = e.clientX;
+    dragOffsetOld = wglp.gOffsetX;
+  }
 }
 
 function mouseMove(e: MouseEvent) {
-  if (move) {
-    //const moveX = e.clientX - moveInitialX;
+  e.preventDefault();
+  if (zoom) {
     const cursorOffsetX = (2 * (e.clientX - canv.width / 2)) / canv.width;
     Rect.xy = new Float32Array([
-      moveInitialX,
+      (cursorDownX - wglp.gOffsetX) / wglp.gScaleX,
       -1,
-      moveInitialX,
+      (cursorDownX - wglp.gOffsetX) / wglp.gScaleX,
       1,
-      cursorOffsetX,
+      (cursorOffsetX - wglp.gOffsetX) / wglp.gScaleX,
       1,
-      cursorOffsetX,
+      (cursorOffsetX - wglp.gOffsetX) / wglp.gScaleX,
       -1,
     ]);
+    Rect.visible = true;
   }
-}
-
-function mouseUp(e: MouseEvent) {
-  e.preventDefault();
-  move = false;
-  canv.style.cursor = "zoom-in";
-  moveInitialX = 0;
-  Rect.visible = false;
-}
-
-/*function mouseDown(e: MouseEvent) {
-  move = true;
-  canv.style.cursor = "pointer";
-  moveInitialX = e.clientX;
-  offsetOld = wglp.gOffsetX;
-  console.log(offsetOld);
-}
-
-function mouseMove(e: MouseEvent) {
-  if (move) {
-    const moveX = e.clientX - moveInitialX;
+  if (drag) {
+    const moveX = e.clientX - dragInitialX;
     const offsetX = (wglp.gScaleY * moveX) / 1000;
-    wglp.gOffsetX = offsetX + offsetOld;
+    wglp.gOffsetX = offsetX + dragOffsetOld;
   }
 }
 
 function mouseUp(e: MouseEvent) {
   e.preventDefault();
-  move = false;
+  if (zoom) {
+    const cursorUpX = (2 * (e.clientX - canv.width / 2)) / canv.width;
+    console.log(cursorDownX, cursorUpX);
+
+    const zoomFactor = Math.abs(cursorUpX - cursorDownX) / (2 * wglp.gScaleX);
+    const offsetFactor = (cursorDownX + cursorUpX - 2 * wglp.gOffsetX) / (2 * wglp.gScaleX);
+
+    if (zoomFactor > 0) {
+      wglp.gScaleX = 1 / zoomFactor;
+      wglp.gOffsetX = -offsetFactor / zoomFactor;
+    }
+  }
+
+  zoom = false;
+  drag = false;
   canv.style.cursor = "zoom-in";
-  moveInitialX = 0;
-}*/
+  //Rect.visible = false;
+}
 
 function zoomEvent(e: WheelEvent) {
   e.preventDefault();
