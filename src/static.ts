@@ -128,7 +128,7 @@ function init(): void {
 
 function update(): void {
   if (wglp) {
-    display.innerHTML = wglp.gScaleX.toFixed(2) + ", " + wglp.gOffsetX.toFixed(2);
+    display.innerHTML = "Zoom: "+ wglp.gScaleX.toFixed(2) + ", Offset: " + wglp.gOffsetX.toFixed(2);
   }
 }
 
