@@ -33,8 +33,8 @@ init();
 
 let resizeId: number;
 window.addEventListener("resize", () => {
-  clearTimeout(resizeId);
-  resizeId = setTimeout(doneResizing, 500);
+  window.clearTimeout(resizeId);
+  resizeId = window.setTimeout(doneResizing, 500);
 });
 
 function newFrame(): void {
@@ -128,7 +128,8 @@ function init(): void {
 
 function update(): void {
   if (wglp) {
-    display.innerHTML = "Zoom: "+ wglp.gScaleX.toFixed(2) + ", Offset: " + wglp.gOffsetX.toFixed(2);
+    display.innerHTML =
+      "Zoom: " + wglp.gScaleX.toFixed(2) + ", Offset: " + wglp.gOffsetX.toFixed(2);
   }
 }
 

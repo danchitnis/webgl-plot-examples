@@ -46,8 +46,8 @@ createUI();
 
 let resizeId: number;
 window.addEventListener("resize", () => {
-  clearTimeout(resizeId);
-  resizeId = setTimeout(doneResizing, 500);
+  window.clearTimeout(resizeId);
+  resizeId = window.setTimeout(doneResizing, 500);
 });
 
 /*let bt = <HTMLButtonElement>document.getElementById("bt");

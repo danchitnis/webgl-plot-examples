@@ -36,8 +36,8 @@ document.body.appendChild(stats.dom);
 
 let resizeId: number;
 window.addEventListener("resize", () => {
-  clearTimeout(resizeId);
-  resizeId = setTimeout(doneResizing, 100);
+  window.clearTimeout(resizeId);
+  resizeId = window.setTimeout(doneResizing, 100);
 });
 
 let timer = setInterval(() => {
