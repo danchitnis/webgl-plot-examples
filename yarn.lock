@@ -2319,10 +2319,10 @@ watchpack@2.0.0-beta.13:
     glob-to-regexp "^0.4.1"
     graceful-fs "^4.1.2"
 
-webgl-plot@^0.3.1:
-  version "0.3.1"
-  resolved "https://registry.yarnpkg.com/webgl-plot/-/webgl-plot-0.3.1.tgz#9296f3d594be77224bcd038cddd3ff646e197d3b"
-  integrity sha512-9Rc6HmhhO0oVl/vU1fBhx0FWI+1BYypGwGnM/GaZqp0UI4hCGWHVtxtsgflleh5DdmAQCuD+pXjyRIfVK3+6dA==
+webgl-plot@^0.4.0:
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/webgl-plot/-/webgl-plot-0.4.0.tgz#1e10db7750368fe7c7685342f1b75abb2c56d689"
+  integrity sha512-pVP/oRy80Nr2cK7vE770XEj0tgRKQdrqR6H9eRiHlBQfIRy9m9YJ3NicBxjtpuZq9Sc9sqBMPcgrpyKsGpQP/g==
 
 webpack-cli@^3.3.12:
   version "3.3.12"
