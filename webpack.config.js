@@ -65,4 +65,12 @@ module.exports = [
       path: path.resolve(__dirname, "prod"),
     },
   },
+  {
+    entry: "./dist/offScreen.js",
+    mode: "development",
+    output: {
+      filename: "offScreen.js",
+      path: path.resolve(__dirname, "prod"),
+    },
+  },
 ];
