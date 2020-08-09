@@ -8,7 +8,7 @@ let amp = 0.5;
 let noise = 0.1;
 let freq = 0.01;
 
-const canv = document.getElementById("my_canvas") as HTMLCanvasElement;
+const canvas = document.getElementById("my_canvas") as HTMLCanvasElement;
 
 let numPoints = 100;
 
@@ -55,13 +55,16 @@ window.requestAnimationFrame(newFrame);
 
 function init(): void {
   const devicePixelRatio = window.devicePixelRatio || 1;
-  const numX = Math.round(canv.clientWidth * devicePixelRatio);
-  const numY = Math.round(canv.clientHeight * devicePixelRatio);
+  canvas.width = canvas.clientWidth * devicePixelRatio;
+  canvas.height = canvas.clientHeight * devicePixelRatio;
+
+  const numX = canvas.width;
+  const numY = canvas.height;
 
   const color = new ColorRGBA(Math.random(), Math.random(), Math.random(), 1);
   line = new WebglPolar(color, numPoints);
 
-  wglp = new WebGLplot(canv);
+  wglp = new WebGLplot(canvas);
 
   wglp.gScaleX = numY / numX;
   wglp.gScaleY = 1;
@@ -81,7 +84,7 @@ function update(): void {
 }
 
 function doneResizing(): void {
-  wglp.viewport(0, 0, canv.width, canv.height);
+  //wglp.viewport(0, 0, canv.width, canv.height);
   init();
 }
 

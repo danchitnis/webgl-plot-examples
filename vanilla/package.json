@@ -3,7 +3,8 @@
   "version": "0.0.1",
   "description": "webgl-plot examples",
   "scripts": {
-    "build": "tsc && webpack"
+    "build": "tsc && webpack",
+    "roll": "rollup -c"
   },
   "repository": {
     "type": "git",

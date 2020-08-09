@@ -1,6 +1,6 @@
 import WebGLplot, { ColorRGBA, WebglLine } from "webgl-plot";
 
-const canv = document.getElementById("my_canvas") as HTMLCanvasElement;
+const canvas = document.getElementById("my_canvas") as HTMLCanvasElement;
 const player = document.getElementById("player") as HTMLVideoElement;
 
 let numX: number;
@@ -62,7 +62,7 @@ function init(): void {
     //source.connect(processor);
     //processor.connect(context.destination);
 
-    processor.onaudioprocess = function (e) {
+    processor.onaudioprocess = () => {
       // Do something with the data, e.g. convert it to WAV
       //console.log(e.inputBuffer);
       //analyser.getByteTimeDomainData(dataArray);
@@ -82,15 +82,17 @@ function init(): void {
   player.height = 0;
   player.width = 0;
 
-  //const devicePixelRatio = window.devicePixelRatio || 1;
-  //numX = Math.round(canv.clientWidth * devicePixelRatio);
+  const devicePixelRatio = window.devicePixelRatio || 1;
+  canvas.width = canvas.clientWidth * devicePixelRatio;
+  canvas.height = canvas.clientHeight * devicePixelRatio;
+
   numX = 1024;
 
   lineTime = new WebglLine(new ColorRGBA(0.2, 0.9, 0.2, 1), numX);
 
   lineFreq = new WebglLine(new ColorRGBA(0.9, 0.2, 0.2, 1), fftSize / 2);
 
-  wglp = new WebGLplot(canv);
+  wglp = new WebGLplot(canvas);
 
   wglp.gOffsetY = 0;
 
@@ -133,7 +135,8 @@ function update(): void {
 }
 
 function doneResizing(): void {
-  wglp.viewport(0, 0, canv.width, canv.height);
+  //wglp.viewport(0, 0, canv.width, canv.height);
+  init();
 }
 
 /*function createUI(): void {

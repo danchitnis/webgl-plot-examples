@@ -13,9 +13,11 @@ let Xmin = 25;
 let Xmax = 75;
 let Xskew = 1;
 
-const canv = document.getElementById("my_canvas") as HTMLCanvasElement;
+const canvas = document.getElementById("my_canvas") as HTMLCanvasElement;
 
 const devicePixelRatio = window.devicePixelRatio || 1;
+canvas.width = canvas.clientWidth * devicePixelRatio;
+canvas.height = canvas.clientHeight * devicePixelRatio;
 
 let scaleY = 1;
 
@@ -70,7 +72,7 @@ function newFrame(): void {
 window.requestAnimationFrame(newFrame);
 
 function init(): void {
-  wglp = new WebGLplot(canv);
+  wglp = new WebGLplot(canvas);
   xbins = new Float32Array(numBins);
   ybins = new Float32Array(numBins);
 
@@ -149,7 +151,7 @@ function randnArray(array: Float32Array): void {
 }
 
 function doneResizing(): void {
-  wglp.viewport(0, 0, canv.width, canv.height);
+  //wglp.viewport(0, 0, canv.width, canv.height);
 }
 
 function createUI(): void {

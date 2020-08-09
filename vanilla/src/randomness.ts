@@ -9,10 +9,13 @@ import WebGLplot, { WebglLine, ColorRGBA } from "webgl-plot";
 
 import * as Stats from "stats.js";
 
-const canv = document.getElementById("my_canvas") as HTMLCanvasElement;
+const canvas = document.getElementById("my_canvas") as HTMLCanvasElement;
 
 const devicePixelRatio = window.devicePixelRatio || 1;
-const numX = Math.round(canv.clientWidth * devicePixelRatio);
+canvas.width = canvas.clientWidth * devicePixelRatio;
+canvas.height = canvas.clientHeight * devicePixelRatio;
+
+const numX = Math.round(canvas.width);
 
 const stats = new Stats();
 stats.showPanel(0);
@@ -102,7 +105,7 @@ function init(): void {
     lines.push(new WebglLine(color, numX));
   }
 
-  wglp = new WebGLplot(canv);
+  wglp = new WebGLplot(canvas);
 
   lines.forEach((line) => {
     wglp.addLine(line);
@@ -117,7 +120,7 @@ function init(): void {
 }
 
 function doneResizing(): void {
-  wglp.viewport(0, 0, canv.width, canv.height);
+  //wglp.viewport(0, 0, canv.width, canv.height);
 }
 
 function createUI(): void {

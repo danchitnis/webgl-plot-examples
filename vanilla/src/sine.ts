@@ -10,7 +10,7 @@ let amp = 0.5;
 let noise = 0.1;
 let freq = 0.01;
 
-const canv = document.getElementById("my_canvas") as HTMLCanvasElement;
+const canvas = document.getElementById("my_canvas") as HTMLCanvasElement;
 
 let numX: number;
 
@@ -62,7 +62,10 @@ window.requestAnimationFrame(newFrame);
 
 function init(): void {
   const devicePixelRatio = window.devicePixelRatio || 1;
-  numX = Math.round(canv.clientWidth * devicePixelRatio);
+  canvas.width = canvas.clientWidth * devicePixelRatio;
+  canvas.height = canvas.clientHeight * devicePixelRatio;
+
+  numX = Math.round(canvas.width);
 
   lines = [];
 
@@ -71,7 +74,7 @@ function init(): void {
     lines.push(new WebglLine(color, numX));
   }
 
-  wglp = new WebGLplot(canv);
+  wglp = new WebGLplot(canvas);
 
   // wglp.offsetX = -1;
   // wglp.scaleX = 2;
@@ -93,7 +96,7 @@ function update(): void {
 }
 
 function doneResizing(): void {
-  wglp.viewport(0, 0, canv.width, canv.height);
+  //wglp.viewport(0, 0, canvas.width, canvas.height);
 }
 
 function changeView(): void {

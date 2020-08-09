@@ -1,10 +1,6 @@
-import * as noUiSlider from "nouislider";
-
 import WebGLplot, { ColorRGBA, WebglLine } from "webgl-plot";
 
-import * as Statsjs from "stats.js";
-
-const canv = document.getElementById("my_canvas") as HTMLCanvasElement;
+const canvas = document.getElementById("my_canvas") as HTMLCanvasElement;
 const player = document.getElementById("player") as HTMLVideoElement;
 const camera = document.getElementById("camera") as HTMLCanvasElement;
 
@@ -12,18 +8,12 @@ const context = camera.getContext("2d");
 
 let numX: number;
 
-let segView = false;
-
 let N = 0;
 
 let wglp: WebGLplot;
 let lineR: WebglLine;
 let lineG: WebglLine;
 let lineB: WebglLine;
-
-const stats = new Statsjs();
-//stats.showPanel(0);
-//document.body.appendChild(stats.dom);
 
 createUI();
 
@@ -36,19 +26,15 @@ window.addEventListener("resize", () => {
 });
 
 function newFrame(): void {
-  stats.begin();
-
   update();
 
   wglp.update();
   //wglp.gScaleY = scaleY;
 
-  stats.end();
-
-  window.requestAnimationFrame(newFrame);
+  requestAnimationFrame(newFrame);
 }
 
-window.requestAnimationFrame(newFrame);
+requestAnimationFrame(newFrame);
 
 function init(): void {
   // Create the canvas and get a context
@@ -71,17 +57,17 @@ function init(): void {
 
   //let imageData = 0;
   //let pixels = 0;
-
   const devicePixelRatio = window.devicePixelRatio || 1;
-  //numX = Math.round(canv.clientWidth * devicePixelRatio);
-  //numX = camera.width;
+  canvas.width = canvas.clientWidth * devicePixelRatio;
+  canvas.height = canvas.clientHeight * devicePixelRatio;
+
   numX = 256;
 
   lineR = new WebglLine(new ColorRGBA(0.9, 0.2, 0.2, 1), numX);
   lineG = new WebglLine(new ColorRGBA(0.2, 0.9, 0.2, 1), numX);
   lineB = new WebglLine(new ColorRGBA(0.2, 0.2, 0.9, 1), numX);
 
-  wglp = new WebGLplot(canv);
+  wglp = new WebGLplot(canvas);
 
   wglp.gOffsetY = -1;
   wglp.gScaleY = 1.9;
@@ -124,9 +110,10 @@ function update(): void {
 }
 
 function doneResizing(): void {
-  wglp.viewport(0, 0, canv.width, canv.height);
+  //wglp.viewport(0, 0, canv.width, canv.height);
+  init();
 }
 
 function createUI(): void {
-  const ui = document.getElementById("ui") as HTMLDivElement;
+  //const ui = document.getElementById("ui") as HTMLDivElement;
 }

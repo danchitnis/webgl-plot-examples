@@ -6,7 +6,7 @@ const amp = 0.5;
 const noise = 0.1;
 const freq = 0.01;
 
-const canv = document.getElementById("my_canvas") as HTMLCanvasElement;
+const canvas = document.getElementById("my_canvas") as HTMLCanvasElement;
 
 let numX: number;
 
@@ -51,6 +51,8 @@ window.requestAnimationFrame(newFrame);
 
 function init(): void {
   const devicePixelRatio = window.devicePixelRatio || 1;
+  canvas.width = canvas.clientWidth * devicePixelRatio;
+  canvas.height = canvas.clientHeight * devicePixelRatio;
   //numX = Math.round(canv.clientWidth * devicePixelRatio);
   numX = 100000;
 
@@ -61,7 +63,7 @@ function init(): void {
     lines.push(new WebglLine(color, numX));
   }
 
-  wglp = new WebGLplot(canv);
+  wglp = new WebGLplot(canvas);
 
   // wglp.offsetX = -1;
   // wglp.scaleX = 2;
@@ -108,20 +110,20 @@ function init(): void {
   //wglp.viewport(0, 0, 1000, 1000);
   wglp.gScaleX = 1;
 
-  canv.addEventListener("wheel", zoomEvent);
-  canv.addEventListener("touchstart", touchStart);
-  canv.addEventListener("touchmove", touchMove);
-  canv.addEventListener("touchend", touchEnd);
+  canvas.addEventListener("wheel", zoomEvent);
+  canvas.addEventListener("touchstart", touchStart);
+  canvas.addEventListener("touchmove", touchMove);
+  canvas.addEventListener("touchend", touchEnd);
 
-  canv.addEventListener("mousedown", mouseDown);
-  canv.addEventListener("mousemove", mouseMove);
-  canv.addEventListener("mouseup", mouseUp);
+  canvas.addEventListener("mousedown", mouseDown);
+  canvas.addEventListener("mousemove", mouseMove);
+  canvas.addEventListener("mouseup", mouseUp);
 
-  canv.addEventListener("dblclick", dblClick);
+  canvas.addEventListener("dblclick", dblClick);
 
-  canv.addEventListener("contextmenu", contextMenu);
+  canvas.addEventListener("contextmenu", contextMenu);
 
-  canv.style.cursor = "zoom-in";
+  canvas.style.cursor = "zoom-in";
 
   //window.addEventListener("keydown", keyEvent);
 }
@@ -149,15 +151,15 @@ function mouseDown(e: MouseEvent) {
   e.preventDefault();
   if (e.button == 0) {
     zoom = true;
-    canv.style.cursor = "pointer";
-    cursorDownX = (2 * (e.clientX - canv.width / 2)) / canv.width;
+    canvas.style.cursor = "pointer";
+    cursorDownX = (2 * (e.clientX - canvas.width / 2)) / canvas.width;
     //cursorDownX = (cursorDownX - wglp.gOffsetX) / wglp.gScaleX;
 
     Rect.visible = true;
   }
   if (e.button == 2) {
     drag = true;
-    canv.style.cursor = "grabbing";
+    canvas.style.cursor = "grabbing";
     dragInitialX = e.clientX;
     dragOffsetOld = wglp.gOffsetX;
   }
@@ -166,7 +168,7 @@ function mouseDown(e: MouseEvent) {
 function mouseMove(e: MouseEvent) {
   e.preventDefault();
   if (zoom) {
-    const cursorOffsetX = (2 * (e.clientX - canv.width / 2)) / canv.width;
+    const cursorOffsetX = (2 * (e.clientX - canvas.width / 2)) / canvas.width;
     Rect.xy = new Float32Array([
       (cursorDownX - wglp.gOffsetX) / wglp.gScaleX,
       -1,
@@ -189,7 +191,7 @@ function mouseMove(e: MouseEvent) {
 function mouseUp(e: MouseEvent) {
   e.preventDefault();
   if (zoom) {
-    const cursorUpX = (2 * (e.clientX - canv.width / 2)) / canv.width;
+    const cursorUpX = (2 * (e.clientX - canvas.width / 2)) / canvas.width;
     console.log(cursorDownX, cursorUpX);
 
     const zoomFactor = Math.abs(cursorUpX - cursorDownX) / (2 * wglp.gScaleX);
@@ -203,14 +205,14 @@ function mouseUp(e: MouseEvent) {
 
   zoom = false;
   drag = false;
-  canv.style.cursor = "zoom-in";
+  canvas.style.cursor = "zoom-in";
   //Rect.visible = false;
 }
 
 function zoomEvent(e: WheelEvent) {
   e.preventDefault();
 
-  const cursorOffsetX = (-2 * (e.clientX - canv.width / 2)) / canv.width;
+  const cursorOffsetX = (-2 * (e.clientX - canvas.width / 2)) / canvas.width;
   console.log(cursorOffsetX);
 
   if (e.shiftKey) {
@@ -291,7 +293,7 @@ function updateZoomRect(x1: number, x2: number): void {
 }
 
 function doneResizing(): void {
-  wglp.viewport(0, 0, canv.width, canv.height);
+  //wglp.viewport(0, 0, canv.width, canv.height);
 }
 
 function createUI(): void {

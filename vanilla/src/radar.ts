@@ -9,7 +9,7 @@ let updateRate = 0.1;
 
 let preR = 0.5;
 
-const canv = document.getElementById("my_canvas") as HTMLCanvasElement;
+const canvas = document.getElementById("my_canvas") as HTMLCanvasElement;
 
 let indexNow = 0;
 
@@ -63,16 +63,18 @@ window.requestAnimationFrame(newFrame);
 
 function init(): void {
   const devicePixelRatio = window.devicePixelRatio || 1;
-  const numX = Math.round(canv.clientWidth * devicePixelRatio);
-  const numY = Math.round(canv.clientHeight * devicePixelRatio);
+  canvas.width = canvas.clientWidth * devicePixelRatio;
+  canvas.height = canvas.clientHeight * devicePixelRatio;
 
+  const numX = canvas.width;
+  const numY = canvas.height;
   line = new WebglPolar(lineColor, numPoints);
   line.loop = true;
 
   line2 = new WebglPolar(new ColorRGBA(0.9, 0.9, 0.9, 1), 2);
   line2.xy = new Float32Array([0, 0, 1, 1]);
 
-  wglp = new WebGLplot(canv);
+  wglp = new WebGLplot(canvas);
 
   //wglp.offsetX = -1;
   wglp.gScaleX = numY / numX;
@@ -117,7 +119,7 @@ function update(): void {
 }
 
 function doneResizing(): void {
-  wglp.viewport(0, 0, canv.width, canv.height);
+  //wglp.viewport(0, 0, canv.width, canv.height);
   init();
 }
 
