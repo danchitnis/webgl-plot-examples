@@ -1,0 +1,25 @@
+{
+  "name": "rollup",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./src/offScreen.ts",
+  "scripts": {
+    "build": "webpack"
+  },
+  "author": "Danial Chitnis",
+  "license": "MIT",
+  "dependencies": {
+    "comlink": "^4.3.0",
+    "webgl-plot": "^0.4.1"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^3.8.0",
+    "@typescript-eslint/parser": "^3.8.0",
+    "eslint": "^7.6.0",
+    "ts-loader": "^8.0.2",
+    "typescript": "^3.9.7",
+    "webpack": "^5.0.0-beta.24",
+    "webpack-cli": "^3.3.12",
+    "worker-loader": "^3.0.1"
+  }
+}
