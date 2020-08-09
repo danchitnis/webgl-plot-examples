@@ -3,13 +3,22 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>Webgl-Plot examples</title>
+    <title>Webgl line plotting framework - Lines</title>
+    <link rel="stylesheet" href="style.css" type="text/css" />
   </head>
 
   <body>
+    <div>
+      <canvas class="canvas" id="my_canvas"></canvas>
+    </div>
+
+    <div class="menu"></div>
+
     <p></p>
 
     <div id="ui" class="items"></div>
+    <button id="btBusy" class="button">Make Busy</button>
+    <p id="info"></p>
 
     <div class="credit-div">
       <style>
@@ -30,12 +39,11 @@
       <p>
         See the
         <a target="_blank" rel="noopener" href="https://github.com/danchitnis/webgl-plot-examples"
-          >Github repository for the details
-          <img src="./vanilla/Github_logo.svg" style="height: 2em;"
+          >Github repository for the details <img src="Github_logo.svg" style="height: 2em;"
         /></a>
       </p>
     </div>
   </body>
 
-  <script src="./prod/randomness.js"></script>
+  <script src="./dist/bundle.js"></script>
 </html>

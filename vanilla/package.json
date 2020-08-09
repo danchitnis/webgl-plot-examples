@@ -1,0 +1,41 @@
+{
+  "name": "webgl-plot-examples",
+  "version": "0.0.1",
+  "description": "webgl-plot examples",
+  "scripts": {
+    "build": "tsc && webpack",
+    "roll": "rollup -c"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/danchitnis/WebGL-plot-examples.git"
+  },
+  "author": "Danial Chitnis",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/danchitnis/WebGL-plot-examples/issues"
+  },
+  "homepage": "https://github.com/danchitnis/WebGL-plot-examples#readme",
+  "dependencies": {
+    "@types/nouislider": "^9.0.7",
+    "@types/stats.js": "^0.17.0",
+    "nouislider": "^14.6.0",
+    "stats.js": "^0.17.0",
+    "webgl-plot": "^0.4.1"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^3.8.0",
+    "@typescript-eslint/parser": "^3.8.0",
+    "eslint": "^7.6.0",
+    "rollup": "^2.23.1",
+    "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-sourcemaps": "^0.6.2",
+    "rollup-plugin-typescript2": "^0.27.2",
+    "rollup-plugin-web-worker-loader": "^1.3.1",
+    "typescript": "^3.9.7",
+    "webpack": "next",
+    "webpack-cli": "^3.3.12",
+    "worker-loader": "^3.0.1"
+  }
+}
