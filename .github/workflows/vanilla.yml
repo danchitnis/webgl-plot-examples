@@ -5,14 +5,13 @@ on: [push]
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      working-directory: ./vanilla
 
     steps:
       - uses: actions/checkout@v1
       - name: Run a one-line script
         run: echo Hello, world!
-
-      - name: directory
-        run: cd vanilla
 
       - name: install
         run: yarn install
