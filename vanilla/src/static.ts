@@ -27,6 +27,8 @@ let dragOffsetOld = 0;
 
 let initialX = 0;
 
+const devicePixelRatio = window.devicePixelRatio || 1;
+
 createUI();
 
 init();
@@ -50,7 +52,7 @@ function newFrame(): void {
 window.requestAnimationFrame(newFrame);
 
 function init(): void {
-  const devicePixelRatio = window.devicePixelRatio || 1;
+  //const devicePixelRatio = 1;
   canvas.width = canvas.clientWidth * devicePixelRatio;
   canvas.height = canvas.clientHeight * devicePixelRatio;
   //numX = Math.round(canv.clientWidth * devicePixelRatio);
@@ -149,10 +151,11 @@ let cursorDownX = 0;
 
 function mouseDown(e: MouseEvent) {
   e.preventDefault();
+  console.log(e.clientX);
   if (e.button == 0) {
     zoom = true;
     canvas.style.cursor = "pointer";
-    cursorDownX = (2 * (e.clientX - canvas.width / 2)) / canvas.width;
+    cursorDownX = (2 * (e.clientX * devicePixelRatio - canvas.width / 2)) / canvas.width;
     //cursorDownX = (cursorDownX - wglp.gOffsetX) / wglp.gScaleX;
 
     Rect.visible = true;
@@ -160,7 +163,7 @@ function mouseDown(e: MouseEvent) {
   if (e.button == 2) {
     drag = true;
     canvas.style.cursor = "grabbing";
-    dragInitialX = e.clientX;
+    dragInitialX = e.clientX * devicePixelRatio;
     dragOffsetOld = wglp.gOffsetX;
   }
 }
@@ -168,7 +171,7 @@ function mouseDown(e: MouseEvent) {
 function mouseMove(e: MouseEvent) {
   e.preventDefault();
   if (zoom) {
-    const cursorOffsetX = (2 * (e.clientX - canvas.width / 2)) / canvas.width;
+    const cursorOffsetX = (2 * (e.clientX * devicePixelRatio - canvas.width / 2)) / canvas.width;
     Rect.xy = new Float32Array([
       (cursorDownX - wglp.gOffsetX) / wglp.gScaleX,
       -1,
@@ -182,7 +185,7 @@ function mouseMove(e: MouseEvent) {
     Rect.visible = true;
   }
   if (drag) {
-    const moveX = e.clientX - dragInitialX;
+    const moveX = e.clientX * devicePixelRatio - dragInitialX;
     const offsetX = (wglp.gScaleY * moveX) / 1000;
     wglp.gOffsetX = offsetX + dragOffsetOld;
   }
@@ -191,8 +194,7 @@ function mouseMove(e: MouseEvent) {
 function mouseUp(e: MouseEvent) {
   e.preventDefault();
   if (zoom) {
-    const cursorUpX = (2 * (e.clientX - canvas.width / 2)) / canvas.width;
-    console.log(cursorDownX, cursorUpX);
+    const cursorUpX = (2 * (e.clientX * devicePixelRatio - canvas.width / 2)) / canvas.width;
 
     const zoomFactor = Math.abs(cursorUpX - cursorDownX) / (2 * wglp.gScaleX);
     const offsetFactor = (cursorDownX + cursorUpX - 2 * wglp.gOffsetX) / (2 * wglp.gScaleX);
@@ -212,8 +214,7 @@ function mouseUp(e: MouseEvent) {
 function zoomEvent(e: WheelEvent) {
   e.preventDefault();
 
-  const cursorOffsetX = (-2 * (e.clientX - canvas.width / 2)) / canvas.width;
-  console.log(cursorOffsetX);
+  const cursorOffsetX = (-2 * (e.clientX * devicePixelRatio - canvas.width / 2)) / canvas.width;
 
   if (e.shiftKey) {
     offset += e.deltaY * 0.1;
