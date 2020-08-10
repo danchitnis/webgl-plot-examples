@@ -1,18 +1,19 @@
 const path = require("path");
+const WorkerPlugin = require("worker-plugin");
 
 module.exports = {
   mode: "development",
   entry: "./src/offScreen.ts",
+  plugins: [
+    new WorkerPlugin({
+      // use "self" as the global object when receiving hot updates.
+      globalObject: "self", // <-- this is the default value
+    }),
+  ],
   module: {
-    rules: [
-      {
-        test: /\.worker\.ts$/,
-        loader: "worker-loader",
-      },
-      { test: /\.ts?$/, loader: "ts-loader" },
-    ],
+    rules: [{ test: /\.ts?$/, loader: "ts-loader" }],
   },
-  //plugins: [new WorkerPlugin()],
+
   resolve: {
     extensions: [".tsx", ".ts", ".js"],
   },

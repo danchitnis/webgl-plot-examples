@@ -18,8 +18,8 @@
     "eslint": "^7.6.0",
     "ts-loader": "^8.0.2",
     "typescript": "^3.9.7",
-    "webpack": "^5.0.0-beta.24",
+    "webpack": "^4.44.1",
     "webpack-cli": "^3.3.12",
-    "worker-loader": "^3.0.1"
+    "worker-plugin": "^4.0.3"
   }
 }

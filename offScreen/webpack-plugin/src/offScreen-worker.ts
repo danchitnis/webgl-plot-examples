@@ -5,9 +5,6 @@ const exports = {
   amp: 0.5,
 
   run(canvas: OffscreenCanvas): Promise<void> {
-    console.log("😉");
-    //const canvas = this.getElementById("my_canvas") as HTMLCanvasElement;
-
     console.log(canvas);
 
     const numX = canvas.width;

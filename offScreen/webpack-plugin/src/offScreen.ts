@@ -1,5 +1,4 @@
 import { wrap, transfer } from "comlink";
-import Worker from "worker-loader!./offScreen-worker";
 
 const init = async () => {
   const htmlCanvas = document.getElementById("my_canvas") as HTMLCanvasElement;
@@ -9,7 +8,7 @@ const init = async () => {
   offscreen.width = htmlCanvas.clientWidth * window.devicePixelRatio;
   offscreen.height = htmlCanvas.clientHeight * window.devicePixelRatio;
 
-  const worker = new Worker();
+  const worker = new Worker("./offScreen-worker", { type: "module" });
   const workerApi = wrap<import("./offScreen-worker").CanvasWorker>(worker);
   await workerApi.run(transfer(offscreen, [offscreen]));
   await workerApi.set(0.8);
