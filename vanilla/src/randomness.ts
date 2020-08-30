@@ -23,9 +23,9 @@ document.body.appendChild(stats.dom);
 
 let numLines = 1;
 let scaleY = 1;
-let lines: WebglLine[];
+//let lines: WebglLine[];
 
-let wglp: WebGLplot;
+const wglp = new WebGLplot(canvas);
 
 let fpsDivder = 1;
 let fpsCounter = 0;
@@ -82,9 +82,9 @@ function newFrame(): void {
 window.requestAnimationFrame(newFrame);
 
 function plot(shiftSize: number): void {
-  lines.forEach((line) => {
-    const yArray = randomWalk(line.getY(numX - 1), shiftSize);
-    line.shiftAdd(yArray);
+  wglp.lines.forEach((line) => {
+    const yArray = randomWalk((line as WebglLine).getY(numX - 1), shiftSize);
+    (line as WebglLine).shiftAdd(yArray);
   });
 }
 
@@ -98,24 +98,13 @@ function randomWalk(initial: number, walkSize: number): Float32Array {
 }
 
 function init(): void {
-  lines = [];
+  wglp.lines = [];
 
   for (let i = 0; i < numLines; i++) {
     const color = new ColorRGBA(Math.random(), Math.random(), Math.random(), 0.5);
-    lines.push(new WebglLine(color, numX));
-  }
-
-  wglp = new WebGLplot(canvas);
-
-  lines.forEach((line) => {
+    const line = new WebglLine(color, numX);
+    line.lineSpaceX(-1, 2 / numX);
     wglp.addLine(line);
-  });
-
-  for (let i = 0; i < numX; i++) {
-    // set x to -num/2:1:+num/2
-    lines.forEach((line) => {
-      line.lineSpaceX(-1, 2 / numX);
-    });
   }
 }
 
