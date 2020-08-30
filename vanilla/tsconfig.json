@@ -9,10 +9,7 @@
     "sourceMap": true,
     "typeRoots": ["node_modules/@types", "@types"],
     "outDir": "./dist",
-    "baseUrl": ".",
-    "paths": {
-      "*": ["node_modules/*"]
-    }
+    "baseUrl": "."
   },
   "include": [
     "src/**/*"
