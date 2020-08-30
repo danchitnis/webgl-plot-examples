@@ -21,7 +21,7 @@ const stats = new Stats();
 stats.showPanel(0);
 document.body.appendChild(stats.dom);
 
-let numLines = 100;
+let numLines = 1;
 let scaleY = 1;
 let lines: WebglLine[];
 
