@@ -89,7 +89,7 @@ function init(): void {
   wglp.lines = [];
 
   for (let i = 0; i < numLines; i++) {
-    const color = new ColorRGBA(Math.random(), Math.random(), Math.random(), 0.5);
+    const color = new ColorRGBA(Math.random(), Math.random(), Math.random(), 1);
     const line = new WebglLine(color, numX);
     line.lineSpaceX(-1, 2 / numX);
     wglp.addLine(line);
@@ -101,20 +101,9 @@ function doneResizing(): void {
 }
 
 function createUI(): void {
-  const ui = document.getElementById("ui") as HTMLDivElement;
-  ui.style.width = "80%";
-
-  let div = document.createElement("div") as HTMLDivElement;
-  div.id = "sliderLine";
-  ui.appendChild(div);
-
   const sliderLines = new SimpleSlider("sliderLine", 0, lineNumList.length - 1, lineNumList.length);
-  sliderLines.setDebug(true);
-  sliderLines.setValue(
-    lineNumList.findIndex(() => {
-      return numLines;
-    })
-  );
+  //sliderLines.setDebug(true);
+
   sliderLines.addEventListener("drag-end", () => {
     numLines = lineNumList[sliderLines.value];
     displayLines.innerHTML = `Line number: ${numLines}`;
@@ -123,15 +112,11 @@ function createUI(): void {
 
   displayLines = document.createElement("span");
   displayLines.innerHTML = `Line number: ${numLines}`;
-  ui.appendChild(displayLines);
-  ui.appendChild(document.createElement("p"));
-
-  div = document.createElement("div") as HTMLDivElement;
-  div.id = "sliderYScale";
-  ui.appendChild(div);
+  //ui.appendChild(displayLines);
+  //ui.appendChild(document.createElement("p"));
 
   const sliderYSclae = new SimpleSlider("sliderYScale", 0, 2, 0);
-  sliderYSclae.setDebug(true);
+  //sliderYSclae.setDebug(true);
   sliderYSclae.setValue(scaleY);
   sliderYSclae.addEventListener("update", () => {
     scaleY = sliderYSclae.value;
@@ -153,8 +138,8 @@ function createUI(): void {
 
   displayYScale = document.createElement("span");
   //ui.appendChild(sliderYScale);
-  ui.appendChild(displayYScale);
-  ui.appendChild(document.createElement("p"));
+  //ui.appendChild(displayYScale);
+  //ui.appendChild(document.createElement("p"));
 
   /*sliderYScale.noUiSlider.on("update", (values, handle) => {
     scaleY = parseFloat(values[handle]);
@@ -178,8 +163,8 @@ function createUI(): void {
 
   displayNewDataSize = document.createElement("span");
   //ui.appendChild(sliderNewData);
-  ui.appendChild(displayNewDataSize);
-  ui.appendChild(document.createElement("p"));
+  //ui.appendChild(displayNewDataSize);
+  //ui.appendChild(document.createElement("p"));
 
   /*sliderNewData.noUiSlider.on("update", (values, handle) => {
     newDataSize = parseFloat(values[handle]);
@@ -203,8 +188,8 @@ function createUI(): void {
 
   displayFps = document.createElement("span");
   //ui.appendChild(sliderFps);
-  ui.appendChild(displayFps);
-  ui.appendChild(document.createElement("p"));
+  //ui.appendChild(displayFps);
+  //ui.appendChild(document.createElement("p"));
 
   /*sliderFps.noUiSlider.on("update", (values, handle) => {
     fpsDivder = parseFloat(values[handle]);
