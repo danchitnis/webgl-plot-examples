@@ -26,7 +26,17 @@
 
     <p></p>
 
-    <div id="ui" class="items"></div>
+    <div style="width: 80%; margin: auto">
+      <h3>Move the Sliders!</h3>
+      <span id="numLines"></span>
+      <div id="sliderLine"></div>
+      <span id="yScale"></span>
+      <div id="sliderYScale"></div>
+      <span id="newData"></span>
+      <div id="sliderNewData"></div>
+      <span id="fps"></span>
+      <div id="sliderFps"></div>
+    </div>
 
     <div class="credit-div">
       <style>
@@ -47,11 +57,12 @@
       <p>
         See the
         <a target="_blank" rel="noopener" href="https://github.com/danchitnis/webgl-plot-examples"
-          >Github repository for the details <img src="Github_logo.svg" style="height: 2em;"
+          >Github repository for the details <img src="Github_logo.svg" style="height: 2em"
         /></a>
       </p>
     </div>
   </body>
 
-  <script src="./prod/sine.js"></script>
+  <script src="https://unpkg.com/@ungap/event-target"></script>
+  <script src="./dist/sine.js"></script>
 </html>

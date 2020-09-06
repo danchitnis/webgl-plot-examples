@@ -27,16 +27,6 @@ let newDataSize = 1;
 
 const lineNumList = [1, 2, 5, 10, 20, 50, 100, 200, 500, 1000, 2000, 5000, 10000];
 
-/*let sliderLines: noUiSlider.Instance;
-let sliderYScale: noUiSlider.Instance;
-let sliderNewData: noUiSlider.Instance;
-let sliderFps: noUiSlider.Instance;*/
-
-let displayLines: HTMLSpanElement;
-let displayYScale: HTMLSpanElement;
-let displayNewDataSize: HTMLSpanElement;
-let displayFps: HTMLSpanElement;
-
 createUI();
 
 let resizeId: number;
@@ -86,7 +76,7 @@ function randomWalk(initial: number, walkSize: number): Float32Array {
 }
 
 function init(): void {
-  wglp.lines = [];
+  wglp.removeAllLines();
 
   for (let i = 0; i < numLines; i++) {
     const color = new ColorRGBA(Math.random(), Math.random(), Math.random(), 1);
@@ -102,105 +92,43 @@ function doneResizing(): void {
 
 function createUI(): void {
   const sliderLines = new SimpleSlider("sliderLine", 0, lineNumList.length - 1, lineNumList.length);
-  //sliderLines.setDebug(true);
-
+  sliderLines.setValue(0);
   sliderLines.addEventListener("drag-end", () => {
-    numLines = lineNumList[sliderLines.value];
-    displayLines.innerHTML = `Line number: ${numLines}`;
+    numLines = lineNumList[Math.round(sliderLines.value)];
+    updateTextDisplay();
     init();
   });
-
-  displayLines = document.createElement("span");
-  displayLines.innerHTML = `Line number: ${numLines}`;
-  //ui.appendChild(displayLines);
-  //ui.appendChild(document.createElement("p"));
 
   const sliderYSclae = new SimpleSlider("sliderYScale", 0, 2, 0);
   //sliderYSclae.setDebug(true);
   sliderYSclae.setValue(scaleY);
   sliderYSclae.addEventListener("update", () => {
     scaleY = sliderYSclae.value;
-    displayYScale.innerHTML = `Y scale = ${scaleY.toFixed(2)}`;
+    updateTextDisplay();
   });
 
-  /*****slider yscale */
-  /*sliderYScale = (document.createElement("div") as unknown) as noUiSlider.Instance;
-  sliderYScale.style.width = "100%";
-  noUiSlider.create(sliderYScale, {
-    start: [1],
-    connect: [true, false],
-    // tooltips: [false, wNumb({decimals: 1}), true],
-    range: {
-      min: 0.01,
-      max: 10,
-    },
-  });*/
+  const sliderNewData = new SimpleSlider("sliderNewData", 0, 100, 101);
+  //sliderYSclae.setDebug(true);
+  sliderNewData.setValue(newDataSize);
+  sliderNewData.addEventListener("update", () => {
+    newDataSize = sliderNewData.value;
+    updateTextDisplay();
+  });
 
-  displayYScale = document.createElement("span");
-  //ui.appendChild(sliderYScale);
-  //ui.appendChild(displayYScale);
-  //ui.appendChild(document.createElement("p"));
+  const sliderFps = new SimpleSlider("sliderFps", 1, 16, 16);
+  //sliderYSclae.setDebug(true);
+  sliderFps.setValue(newDataSize);
+  sliderFps.addEventListener("update", () => {
+    fpsDivder = sliderFps.value;
+    updateTextDisplay();
+  });
 
-  /*sliderYScale.noUiSlider.on("update", (values, handle) => {
-    scaleY = parseFloat(values[handle]);
-    displayYScale.innerHTML = `Y scale = ${scaleY}`;
-  });*/
-
-  /****** slider new data */
-  /*sliderNewData = (document.createElement("div") as unknown) as noUiSlider.Instance;
-  sliderNewData.style.width = "100%";
-
-  noUiSlider.create(sliderNewData, {
-    start: [1],
-    step: 1,
-    connect: [true, false],
-    // tooltips: [false, wNumb({decimals: 1}), true],
-    range: {
-      min: 1,
-      max: 100,
-    },
-  });*/
-
-  displayNewDataSize = document.createElement("span");
-  //ui.appendChild(sliderNewData);
-  //ui.appendChild(displayNewDataSize);
-  //ui.appendChild(document.createElement("p"));
-
-  /*sliderNewData.noUiSlider.on("update", (values, handle) => {
-    newDataSize = parseFloat(values[handle]);
-    displayNewDataSize.innerHTML = `New data per frame = ${newDataSize}`;
-  });*/
-
-  /**** slider fps */
-  /*sliderFps = (document.createElement("div") as unknown) as noUiSlider.Instance;
-  sliderFps.style.width = "100%";
-
-  noUiSlider.create(sliderFps, {
-    start: [1],
-    step: 1,
-    connect: [true, false],
-    // tooltips: [false, wNumb({decimals: 1}), true],
-    range: {
-      min: 1,
-      max: 10,
-    },
-  });*/
-
-  displayFps = document.createElement("span");
-  //ui.appendChild(sliderFps);
-  //ui.appendChild(displayFps);
-  //ui.appendChild(document.createElement("p"));
-
-  /*sliderFps.noUiSlider.on("update", (values, handle) => {
-    fpsDivder = parseFloat(values[handle]);
-    displayFps.innerHTML = `FPS  = ${60 / fpsDivder}`;
-  });*/
+  updateTextDisplay();
 }
 
-/*function btclick() {
-  console.log("button press!");
-  let ui = <HTMLDivElement>document.getElementById("ui");
-  while (ui.firstChild) {
-    ui.removeChild(ui.firstChild);
-  }
-}*/
+function updateTextDisplay() {
+  document.getElementById("numLines").innerHTML = `Line number: ${numLines}`;
+  document.getElementById("yScale").innerHTML = `Y scale = ${scaleY.toFixed(2)}`;
+  document.getElementById("newData").innerHTML = `New Data Size = ${newDataSize.toFixed(0)}`;
+  document.getElementById("fps").innerHTML = `FPS = ${60 / fpsDivder}`;
+}
