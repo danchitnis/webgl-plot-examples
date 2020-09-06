@@ -98,7 +98,7 @@ function randomWalk(initial: number, walkSize: number): Float32Array {
 }
 
 function init(): void {
-  wglp.lines = [];
+  wglp.removeAllLines();
 
   for (let i = 0; i < numLines; i++) {
     const color = new ColorRGBA(Math.random(), Math.random(), Math.random(), 0.5);
