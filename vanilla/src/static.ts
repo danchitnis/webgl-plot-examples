@@ -1,10 +1,6 @@
 import WebGLplot, { ColorRGBA, WebglLine } from "webgl-plot";
 
-const numLines = 1;
-
-const amp = 0.5;
-const noise = 0.1;
-const freq = 0.01;
+const numLines = 2;
 
 const canvas = document.getElementById("my_canvas") as HTMLCanvasElement;
 
@@ -13,7 +9,7 @@ let numX: number;
 let display: HTMLParagraphElement;
 
 let wglp: WebGLplot;
-let lines: WebglLine[];
+//let lines: WebglLine[];
 let Rect: WebglLine;
 
 let scale = 1;
@@ -58,21 +54,29 @@ function init(): void {
   //numX = Math.round(canv.clientWidth * devicePixelRatio);
   numX = 100000;
 
-  lines = [];
+  wglp = new WebGLplot(canvas);
+
+  wglp.removeAllLines();
 
   for (let i = 0; i < numLines; i++) {
     const color = new ColorRGBA(Math.random(), Math.random(), Math.random(), 1);
-    lines.push(new WebglLine(color, numX));
-  }
-
-  wglp = new WebGLplot(canvas);
-
-  // wglp.offsetX = -1;
-  // wglp.scaleX = 2;
-
-  lines.forEach((line) => {
+    const line = new WebglLine(color, numX);
     line.lineSpaceX(-1, 2 / numX);
     wglp.addLine(line);
+  }
+
+  wglp.lines.forEach((line) => {
+    (line as WebglLine).setY(0, Math.random() - 0.5);
+    for (let i = 1; i < line.numPoints; i++) {
+      let y = (line as WebglLine).getY(i - 1) + 0.01 * (Math.round(Math.random()) - 0.5);
+      if (y > 0.9) {
+        y = 0.9;
+      }
+      if (y < -0.9) {
+        y = -0.9;
+      }
+      (line as WebglLine).setY(i, y);
+    }
   });
 
   // add zoom rectangle
@@ -87,27 +91,6 @@ function init(): void {
   testRect.loop = true;
   testRect.xy = new Float32Array([-0.7, -0.8, -0.7, 0.8, -0.6, 0.8, -0.6, -0.8]);
   wglp.addLine(testRect);
-
-  /*for (let j = 0; j < lines.length; j++) {
-    for (let i = 0; i < lines[j].numPoints; i++) {
-      const ySin = Math.sin(Math.PI * i * freq + (j / lines.length) * Math.PI * 2);
-      const yNoise = Math.random() - 0.5;
-      lines[j].setY(i, ySin * amp + yNoise * noise);
-    }
-  }*/
-
-  for (let j = 0; j < lines.length; j++) {
-    for (let i = 1; i < lines[j].numPoints; i++) {
-      let y = lines[j].getY(i - 1) + 0.01 * (Math.round(Math.random()) - 0.5);
-      if (y > 0.9) {
-        y = 0.9;
-      }
-      if (y < -0.9) {
-        y = -0.9;
-      }
-      lines[j].setY(i, y);
-    }
-  }
 
   //wglp.viewport(0, 0, 1000, 1000);
   wglp.gScaleX = 1;

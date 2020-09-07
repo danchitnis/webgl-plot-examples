@@ -61,13 +61,13 @@ function init(): void {
   canvas.width = canvas.clientWidth * devicePixelRatio;
   canvas.height = canvas.clientHeight * devicePixelRatio;
 
+  wglp = new WebGLplot(canvas);
+
   numX = 256;
 
   lineR = new WebglLine(new ColorRGBA(0.9, 0.2, 0.2, 1), numX);
   lineG = new WebglLine(new ColorRGBA(0.2, 0.9, 0.2, 1), numX);
   lineB = new WebglLine(new ColorRGBA(0.2, 0.2, 0.9, 1), numX);
-
-  wglp = new WebGLplot(canvas);
 
   wglp.gOffsetY = -1;
   wglp.gScaleY = 1.9;
