@@ -6,6 +6,8 @@
     <title>Webgl line plotting framework - Lines</title>
     <link rel="stylesheet" href="style.css" type="text/css" />
     <link rel="stylesheet" href="./prod/nouislider.min.css" type="text/css" />
+
+    <link rel="stylesheet" href="./dist/slider.css" type="text/css" />
   </head>
 
   <body>
@@ -26,7 +28,12 @@
 
     <p></p>
 
-    <div id="ui" class="items"></div>
+    <div style="width: 80%; margin: auto">
+      <span id="info"></span>
+      <h3>Move the Sliders!</h3>
+      <span id="numLines"></span>
+      <div id="sliderLine"></div>
+    </div>
   </body>
 
   <p>With Mouse: turn the mouse wheel for zoom (zooming where the cursor is)</p>
@@ -61,5 +68,6 @@
     </p>
   </div>
 
+  <script src="https://unpkg.com/@ungap/event-target"></script>
   <script src="./dist/static.js"></script>
 </html>

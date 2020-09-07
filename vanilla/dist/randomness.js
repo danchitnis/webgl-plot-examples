@@ -651,9 +651,11 @@
     function createUI() {
         const sliderLines = new SimpleSlider("sliderLine", 0, lineNumList.length - 1, lineNumList.length);
         sliderLines.setValue(0);
-        sliderLines.addEventListener("drag-end", () => {
+        sliderLines.addEventListener("update", () => {
             numLines = lineNumList[Math.round(sliderLines.value)];
             updateTextDisplay();
+        });
+        sliderLines.addEventListener("drag-end", () => {
             init();
         });
         const sliderYSclae = new SimpleSlider("sliderYScale", 0, 2, 0);

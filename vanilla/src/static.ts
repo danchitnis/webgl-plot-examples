@@ -1,15 +1,15 @@
+import { SimpleSlider } from "@danchitnis/simple-slider";
 import WebGLplot, { ColorRGBA, WebglLine } from "webgl-plot";
 
-const numLines = 2;
+let numLines = 2;
+const lineNumList = [1, 2, 5, 10, 20, 50, 100, 200, 500, 1000];
 
 const canvas = document.getElementById("my_canvas") as HTMLCanvasElement;
 
 let numX: number;
 
-let display: HTMLParagraphElement;
-
 let wglp: WebGLplot;
-//let lines: WebglLine[];
+
 let Rect: WebglLine;
 
 let scale = 1;
@@ -23,8 +23,6 @@ let dragOffsetOld = 0;
 
 let initialX = 0;
 
-const devicePixelRatio = window.devicePixelRatio || 1;
-
 createUI();
 
 init();
@@ -36,22 +34,20 @@ window.addEventListener("resize", () => {
 });
 
 function newFrame(): void {
-  update();
-
-  //wglp.clear();
+  updateTextDisplay();
 
   wglp.update();
 
-  window.requestAnimationFrame(newFrame);
+  requestAnimationFrame(newFrame);
 }
 
-window.requestAnimationFrame(newFrame);
+requestAnimationFrame(newFrame);
 
 function init(): void {
-  //const devicePixelRatio = 1;
+  const devicePixelRatio = window.devicePixelRatio || 1;
   canvas.width = canvas.clientWidth * devicePixelRatio;
   canvas.height = canvas.clientHeight * devicePixelRatio;
-  //numX = Math.round(canv.clientWidth * devicePixelRatio);
+
   numX = 100000;
 
   wglp = new WebGLplot(canvas);
@@ -111,13 +107,6 @@ function init(): void {
   canvas.style.cursor = "zoom-in";
 
   //window.addEventListener("keydown", keyEvent);
-}
-
-function update(): void {
-  if (wglp) {
-    display.innerHTML =
-      "Zoom: " + wglp.gScaleX.toFixed(2) + ", Offset: " + wglp.gOffsetX.toFixed(2);
-  }
 }
 
 function dblClick(e: MouseEvent) {
@@ -281,13 +270,26 @@ function doneResizing(): void {
 }
 
 function createUI(): void {
-  const ui = document.getElementById("ui") as HTMLDivElement;
+  const sliderLines = new SimpleSlider("sliderLine", 0, lineNumList.length - 1, lineNumList.length);
+  sliderLines.setValue(0);
+  sliderLines.addEventListener("update", () => {
+    numLines = lineNumList[Math.round(sliderLines.value)];
+    updateTextDisplay();
+  });
 
-  display = document.createElement("p") as HTMLParagraphElement;
-  display.innerHTML = "hello😉";
-  ui.appendChild(display);
+  sliderLines.addEventListener("drag-end", () => {
+    init();
+  });
 }
 
 function log(str: string) {
-  display.innerHTML = str;
+  //display.innerHTML = str;
+  console.log(str);
+}
+
+function updateTextDisplay() {
+  document.getElementById("info").innerHTML = `Zoom: ${wglp.gScaleX.toFixed(
+    2
+  )}, Offset ${wglp.gOffsetX.toFixed(2)}`;
+  document.getElementById("numLines").innerHTML = `Line number: ${numLines}`;
 }
