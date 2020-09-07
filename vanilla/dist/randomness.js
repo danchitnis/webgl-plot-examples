@@ -591,10 +591,10 @@
     canvas.width = canvas.clientWidth * devicePixelRatio;
     canvas.height = canvas.clientHeight * devicePixelRatio;
     const numX = Math.round(canvas.width);
+    const wglp = new WebGLPlot(canvas);
     let numLines = 1;
     let scaleY = 1;
     //let lines: WebglLine[];
-    const wglp = new WebGLPlot(canvas);
     let fpsDivder = 1;
     let fpsCounter = 0;
     // new data per frame
@@ -619,9 +619,9 @@
         if (fpsCounter >= fpsDivder) {
             fpsCounter = 0;
         }
-        window.requestAnimationFrame(newFrame);
+        requestAnimationFrame(newFrame);
     }
-    window.requestAnimationFrame(newFrame);
+    requestAnimationFrame(newFrame);
     function plot(shiftSize) {
         wglp.lines.forEach((line) => {
             const yArray = randomWalk(line.getY(numX - 1), shiftSize);
