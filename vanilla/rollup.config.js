@@ -43,4 +43,12 @@ export default [
       format: "iife",
     },
   },
+  {
+    input: "./src/grid.ts",
+    plugins: [typescript(), resolve()],
+    output: {
+      file: "./dist/grid.js",
+      format: "iife",
+    },
+  },
 ];
