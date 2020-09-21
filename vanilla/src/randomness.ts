@@ -100,11 +100,11 @@ function createUI(): void {
     init();
   });
 
-  const sliderYSclae = new SimpleSlider("sliderYScale", 0, 2, 0);
+  const sliderYScale = new SimpleSlider("sliderYScale", 0, 2, 0);
   //sliderYSclae.setDebug(true);
-  sliderYSclae.setValue(scaleY);
-  sliderYSclae.addEventListener("update", () => {
-    scaleY = sliderYSclae.value;
+  sliderYScale.setValue(scaleY);
+  sliderYScale.addEventListener("update", () => {
+    scaleY = sliderYScale.value;
     updateTextDisplay();
   });
 

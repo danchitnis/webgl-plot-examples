@@ -44,6 +44,22 @@ export default [
     },
   },
   {
+    input: "./src/polar.ts",
+    plugins: [typescript(), resolve()],
+    output: {
+      file: "./dist/polar.js",
+      format: "iife",
+    },
+  },
+  {
+    input: "./src/radar.ts",
+    plugins: [typescript(), resolve()],
+    output: {
+      file: "./dist/radar.js",
+      format: "iife",
+    },
+  },
+  {
     input: "./src/grid.ts",
     plugins: [typescript(), resolve()],
     output: {

@@ -1,8 +1,5 @@
-import * as noUiSlider from "nouislider";
-
+import { SimpleSlider } from "@danchitnis/simple-slider";
 import WebGLplot, { ColorRGBA, WebglPolar } from "webgl-plot";
-
-import * as Statsjs from "stats.js";
 
 let amp = 0.5;
 let updateRate = 0.1;
@@ -13,26 +10,17 @@ const canvas = document.getElementById("my_canvas") as HTMLCanvasElement;
 
 let indexNow = 0;
 
-let numPoints = 100;
+const numPointList = [3, 4, 5, 6, 7, 8, 10, 20, 50, 100, 200, 500, 1000, 2000, 5000];
+let numPoints = numPointList[9];
 
-let wglp: WebGLplot;
+const devicePixelRatio = window.devicePixelRatio || 1;
+canvas.width = canvas.clientWidth * devicePixelRatio;
+canvas.height = canvas.clientHeight * devicePixelRatio;
+const wglp = new WebGLplot(canvas);
+
 let line: WebglPolar;
 let line2: WebglPolar;
 const lineColor = new ColorRGBA(Math.random(), Math.random(), Math.random(), 1);
-
-const lineNumList = [3, 4, 5, 6, 7, 8, 10, 20, 50, 100, 200, 500, 1000, 2000, 5000];
-
-let sliderLines: noUiSlider.Instance;
-let sliderAmp: noUiSlider.Instance;
-let sliderUpdateRate: noUiSlider.Instance;
-
-let displayLines: HTMLSpanElement;
-let displayAmp: HTMLSpanElement;
-let displayUpdateRate: HTMLSpanElement;
-
-const stats = new Statsjs();
-stats.showPanel(0);
-document.body.appendChild(stats.dom);
 
 let resizeId: number;
 window.addEventListener("resize", () => {
@@ -47,24 +35,19 @@ let timer = setInterval(() => {
 createUI();
 
 init();
+updateTextDisplay();
 
 /****************************************/
 
 function newFrame(): void {
-  stats.begin();
-
   wglp.update();
 
-  stats.end();
-
-  window.requestAnimationFrame(newFrame);
+  requestAnimationFrame(newFrame);
 }
-window.requestAnimationFrame(newFrame);
+requestAnimationFrame(newFrame);
 
 function init(): void {
-  const devicePixelRatio = window.devicePixelRatio || 1;
-  canvas.width = canvas.clientWidth * devicePixelRatio;
-  canvas.height = canvas.clientHeight * devicePixelRatio;
+  wglp.removeAllLines();
 
   const numX = canvas.width;
   const numY = canvas.height;
@@ -73,8 +56,6 @@ function init(): void {
 
   line2 = new WebglPolar(new ColorRGBA(0.9, 0.9, 0.9, 1), 2);
   line2.xy = new Float32Array([0, 0, 1, 1]);
-
-  wglp = new WebGLplot(canvas);
 
   //wglp.offsetX = -1;
   wglp.gScaleX = numY / numX;
@@ -124,86 +105,43 @@ function doneResizing(): void {
 }
 
 function createUI(): void {
-  const ui = document.getElementById("ui") as HTMLDivElement;
-
   // ******slider lines */
-  sliderLines = (document.createElement("div") as unknown) as noUiSlider.Instance;
-  sliderLines.style.width = "100%";
-  noUiSlider.create(sliderLines, {
-    start: [8],
-    step: 1,
-    connect: [true, false],
-    // tooltips: [false, wNumb({decimals: 1}), true],
-    range: {
-      min: 0,
-      max: lineNumList.length - 1,
-    },
+  const sliderLines = new SimpleSlider(
+    "sliderLine",
+    0,
+    numPointList.length - 1,
+    numPointList.length
+  );
+  sliderLines.setValue(9);
+  sliderLines.addEventListener("update", () => {
+    numPoints = numPointList[Math.round(sliderLines.value)];
+    updateTextDisplay();
   });
-
-  displayLines = document.createElement("span");
-  ui.appendChild(sliderLines);
-  ui.appendChild(displayLines);
-  ui.appendChild(document.createElement("p"));
-
-  sliderLines.noUiSlider.on("update", (values, handle) => {
-    numPoints = lineNumList[parseFloat(values[handle])];
-    displayLines.innerHTML = `Line number: ${numPoints}`;
-  });
-
-  sliderLines.noUiSlider.on("set", () => {
+  sliderLines.addEventListener("drag-end", () => {
     init();
   });
 
-  // ******slider amp */
-  sliderAmp = (document.createElement("div") as unknown) as noUiSlider.Instance;
-  sliderAmp.style.width = "100%";
-  noUiSlider.create(sliderAmp, {
-    start: [0.5],
-    step: 0.001,
-    connect: [true, false],
-    // tooltips: [false, wNumb({decimals: 1}), true],
-    range: {
-      min: 0,
-      max: 1,
-    },
+  const sliderAmp = new SimpleSlider("sliderAmp", 0, 1, 0);
+  //sliderYSclae.setDebug(true);
+  sliderAmp.setValue(amp);
+  sliderAmp.addEventListener("update", () => {
+    amp = sliderAmp.value;
+    updateTextDisplay();
   });
 
-  displayAmp = document.createElement("span");
-  ui.appendChild(sliderAmp);
-  ui.appendChild(displayAmp);
-  ui.appendChild(document.createElement("p"));
-
-  sliderAmp.noUiSlider.on("update", (values, handle) => {
-    const k = 0.5;
-    amp = k * parseFloat(values[handle]);
-    displayAmp.innerHTML = `Randomness Amplitude: ${amp / k}`;
-  });
-
-  // ******slider noise */
-  sliderUpdateRate = (document.createElement("div") as unknown) as noUiSlider.Instance;
-  sliderUpdateRate.style.width = "100%";
-  noUiSlider.create(sliderUpdateRate, {
-    start: [1],
-    step: 1,
-    connect: [true, false],
-    // tooltips: [false, wNumb({decimals: 1}), true],
-    range: {
-      min: 1,
-      max: 100,
-    },
-  });
-
-  displayUpdateRate = document.createElement("span");
-  ui.appendChild(sliderUpdateRate);
-  ui.appendChild(displayUpdateRate);
-  ui.appendChild(document.createElement("p"));
-
-  sliderUpdateRate.noUiSlider.on("update", (values, handle) => {
-    const k = 1;
-    updateRate = k * parseFloat(values[handle]);
-    //fpsDivder = k * parseFloat(values[handle]);
-    displayUpdateRate.innerHTML = `Update Rate: ${updateRate / k}`;
+  const sliderUpdateRate = new SimpleSlider("sliderUpdateRate", 1, 100, 100);
+  //sliderYSclae.setDebug(true);
+  sliderUpdateRate.setValue(updateRate);
+  sliderUpdateRate.addEventListener("update", () => {
+    updateRate = Math.round(sliderUpdateRate.value);
+    updateTextDisplay();
     clearInterval(timer);
     timer = setInterval(update, updateRate);
   });
+}
+
+function updateTextDisplay() {
+  document.getElementById("numLines").innerHTML = `Line number: ${numPoints}`;
+  document.getElementById("amp").innerHTML = `Y scale = ${amp}`;
+  document.getElementById("rate").innerHTML = `New Data Size = ${updateRate}`;
 }

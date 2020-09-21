@@ -658,11 +658,11 @@
         sliderLines.addEventListener("drag-end", () => {
             init();
         });
-        const sliderYSclae = new SimpleSlider("sliderYScale", 0, 2, 0);
+        const sliderYScale = new SimpleSlider("sliderYScale", 0, 2, 0);
         //sliderYSclae.setDebug(true);
-        sliderYSclae.setValue(scaleY);
-        sliderYSclae.addEventListener("update", () => {
-            scaleY = sliderYSclae.value;
+        sliderYScale.setValue(scaleY);
+        sliderYScale.addEventListener("update", () => {
+            scaleY = sliderYScale.value;
             updateTextDisplay();
         });
         const sliderNewData = new SimpleSlider("sliderNewData", 0, 100, 101);
