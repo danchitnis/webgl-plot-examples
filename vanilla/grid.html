@@ -3,8 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>Webgl line plotting framework - Histograms</title>
+    <title>Webgl line plotting framework - Lines</title>
     <link rel="stylesheet" href="style.css" type="text/css" />
+    <link rel="stylesheet" href="./prod/nouislider.min.css" type="text/css" />
+
     <link rel="stylesheet" href="./dist/slider.css" type="text/css" />
   </head>
 
@@ -66,13 +68,12 @@
         }
       }
     </style>
-
     <div>
       <canvas class="canvas" id="my_canvas"></canvas>
     </div>
 
     <div class="menu">
-      <a href="./index.html"><b>Random</b></a>
+      <a href="./index.html">Random</a>
       <a href="./sine.html">Sine</a>
       <a href="./static.html">Static</a>
       <a href="./histogram.html">Histogram</a>
@@ -80,21 +81,17 @@
       <a href="./radar.html">Radar</a>
       <a href="./camera.html">Camera</a>
       <a href="./microphone.html">Microphone</a>
-      <a href="./grid.html">Grid</a>
+      <a href="./grid.html"><b>Grid</b></a>
     </div>
 
     <p></p>
 
     <div style="width: 80%; margin: auto">
       <h3>Move the Sliders!</h3>
-      <span id="numLines"></span>
-      <div id="sliderLine"></div>
-      <span id="yScale"></span>
-      <div id="sliderYScale"></div>
-      <span id="newData"></span>
-      <div id="sliderNewData"></div>
-      <span id="fps"></span>
-      <div id="sliderFps"></div>
+      <label>X: </label>
+      <input type="number" id="gridX" value="3" min="1" max="11" step="2" />
+      <label>Y: </label>
+      <input type="number" id="gridY" value="3" min="1" max="11" step="2" />
     </div>
 
     <div class="credit-div">
@@ -121,6 +118,7 @@
       </p>
     </div>
   </body>
+
   <script src="https://unpkg.com/@ungap/event-target"></script>
-  <script src="./dist/randomness.js"></script>
+  <script src="./dist/grid.js"></script>
 </html>

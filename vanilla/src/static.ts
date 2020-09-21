@@ -1,19 +1,15 @@
+import { SimpleSlider } from "@danchitnis/simple-slider";
 import WebGLplot, { ColorRGBA, WebglLine } from "webgl-plot";
 
-const numLines = 1;
-
-const amp = 0.5;
-const noise = 0.1;
-const freq = 0.01;
+let numLines = 2;
+const lineNumList = [1, 2, 5, 10, 20, 50, 100, 200, 500, 1000];
 
 const canvas = document.getElementById("my_canvas") as HTMLCanvasElement;
 
 let numX: number;
 
-let display: HTMLParagraphElement;
-
 let wglp: WebGLplot;
-let lines: WebglLine[];
+
 let Rect: WebglLine;
 
 let scale = 1;
@@ -27,8 +23,6 @@ let dragOffsetOld = 0;
 
 let initialX = 0;
 
-const devicePixelRatio = window.devicePixelRatio || 1;
-
 createUI();
 
 init();
@@ -40,39 +34,45 @@ window.addEventListener("resize", () => {
 });
 
 function newFrame(): void {
-  update();
-
-  //wglp.clear();
+  updateTextDisplay();
 
   wglp.update();
 
-  window.requestAnimationFrame(newFrame);
+  requestAnimationFrame(newFrame);
 }
 
-window.requestAnimationFrame(newFrame);
+requestAnimationFrame(newFrame);
 
 function init(): void {
-  //const devicePixelRatio = 1;
+  const devicePixelRatio = window.devicePixelRatio || 1;
   canvas.width = canvas.clientWidth * devicePixelRatio;
   canvas.height = canvas.clientHeight * devicePixelRatio;
-  //numX = Math.round(canv.clientWidth * devicePixelRatio);
+
   numX = 100000;
-
-  lines = [];
-
-  for (let i = 0; i < numLines; i++) {
-    const color = new ColorRGBA(Math.random(), Math.random(), Math.random(), 1);
-    lines.push(new WebglLine(color, numX));
-  }
 
   wglp = new WebGLplot(canvas);
 
-  // wglp.offsetX = -1;
-  // wglp.scaleX = 2;
+  wglp.removeAllLines();
 
-  lines.forEach((line) => {
+  for (let i = 0; i < numLines; i++) {
+    const color = new ColorRGBA(Math.random(), Math.random(), Math.random(), 1);
+    const line = new WebglLine(color, numX);
     line.lineSpaceX(-1, 2 / numX);
     wglp.addLine(line);
+  }
+
+  wglp.lines.forEach((line) => {
+    (line as WebglLine).setY(0, Math.random() - 0.5);
+    for (let i = 1; i < line.numPoints; i++) {
+      let y = (line as WebglLine).getY(i - 1) + 0.01 * (Math.round(Math.random()) - 0.5);
+      if (y > 0.9) {
+        y = 0.9;
+      }
+      if (y < -0.9) {
+        y = -0.9;
+      }
+      (line as WebglLine).setY(i, y);
+    }
   });
 
   // add zoom rectangle
@@ -87,27 +87,6 @@ function init(): void {
   testRect.loop = true;
   testRect.xy = new Float32Array([-0.7, -0.8, -0.7, 0.8, -0.6, 0.8, -0.6, -0.8]);
   wglp.addLine(testRect);
-
-  /*for (let j = 0; j < lines.length; j++) {
-    for (let i = 0; i < lines[j].numPoints; i++) {
-      const ySin = Math.sin(Math.PI * i * freq + (j / lines.length) * Math.PI * 2);
-      const yNoise = Math.random() - 0.5;
-      lines[j].setY(i, ySin * amp + yNoise * noise);
-    }
-  }*/
-
-  for (let j = 0; j < lines.length; j++) {
-    for (let i = 1; i < lines[j].numPoints; i++) {
-      let y = lines[j].getY(i - 1) + 0.01 * (Math.round(Math.random()) - 0.5);
-      if (y > 0.9) {
-        y = 0.9;
-      }
-      if (y < -0.9) {
-        y = -0.9;
-      }
-      lines[j].setY(i, y);
-    }
-  }
 
   //wglp.viewport(0, 0, 1000, 1000);
   wglp.gScaleX = 1;
@@ -128,13 +107,6 @@ function init(): void {
   canvas.style.cursor = "zoom-in";
 
   //window.addEventListener("keydown", keyEvent);
-}
-
-function update(): void {
-  if (wglp) {
-    display.innerHTML =
-      "Zoom: " + wglp.gScaleX.toFixed(2) + ", Offset: " + wglp.gOffsetX.toFixed(2);
-  }
 }
 
 function dblClick(e: MouseEvent) {
@@ -298,13 +270,26 @@ function doneResizing(): void {
 }
 
 function createUI(): void {
-  const ui = document.getElementById("ui") as HTMLDivElement;
+  const sliderLines = new SimpleSlider("sliderLine", 0, lineNumList.length - 1, lineNumList.length);
+  sliderLines.setValue(0);
+  sliderLines.addEventListener("update", () => {
+    numLines = lineNumList[Math.round(sliderLines.value)];
+    updateTextDisplay();
+  });
 
-  display = document.createElement("p") as HTMLParagraphElement;
-  display.innerHTML = "hello😉";
-  ui.appendChild(display);
+  sliderLines.addEventListener("drag-end", () => {
+    init();
+  });
 }
 
 function log(str: string) {
-  display.innerHTML = str;
+  //display.innerHTML = str;
+  console.log(str);
+}
+
+function updateTextDisplay() {
+  document.getElementById("info").innerHTML = `Zoom: ${wglp.gScaleX.toFixed(
+    2
+  )}, Offset ${wglp.gOffsetX.toFixed(2)}`;
+  document.getElementById("numLines").innerHTML = `Line number: ${numLines}`;
 }

@@ -8,11 +8,8 @@
     "downlevelIteration": true,
     "sourceMap": true,
     "typeRoots": ["node_modules/@types", "@types"],
-    "outDir": "./dist",
-    "baseUrl": ".",
-    "paths": {
-      "*": ["node_modules/*"]
-    }
+    "outDir": "./build",
+    "baseUrl": "."
   },
   "include": [
     "src/**/*"

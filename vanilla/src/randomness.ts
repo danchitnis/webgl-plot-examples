@@ -2,12 +2,8 @@
  * Author Danial Chitnis 2019
  */
 
-import * as noUiSlider from "nouislider";
+import { SimpleSlider } from "@danchitnis/simple-slider";
 import WebGLplot, { WebglLine, ColorRGBA } from "webgl-plot";
-
-//import Statsjs = require("stats.js");
-
-import * as Stats from "stats.js";
 
 const canvas = document.getElementById("my_canvas") as HTMLCanvasElement;
 
@@ -17,15 +13,11 @@ canvas.height = canvas.clientHeight * devicePixelRatio;
 
 const numX = Math.round(canvas.width);
 
-const stats = new Stats();
-stats.showPanel(0);
-document.body.appendChild(stats.dom);
+const wglp = new WebGLplot(canvas);
 
 let numLines = 1;
 let scaleY = 1;
 //let lines: WebglLine[];
-
-const wglp = new WebGLplot(canvas);
 
 let fpsDivder = 1;
 let fpsCounter = 0;
@@ -33,17 +25,7 @@ let fpsCounter = 0;
 // new data per frame
 let newDataSize = 1;
 
-const lineNumList = [1, 2, 5, 10, 20, 50, 100, 200, 500, 1000, 2000, 5000];
-
-let sliderLines: noUiSlider.Instance;
-let sliderYScale: noUiSlider.Instance;
-let sliderNewData: noUiSlider.Instance;
-let sliderFps: noUiSlider.Instance;
-
-let displayLines: HTMLSpanElement;
-let displayYScale: HTMLSpanElement;
-let displayNewDataSize: HTMLSpanElement;
-let displayFps: HTMLSpanElement;
+const lineNumList = [1, 2, 5, 10, 20, 50, 100, 200, 500, 1000, 2000, 5000, 10000];
 
 createUI();
 
@@ -60,14 +42,10 @@ init();
 
 function newFrame(): void {
   if (fpsCounter === 0) {
-    stats.begin();
-
     plot(newDataSize);
 
     wglp.gScaleY = scaleY;
     wglp.update();
-
-    stats.end();
   }
 
   fpsCounter++;
@@ -75,11 +53,10 @@ function newFrame(): void {
   if (fpsCounter >= fpsDivder) {
     fpsCounter = 0;
   }
-
-  window.requestAnimationFrame(newFrame);
+  requestAnimationFrame(newFrame);
 }
 
-window.requestAnimationFrame(newFrame);
+requestAnimationFrame(newFrame);
 
 function plot(shiftSize: number): void {
   wglp.lines.forEach((line) => {
@@ -101,7 +78,7 @@ function init(): void {
   wglp.removeAllLines();
 
   for (let i = 0; i < numLines; i++) {
-    const color = new ColorRGBA(Math.random(), Math.random(), Math.random(), 0.5);
+    const color = new ColorRGBA(Math.random(), Math.random(), Math.random(), 1);
     const line = new WebglLine(color, numX);
     line.lineSpaceX(-1, 2 / numX);
     wglp.addLine(line);
@@ -113,114 +90,46 @@ function doneResizing(): void {
 }
 
 function createUI(): void {
-  const ui = document.getElementById("ui") as HTMLDivElement;
-
-  // ******slider lines */
-  sliderLines = (document.createElement("div") as unknown) as noUiSlider.Instance;
-  sliderLines.style.width = "100%";
-  noUiSlider.create(sliderLines, {
-    start: [0],
-    step: 1,
-    connect: [true, false],
-    // tooltips: [false, wNumb({decimals: 1}), true],
-    range: {
-      min: 0,
-      max: 11,
-    },
+  const sliderLines = new SimpleSlider("sliderLine", 0, lineNumList.length - 1, lineNumList.length);
+  sliderLines.setValue(0);
+  sliderLines.addEventListener("update", () => {
+    numLines = lineNumList[Math.round(sliderLines.value)];
+    updateTextDisplay();
   });
-
-  displayLines = document.createElement("span");
-  ui.appendChild(sliderLines);
-  ui.appendChild(displayLines);
-  ui.appendChild(document.createElement("p"));
-
-  sliderLines.noUiSlider.on("update", (values, handle) => {
-    numLines = lineNumList[parseFloat(values[handle])];
-    displayLines.innerHTML = `Line number: ${numLines}`;
-  });
-
-  sliderLines.noUiSlider.on("set", () => {
+  sliderLines.addEventListener("drag-end", () => {
     init();
   });
 
-  /*****slider yscale */
-  sliderYScale = (document.createElement("div") as unknown) as noUiSlider.Instance;
-  sliderYScale.style.width = "100%";
-  noUiSlider.create(sliderYScale, {
-    start: [1],
-    connect: [true, false],
-    // tooltips: [false, wNumb({decimals: 1}), true],
-    range: {
-      min: 0.01,
-      max: 10,
-    },
+  const sliderYScale = new SimpleSlider("sliderYScale", 0, 2, 0);
+  //sliderYSclae.setDebug(true);
+  sliderYScale.setValue(scaleY);
+  sliderYScale.addEventListener("update", () => {
+    scaleY = sliderYScale.value;
+    updateTextDisplay();
   });
 
-  displayYScale = document.createElement("span");
-  ui.appendChild(sliderYScale);
-  ui.appendChild(displayYScale);
-  ui.appendChild(document.createElement("p"));
-
-  sliderYScale.noUiSlider.on("update", (values, handle) => {
-    scaleY = parseFloat(values[handle]);
-    displayYScale.innerHTML = `Y scale = ${scaleY}`;
+  const sliderNewData = new SimpleSlider("sliderNewData", 0, 100, 101);
+  //sliderYSclae.setDebug(true);
+  sliderNewData.setValue(newDataSize);
+  sliderNewData.addEventListener("update", () => {
+    newDataSize = sliderNewData.value;
+    updateTextDisplay();
   });
 
-  /****** slider new data */
-  sliderNewData = (document.createElement("div") as unknown) as noUiSlider.Instance;
-  sliderNewData.style.width = "100%";
-
-  noUiSlider.create(sliderNewData, {
-    start: [1],
-    step: 1,
-    connect: [true, false],
-    // tooltips: [false, wNumb({decimals: 1}), true],
-    range: {
-      min: 1,
-      max: 100,
-    },
+  const sliderFps = new SimpleSlider("sliderFps", 1, 16, 16);
+  //sliderYSclae.setDebug(true);
+  sliderFps.setValue(newDataSize);
+  sliderFps.addEventListener("update", () => {
+    fpsDivder = sliderFps.value;
+    updateTextDisplay();
   });
 
-  displayNewDataSize = document.createElement("span");
-  ui.appendChild(sliderNewData);
-  ui.appendChild(displayNewDataSize);
-  ui.appendChild(document.createElement("p"));
-
-  sliderNewData.noUiSlider.on("update", (values, handle) => {
-    newDataSize = parseFloat(values[handle]);
-    displayNewDataSize.innerHTML = `New data per frame = ${newDataSize}`;
-  });
-
-  /**** slider fps */
-  sliderFps = (document.createElement("div") as unknown) as noUiSlider.Instance;
-  sliderFps.style.width = "100%";
-
-  noUiSlider.create(sliderFps, {
-    start: [1],
-    step: 1,
-    connect: [true, false],
-    // tooltips: [false, wNumb({decimals: 1}), true],
-    range: {
-      min: 1,
-      max: 10,
-    },
-  });
-
-  displayFps = document.createElement("span");
-  ui.appendChild(sliderFps);
-  ui.appendChild(displayFps);
-  ui.appendChild(document.createElement("p"));
-
-  sliderFps.noUiSlider.on("update", (values, handle) => {
-    fpsDivder = parseFloat(values[handle]);
-    displayFps.innerHTML = `FPS  = ${60 / fpsDivder}`;
-  });
+  updateTextDisplay();
 }
 
-/*function btclick() {
-  console.log("button press!");
-  let ui = <HTMLDivElement>document.getElementById("ui");
-  while (ui.firstChild) {
-    ui.removeChild(ui.firstChild);
-  }
-}*/
+function updateTextDisplay() {
+  document.getElementById("numLines").innerHTML = `Line number: ${numLines}`;
+  document.getElementById("yScale").innerHTML = `Y scale = ${scaleY.toFixed(2)}`;
+  document.getElementById("newData").innerHTML = `New Data Size = ${newDataSize.toFixed(0)}`;
+  document.getElementById("fps").innerHTML = `FPS = ${60 / fpsDivder}`;
+}

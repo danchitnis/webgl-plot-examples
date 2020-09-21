@@ -4,6 +4,16 @@
 
 Examples for the [WebGL-plot](https://github.com/danchitnis/webgl-plot) library
 
+## Vanilla Javascript Examples
+
+- ### Random Lines
+- ### Sine wave
+- ### Static Lines (Zoom & Drag)
+- ### Polar
+- ### Radar
+- ### Camera (RGB Histogram)
+- ### Microphone (Realtime & Spectrum)
+
 ## Getting started
 
 ```bash
