@@ -8,7 +8,7 @@ export default [
     plugins: [typescript(), resolve()],
     output: {
       file: "./dist/randomness.js",
-      format: "iife",
+      format: "esm",
     },
   },
   {
@@ -16,7 +16,7 @@ export default [
     plugins: [typescript(), resolve()],
     output: {
       file: "./dist/sine.js",
-      format: "iife",
+      format: "esm",
     },
   },
   {
@@ -24,7 +24,7 @@ export default [
     plugins: [typescript(), resolve()],
     output: {
       file: "./dist/microphone.js",
-      format: "iife",
+      format: "esm",
     },
   },
   {
@@ -32,7 +32,7 @@ export default [
     plugins: [typescript(), resolve()],
     output: {
       file: "./dist/camera_hist.js",
-      format: "iife",
+      format: "esm",
     },
   },
   {
@@ -40,7 +40,7 @@ export default [
     plugins: [typescript(), resolve()],
     output: {
       file: "./dist/static.js",
-      format: "iife",
+      format: "esm",
     },
   },
   {
@@ -48,7 +48,7 @@ export default [
     plugins: [typescript(), resolve()],
     output: {
       file: "./dist/polar.js",
-      format: "iife",
+      format: "esm",
     },
   },
   {
@@ -56,7 +56,7 @@ export default [
     plugins: [typescript(), resolve()],
     output: {
       file: "./dist/radar.js",
-      format: "iife",
+      format: "esm",
     },
   },
   {
@@ -64,7 +64,7 @@ export default [
     plugins: [typescript(), resolve()],
     output: {
       file: "./dist/grid.js",
-      format: "iife",
+      format: "esm",
     },
   },
 ];

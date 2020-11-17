@@ -22,19 +22,19 @@
     "@types/stats.js": "^0.17.0",
     "nouislider": "^14.6.2",
     "stats.js": "^0.17.0",
-    "webgl-plot": "^0.5.1"
+    "webgl-plot": "^0.5.3"
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^4.4.0",
-    "@typescript-eslint/parser": "^4.4.0",
-    "eslint": "^7.10.0",
-    "rollup": "^2.29.0",
+    "@typescript-eslint/eslint-plugin": "^4.8.0",
+    "@typescript-eslint/parser": "^4.8.0",
+    "eslint": "^7.13.0",
+    "rollup": "^2.33.2",
     "rollup-plugin-commonjs": "^10.1.0",
     "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-sourcemaps": "^0.6.3",
-    "rollup-plugin-typescript2": "^0.27.3",
-    "typescript": "^4.0.3",
-    "webpack": "^5.0.0-beta.29",
-    "webpack-cli": "^3.3.12"
+    "rollup-plugin-typescript2": "^0.29.0",
+    "typescript": "^4.0.5",
+    "webpack": "^5.4.0",
+    "webpack-cli": "^4.2.0"
   }
 }
