@@ -16,7 +16,7 @@ const exports = {
 
     const line = new WebglLine(color, numX);
 
-    const wglp = new WebGLplot(canvas, true);
+    const wglp = new WebGLplot(canvas);
 
     line.lineSpaceX(-1, 2 / numX);
     wglp.addLine(line);
