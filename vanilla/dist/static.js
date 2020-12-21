@@ -613,7 +613,7 @@ function init() {
     const devicePixelRatio = window.devicePixelRatio || 1;
     canvas.width = canvas.clientWidth * devicePixelRatio;
     canvas.height = canvas.clientHeight * devicePixelRatio;
-    numX = 100000;
+    numX = 10000;
     wglp = new WebGLPlot(canvas);
     wglp.removeAllLines();
     for (let i = 0; i < numLines; i++) {

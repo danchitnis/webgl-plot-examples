@@ -48,7 +48,7 @@ function init(): void {
   canvas.width = canvas.clientWidth * devicePixelRatio;
   canvas.height = canvas.clientHeight * devicePixelRatio;
 
-  numX = 100000;
+  numX = 10000;
 
   wglp = new WebGLplot(canvas);
 

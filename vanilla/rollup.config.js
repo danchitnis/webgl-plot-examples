@@ -67,4 +67,12 @@ export default [
       format: "esm",
     },
   },
+  {
+    input: "./src/cross.ts",
+    plugins: [typescript(), resolve()],
+    output: {
+      file: "./dist/cross.js",
+      format: "esm",
+    },
+  },
 ];
