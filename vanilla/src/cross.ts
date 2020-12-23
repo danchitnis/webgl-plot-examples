@@ -99,14 +99,13 @@ function init(): void {
 
 function mouseMove(e: MouseEvent): void {
   const x =
-    ((1 / wglp.gScaleX) *
-      (2 * ((e.clientX - canvas.offsetLeft) * devicePixelRatio - canvas.width / 2))) /
-    canvas.width;
+    (1 / wglp.gScaleX) *
+    ((2 * ((e.pageX - canvas.offsetLeft) * devicePixelRatio - canvas.width / 2)) / canvas.width -
+      wglp.gOffsetX);
   const y =
-    ((1 / wglp.gScaleY) *
-      2 *
-      (canvas.height / 2 - (e.clientY - canvas.offsetTop) * devicePixelRatio)) /
-    canvas.height;
+    (1 / wglp.gScaleY) *
+    ((2 * (canvas.height / 2 - (e.pageY - canvas.offsetTop) * devicePixelRatio)) / canvas.height -
+      wglp.gOffsetY);
   cross(x, y);
 }
 
@@ -132,16 +131,19 @@ function doneResizing(): void {
 }
 
 function createUI(): void {
-  const sliderLines = new SimpleSlider("sliderLine", 1, 10, 100);
-  sliderLines.setValue(1);
-  sliderLines.addEventListener("update", () => {
+  const sliderScale = new SimpleSlider("sliderScale", 1, 10, 100);
+  sliderScale.setValue(1);
+  sliderScale.addEventListener("update", () => {
     //numLines = lineNumList[Math.round(sliderLines.value)];
-    wglp.gScaleX = sliderLines.value;
+    wglp.gScaleX = sliderScale.value;
     updateTextDisplay();
   });
 
-  sliderLines.addEventListener("drag-end", () => {
-    //init();
+  const sliderOffset = new SimpleSlider("sliderOffset", -1, 1, 1000);
+  sliderOffset.setValue(0);
+  sliderOffset.addEventListener("update", () => {
+    wglp.gOffsetX = -1 * sliderOffset.value * wglp.gScaleX;
+    updateTextDisplay();
   });
 }
 
@@ -153,5 +155,5 @@ function log(str: string) {
 function updateTextDisplay() {
   info.innerHTML = `Zoom: ${wglp.gScaleX.toFixed(2)}, Offset ${wglp.gOffsetX.toFixed(
     2
-  )}, X:${crossX} Y:${crossY}`;
+  )}, X:${crossX.toFixed(3)} Y:${crossY.toFixed(3)}`;
 }
