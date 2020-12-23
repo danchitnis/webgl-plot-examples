@@ -59,7 +59,7 @@ function newFrame(): void {
 requestAnimationFrame(newFrame);
 
 function plot(shiftSize: number): void {
-  wglp.lines.forEach((line) => {
+  wglp.linesData.forEach((line) => {
     const yArray = randomWalk((line as WebglLine).getY(numX - 1), shiftSize);
     (line as WebglLine).shiftAdd(yArray);
   });

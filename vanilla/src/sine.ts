@@ -50,9 +50,9 @@ function init(): void {
 }
 
 function update(): void {
-  wglp.lines.forEach((line, index) => {
+  wglp.linesData.forEach((line, index) => {
     for (let i = 0; i < line.numPoints; i++) {
-      const ySin = Math.sin(Math.PI * i * freq + (index / wglp.lines.length) * Math.PI * 2);
+      const ySin = Math.sin(Math.PI * i * freq + (index / wglp.linesData.length) * Math.PI * 2);
       const yNoise = Math.random() - 0.5;
       (line as WebglLine).setY(i, ySin * amp + yNoise * noise);
     }
@@ -65,15 +65,15 @@ function doneResizing(): void {
 
 function changeView(): void {
   if (segView) {
-    wglp.lines.forEach((line) => {
+    wglp.linesData.forEach((line) => {
       line.offsetY = 0;
       line.scaleY = 1;
     });
     segView = false;
   } else {
-    wglp.lines.forEach((line, index) => {
-      line.offsetY = 1.5 * (index / wglp.lines.length - 0.5);
-      line.scaleY = 1.5 / wglp.lines.length;
+    wglp.linesData.forEach((line, index) => {
+      line.offsetY = 1.5 * (index / wglp.linesData.length - 0.5);
+      line.scaleY = 1.5 / wglp.linesData.length;
     });
     segView = true;
   }

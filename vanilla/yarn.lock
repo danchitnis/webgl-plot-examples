@@ -1820,10 +1820,10 @@ watchpack@^2.0.0:
     glob-to-regexp "^0.4.1"
     graceful-fs "^4.1.2"
 
-webgl-plot@^0.5.3:
-  version "0.5.3"
-  resolved "https://registry.yarnpkg.com/webgl-plot/-/webgl-plot-0.5.3.tgz#41fbce46c90f25da9e0527fcce92b3a15778760f"
-  integrity sha512-I01y2I4rle9phSG3duKVcfTIZiKdnnsjLkG9WIe/OA0bWPAdTcYUlXHY8Bc6lQV34g+p/z0423dglG7/hXC/dw==
+webgl-plot@^0.5.4:
+  version "0.5.4"
+  resolved "https://registry.yarnpkg.com/webgl-plot/-/webgl-plot-0.5.4.tgz#9706beddd4bdd59a3cb7c89fa7ebb959e91e3904"
+  integrity sha512-1j6d9koyC1QZGOPxiYj+OIofCFPntE9EGX1SNbBeVyePlWnw6A49MT6u7r8mc7yOgOWz9vctR7F+tFBoGHus3g==
 
 webpack-cli@^4.2.0:
   version "4.2.0"

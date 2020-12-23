@@ -55,7 +55,7 @@ function init(): void {
 
   // Draw the image onto the top-left corner of the canvas
 
-  var handleSuccess = function (stream: MediaStream) {
+  const handleSuccess = function (stream: MediaStream) {
     player.srcObject = stream;
   };
 

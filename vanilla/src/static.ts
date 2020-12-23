@@ -61,7 +61,7 @@ function init(): void {
     wglp.addLine(line);
   }
 
-  wglp.lines.forEach((line) => {
+  wglp.linesData.forEach((line) => {
     (line as WebglLine).setY(0, Math.random() - 0.5);
     for (let i = 1; i < line.numPoints; i++) {
       let y = (line as WebglLine).getY(i - 1) + 0.01 * (Math.round(Math.random()) - 0.5);

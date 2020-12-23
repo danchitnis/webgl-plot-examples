@@ -1,8 +1,9 @@
 import { SimpleSlider } from "@danchitnis/simple-slider";
 import WebGLplot, { ColorRGBA, WebglLine } from "webgl-plot";
+//import WebGLplot, { ColorRGBA, WebglLine } from "./webglplot/webglplot";
 
 const numLines = 2;
-//const lineNumList = [1, 2, 5, 10, 20, 50, 100, 200, 500, 1000];
+const AuxLines = { crossX: 0, crossY: 1, testRec: 2 };
 
 const canvas = document.getElementById("my_canvas") as HTMLCanvasElement;
 const info = document.getElementById("info") as HTMLSpanElement;
@@ -13,8 +14,6 @@ let crossY = 0;
 let numX: number;
 
 let wglp: WebGLplot;
-
-let Rect: WebglLine;
 
 createUI();
 
@@ -50,10 +49,10 @@ function init(): void {
     const color = new ColorRGBA(Math.random(), Math.random(), Math.random(), 1);
     const line = new WebglLine(color, numX);
     line.lineSpaceX(-1, 2 / numX);
-    wglp.addLine(line);
+    wglp.addDataLine(line);
   }
 
-  wglp.lines.forEach((line) => {
+  wglp.linesData.forEach((line) => {
     (line as WebglLine).setY(0, Math.random() - 0.5);
     for (let i = 1; i < line.numPoints; i++) {
       let y = (line as WebglLine).getY(i - 1) + 0.01 * (Math.round(Math.random()) - 0.5);
@@ -67,18 +66,10 @@ function init(): void {
     }
   });
 
-  // add zoom rectangle
-  Rect = new WebglLine(new ColorRGBA(0.9, 0.9, 0.9, 1), 4);
-  Rect.loop = true;
-  Rect.xy = new Float32Array([-0.5, -1, -0.5, 1, 0.5, 1, 0.5, -1]);
-  Rect.visible = false;
-  wglp.addLine(Rect);
-
   // test rec
   const testRect = new WebglLine(new ColorRGBA(0.1, 0.9, 0.9, 1), 4);
   testRect.loop = true;
   testRect.xy = new Float32Array([-0.7, -0.8, -0.7, 0.8, -0.6, 0.8, -0.6, -0.8]);
-  wglp.addLine(testRect);
 
   //wglp.viewport(0, 0, 1000, 1000);
   wglp.gScaleX = 1;
@@ -93,8 +84,10 @@ function init(): void {
 
   //add cross
   const green = new ColorRGBA(0.1, 0.9, 0.1, 1);
-  wglp.addLine(new WebglLine(green, 2));
-  wglp.addLine(new WebglLine(green, 2));
+
+  wglp.addAuxLine(new WebglLine(green, 2));
+  wglp.addAuxLine(new WebglLine(green, 2));
+  wglp.addAuxLine(testRect);
 }
 
 function mouseMove(e: MouseEvent): void {
@@ -110,8 +103,8 @@ function mouseMove(e: MouseEvent): void {
 }
 
 function cross(x: number, y: number): void {
-  wglp.lines[wglp.lines.length - 2].xy = new Float32Array([x, -1, x, 1]);
-  wglp.lines[wglp.lines.length - 1].xy = new Float32Array([-1, y, 1, y]);
+  wglp.linesAux[AuxLines.crossX].xy = new Float32Array([x, -1, x, 1]);
+  wglp.linesAux[AuxLines.crossY].xy = new Float32Array([-1, y, 1, y]);
   crossX = x;
   crossY = y;
 }
