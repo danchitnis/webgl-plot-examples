@@ -75,4 +75,12 @@ export default [
       format: "esm",
     },
   },
+  {
+    input: "./src/log.ts",
+    plugins: [typescript(), resolve()],
+    output: {
+      file: "./dist/log.js",
+      format: "esm",
+    },
+  },
 ];

@@ -3,7 +3,7 @@
  */
 
 import { SimpleSlider } from "@danchitnis/simple-slider";
-import WebGLplot, { WebglLine, ColorRGBA } from "webgl-plot";
+import { WebglPlot, WebglLine, ColorRGBA } from "webgl-plot";
 
 const canvas = document.getElementById("my_canvas") as HTMLCanvasElement;
 
@@ -13,7 +13,7 @@ canvas.height = canvas.clientHeight * devicePixelRatio;
 
 const numX = Math.round(canvas.width);
 
-const wglp = new WebGLplot(canvas);
+const wglp = new WebglPlot(canvas);
 
 let numLines = 1;
 let scaleY = 1;

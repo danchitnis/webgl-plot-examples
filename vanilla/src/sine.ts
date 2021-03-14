@@ -1,5 +1,5 @@
 import { SimpleSlider } from "@danchitnis/simple-slider";
-import WebGLplot, { ColorRGBA, WebglLine } from "webgl-plot";
+import { WebglPlot, ColorRGBA, WebglLine } from "webgl-plot";
 
 let amp = 0.5;
 let noise = 0.1;
@@ -13,7 +13,7 @@ canvas.height = canvas.clientHeight * devicePixelRatio;
 
 const numX = Math.round(canvas.width);
 
-const wglp = new WebGLplot(canvas);
+const wglp = new WebglPlot(canvas);
 
 let numLines = 1;
 let segView = false;

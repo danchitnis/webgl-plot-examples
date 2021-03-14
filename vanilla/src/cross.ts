@@ -1,5 +1,5 @@
 import { SimpleSlider } from "@danchitnis/simple-slider";
-import WebGLplot, { ColorRGBA, WebglLine } from "webgl-plot";
+import { WebglPlot, ColorRGBA, WebglLine } from "webgl-plot";
 //import WebGLplot, { ColorRGBA, WebglLine } from "./webglplot/webglplot";
 
 const numLines = 2;
@@ -13,7 +13,7 @@ let crossY = 0;
 
 let numX: number;
 
-let wglp: WebGLplot;
+let wglp: WebglPlot;
 
 createUI();
 
@@ -41,7 +41,7 @@ function init(): void {
 
   numX = 10000;
 
-  wglp = new WebGLplot(canvas);
+  wglp = new WebglPlot(canvas);
 
   wglp.removeAllLines();
 

@@ -395,7 +395,7 @@ class WebglLine extends WebglBaseLine {
 /**
  * The main class for the webgl-plot library
  */
-class WebGLPlot {
+class WebglPlot {
     /**
      * Create a webgl-plot instance
      * @param canvas - the canvas in which the plot appears
@@ -460,24 +460,33 @@ class WebGLPlot {
         this.log(`[webgl-plot]:width=${canvas.width}, height=${canvas.height}`);
         this._linesData = [];
         this._linesAux = [];
+        this._surfaces = [];
         //this.webgl = webgl;
         this.gScaleX = 1;
         this.gScaleY = 1;
         this.gXYratio = 1;
         this.gOffsetX = 0;
         this.gOffsetY = 0;
+        this.gLog10X = false;
+        this.gLog10Y = false;
         // Clear the color
         this.webgl.clear(this.webgl.COLOR_BUFFER_BIT);
         // Set the view port
         this.webgl.viewport(0, 0, canvas.width, canvas.height);
         this.progThinLine = this.webgl.createProgram();
         this.initThinLineProgram();
+        //https://learnopengl.com/Advanced-OpenGL/Blending
+        this.webgl.enable(this.webgl.BLEND);
+        this.webgl.blendFunc(this.webgl.SRC_ALPHA, this.webgl.ONE_MINUS_SRC_ALPHA);
     }
     get linesData() {
         return this._linesData;
     }
     get linesAux() {
         return this._linesAux;
+    }
+    get surfaces() {
+        return this._surfaces;
     }
     /**
      * updates and redraws the content of the plot
@@ -489,13 +498,15 @@ class WebGLPlot {
                 webgl.useProgram(this.progThinLine);
                 const uscale = webgl.getUniformLocation(this.progThinLine, "uscale");
                 webgl.uniformMatrix2fv(uscale, false, new Float32Array([
-                    line.scaleX * this.gScaleX,
+                    line.scaleX * this.gScaleX * (this.gLog10X ? 1 / Math.log(10) : 1),
                     0,
                     0,
-                    line.scaleY * this.gScaleY * this.gXYratio,
+                    line.scaleY * this.gScaleY * this.gXYratio * (this.gLog10Y ? 1 / Math.log(10) : 1),
                 ]));
                 const uoffset = webgl.getUniformLocation(this.progThinLine, "uoffset");
                 webgl.uniform2fv(uoffset, new Float32Array([line.offsetX + this.gOffsetX, line.offsetY + this.gOffsetY]));
+                const isLog = webgl.getUniformLocation(this.progThinLine, "is_log");
+                webgl.uniform2iv(isLog, new Int32Array([this.gLog10X ? 1 : 0, this.gLog10Y ? 1 : 0]));
                 const uColor = webgl.getUniformLocation(this.progThinLine, "uColor");
                 webgl.uniform4fv(uColor, [line.color.r, line.color.g, line.color.b, line.color.a]);
                 webgl.bufferData(webgl.ARRAY_BUFFER, line.xy, webgl.STREAM_DRAW);
@@ -503,9 +514,33 @@ class WebGLPlot {
             }
         });
     }
+    updateSurfaces(lines) {
+        const webgl = this.webgl;
+        lines.forEach((line) => {
+            if (line.visible) {
+                webgl.useProgram(this.progThinLine);
+                const uscale = webgl.getUniformLocation(this.progThinLine, "uscale");
+                webgl.uniformMatrix2fv(uscale, false, new Float32Array([
+                    line.scaleX * this.gScaleX * (this.gLog10X ? 1 / Math.log(10) : 1),
+                    0,
+                    0,
+                    line.scaleY * this.gScaleY * this.gXYratio * (this.gLog10Y ? 1 / Math.log(10) : 1),
+                ]));
+                const uoffset = webgl.getUniformLocation(this.progThinLine, "uoffset");
+                webgl.uniform2fv(uoffset, new Float32Array([line.offsetX + this.gOffsetX, line.offsetY + this.gOffsetY]));
+                const isLog = webgl.getUniformLocation(this.progThinLine, "is_log");
+                webgl.uniform2iv(isLog, new Int32Array([this.gLog10X ? 1 : 0, this.gLog10Y ? 1 : 0]));
+                const uColor = webgl.getUniformLocation(this.progThinLine, "uColor");
+                webgl.uniform4fv(uColor, [line.color.r, line.color.g, line.color.b, line.color.a]);
+                webgl.bufferData(webgl.ARRAY_BUFFER, line.xy, webgl.STREAM_DRAW);
+                webgl.drawArrays(webgl.TRIANGLE_STRIP, 0, line.webglNumPoints);
+            }
+        });
+    }
     update() {
         this.updateLines(this.linesData);
         this.updateLines(this.linesAux);
+        this.updateSurfaces(this.surfaces);
     }
     clear() {
         // Clear the canvas  //??????????????????
@@ -540,13 +575,22 @@ class WebGLPlot {
         this._addLine(line);
         this.linesAux.push(line);
     }
+    addSurface(surface) {
+        this._addLine(surface);
+        this.surfaces.push(surface);
+    }
     initThinLineProgram() {
         const vertCode = `
       attribute vec2 coordinates;
       uniform mat2 uscale;
       uniform vec2 uoffset;
+      uniform ivec2 is_log;
+
       void main(void) {
-         gl_Position = vec4(uscale*coordinates + uoffset, 0.0, 1.0);
+         float x = (is_log[0]==1) ? log(coordinates.x) : coordinates.x;
+         float y = (is_log[1]==1) ? log(coordinates.y) : coordinates.y;
+         vec2 line = vec2(x, y);
+         gl_Position = vec4(uscale*line + uoffset, 0.0, 1.0);
       }`;
         // Create a vertex shader object
         const vertShader = this.webgl.createShader(this.webgl.VERTEX_SHADER);
@@ -619,7 +663,7 @@ const devicePixelRatio = window.devicePixelRatio || 1;
 canvas.width = canvas.clientWidth * devicePixelRatio;
 canvas.height = canvas.clientHeight * devicePixelRatio;
 const numX = Math.round(canvas.width);
-const wglp = new WebGLPlot(canvas);
+const wglp = new WebglPlot(canvas);
 let numLines = 1;
 let segView = false;
 const lineNumList = [1, 2, 5, 10, 20, 50, 100, 200, 500, 1000, 2000, 5000];

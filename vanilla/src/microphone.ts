@@ -1,4 +1,4 @@
-import WebGLplot, { ColorRGBA, WebglLine } from "webgl-plot";
+import { WebglPlot, WebglLine, ColorRGBA } from "webgl-plot";
 
 const canvas = document.getElementById("my_canvas") as HTMLCanvasElement;
 const player = document.getElementById("player") as HTMLVideoElement;
@@ -7,7 +7,7 @@ let numX: number;
 
 let analyser: AnalyserNode;
 
-let wglp: WebGLplot;
+let wglp: WebglPlot;
 let lineTime: WebglLine;
 let lineFreq: WebglLine;
 
@@ -92,7 +92,7 @@ function init(): void {
 
   lineFreq = new WebglLine(new ColorRGBA(0.9, 0.2, 0.2, 1), fftSize / 2);
 
-  wglp = new WebGLplot(canvas);
+  wglp = new WebglPlot(canvas);
 
   wglp.gOffsetY = 0;
 

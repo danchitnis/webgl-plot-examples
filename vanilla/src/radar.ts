@@ -1,5 +1,5 @@
 import { SimpleSlider } from "@danchitnis/simple-slider";
-import WebGLplot, { ColorRGBA, WebglPolar } from "webgl-plot";
+import { WebglPlot, ColorRGBA, WebglPolar } from "webgl-plot";
 
 let amp = 0.5;
 let updateRate = 0.1;
@@ -16,7 +16,7 @@ let numPoints = numPointList[9];
 const devicePixelRatio = window.devicePixelRatio || 1;
 canvas.width = canvas.clientWidth * devicePixelRatio;
 canvas.height = canvas.clientHeight * devicePixelRatio;
-const wglp = new WebGLplot(canvas);
+const wglp = new WebglPlot(canvas);
 
 let line: WebglPolar;
 let line2: WebglPolar;

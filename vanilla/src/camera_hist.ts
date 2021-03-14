@@ -1,4 +1,4 @@
-import WebGLplot, { ColorRGBA, WebglLine } from "webgl-plot";
+import { WebglPlot, WebglLine, ColorRGBA } from "webgl-plot";
 
 const canvas = document.getElementById("my_canvas") as HTMLCanvasElement;
 const player = document.getElementById("player") as HTMLVideoElement;
@@ -10,7 +10,7 @@ let numX: number;
 
 let N = 0;
 
-let wglp: WebGLplot;
+let wglp: WebglPlot;
 let lineR: WebglLine;
 let lineG: WebglLine;
 let lineB: WebglLine;
@@ -61,7 +61,7 @@ function init(): void {
   canvas.width = canvas.clientWidth * devicePixelRatio;
   canvas.height = canvas.clientHeight * devicePixelRatio;
 
-  wglp = new WebGLplot(canvas);
+  wglp = new WebglPlot(canvas);
 
   numX = 256;
 
