@@ -1,5 +1,5 @@
-import { SimpleSlider } from "@danchitnis/simple-slider";
-import { WebglPlot, ColorRGBA, WebglLine } from "webgl-plot";
+import { SimpleSlider } from "https://cdn.skypack.dev/@danchitnis/simple-slider";
+import { WebglPlot, ColorRGBA, WebglLine } from "https://cdn.skypack.dev/webgl-plot";
 
 let numLines = 2;
 const lineNumList = [1, 2, 5, 10, 20, 50, 100, 200, 500, 1000];
@@ -272,14 +272,14 @@ function doneResizing(): void {
 function createUI(): void {
   const sliderLines = new SimpleSlider("sliderLine", 0, lineNumList.length - 1, lineNumList.length);
   sliderLines.setValue(0);
-  sliderLines.addEventListener("update", () => {
+  sliderLines.callBackUpdate = () => {
     numLines = lineNumList[Math.round(sliderLines.value)];
     updateTextDisplay();
-  });
+  };
 
-  sliderLines.addEventListener("drag-end", () => {
+  sliderLines.callBackDragEnd = () => {
     init();
-  });
+  };
 }
 
 function log(str: string) {

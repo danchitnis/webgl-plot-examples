@@ -1,5 +1,5 @@
-import { SimpleSlider } from "@danchitnis/simple-slider";
-import { WebglPlot, ColorRGBA, WebglPolar } from "webgl-plot";
+import { SimpleSlider } from "https://cdn.skypack.dev/@danchitnis/simple-slider";
+import { WebglPlot, ColorRGBA, WebglPolar } from "https://cdn.skypack.dev/webgl-plot";
 
 let amp = 0.5;
 let updateRate = 0.1;
@@ -113,31 +113,31 @@ function createUI(): void {
     numPointList.length
   );
   sliderLines.setValue(9);
-  sliderLines.addEventListener("update", () => {
+  sliderLines.callBackUpdate = () => {
     numPoints = numPointList[Math.round(sliderLines.value)];
     updateTextDisplay();
-  });
-  sliderLines.addEventListener("drag-end", () => {
+  };
+  sliderLines.callBackDragEnd = () => {
     init();
-  });
+  };
 
   const sliderAmp = new SimpleSlider("sliderAmp", 0, 1, 0);
   //sliderYSclae.setDebug(true);
   sliderAmp.setValue(amp);
-  sliderAmp.addEventListener("update", () => {
+  sliderAmp.callBackUpdate = () => {
     amp = sliderAmp.value;
     updateTextDisplay();
-  });
+  };
 
   const sliderUpdateRate = new SimpleSlider("sliderUpdateRate", 1, 100, 100);
   //sliderYSclae.setDebug(true);
   sliderUpdateRate.setValue(updateRate);
-  sliderUpdateRate.addEventListener("update", () => {
+  sliderUpdateRate.callBackUpdate = () => {
     updateRate = Math.round(sliderUpdateRate.value);
     updateTextDisplay();
     clearInterval(timer);
     timer = setInterval(update, updateRate);
-  });
+  };
 }
 
 function updateTextDisplay() {

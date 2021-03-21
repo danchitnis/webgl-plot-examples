@@ -1,4 +1,4 @@
-import { WebglPlot, WebglLine, ColorRGBA } from "webgl-plot";
+import { WebglPlot, ColorRGBA, WebglLine } from "https://cdn.skypack.dev/webgl-plot";
 
 const gridX = document.getElementById("gridX") as HTMLInputElement;
 const gridY = document.getElementById("gridY") as HTMLInputElement;

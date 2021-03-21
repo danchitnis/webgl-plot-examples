@@ -2,3 +2,4 @@ node_modules
 .yarn
 webgl-plot
 build
+temp

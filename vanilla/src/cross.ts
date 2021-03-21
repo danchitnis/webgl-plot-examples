@@ -1,6 +1,5 @@
-import { SimpleSlider } from "@danchitnis/simple-slider";
-import { WebglPlot, ColorRGBA, WebglLine } from "webgl-plot";
-//import WebGLplot, { ColorRGBA, WebglLine } from "./webglplot/webglplot";
+import { SimpleSlider } from "https://cdn.skypack.dev/@danchitnis/simple-slider";
+import { WebglPlot, ColorRGBA, WebglLine } from "https://cdn.skypack.dev/webgl-plot";
 
 const numLines = 2;
 const AuxLines = { crossX: 0, crossY: 1, testRec: 2 };
@@ -126,18 +125,18 @@ function doneResizing(): void {
 function createUI(): void {
   const sliderScale = new SimpleSlider("sliderScale", 1, 10, 100);
   sliderScale.setValue(1);
-  sliderScale.addEventListener("update", () => {
+  sliderScale.callBackUpdate = () => {
     //numLines = lineNumList[Math.round(sliderLines.value)];
     wglp.gScaleX = sliderScale.value;
     updateTextDisplay();
-  });
+  };
 
   const sliderOffset = new SimpleSlider("sliderOffset", -1, 1, 1000);
   sliderOffset.setValue(0);
-  sliderOffset.addEventListener("update", () => {
+  sliderOffset.callBackUpdate = () => {
     wglp.gOffsetX = -1 * sliderOffset.value * wglp.gScaleX;
     updateTextDisplay();
-  });
+  };
 }
 
 function log(str: string) {

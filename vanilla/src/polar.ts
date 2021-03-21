@@ -1,5 +1,5 @@
-import { SimpleSlider } from "@danchitnis/simple-slider";
-import { WebglPlot, ColorRGBA, WebglPolar } from "webgl-plot";
+import { SimpleSlider } from "https://cdn.skypack.dev/@danchitnis/simple-slider";
+import { WebglPlot, ColorRGBA, WebglPolar } from "https://cdn.skypack.dev/webgl-plot";
 
 let rotation = 0.1;
 let freq = 0.01;
@@ -77,31 +77,31 @@ function createUI(): void {
     numPointList.length
   );
   sliderLines.setValue(9);
-  sliderLines.addEventListener("update", () => {
+  sliderLines.callBackUpdate = () => {
     numPoints = numPointList[Math.round(sliderLines.value)];
     updateTextDisplay();
-  });
-  sliderLines.addEventListener("drag-end", () => {
+  };
+  sliderLines.callBackDragEnd = () => {
     init();
-  });
+  };
 
   // ******slider Freq */
   const sliderFreq = new SimpleSlider("sliderFreq", 0, 5, 0);
   //sliderYSclae.setDebug(true);
   sliderFreq.setValue(freq);
-  sliderFreq.addEventListener("update", () => {
+  sliderFreq.callBackUpdate = () => {
     freq = sliderFreq.value;
     updateTextDisplay();
-  });
+  };
 
   // ******slider Rotation */
   const sliderRotation = new SimpleSlider("sliderRotation", 0, 5, 0);
   //sliderYSclae.setDebug(true);
   sliderRotation.setValue(rotation);
-  sliderRotation.addEventListener("update", () => {
+  sliderRotation.callBackUpdate = () => {
     rotation = sliderRotation.value;
     updateTextDisplay();
-  });
+  };
 }
 
 function updateTextDisplay() {

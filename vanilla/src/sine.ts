@@ -1,5 +1,5 @@
-import { SimpleSlider } from "@danchitnis/simple-slider";
-import { WebglPlot, ColorRGBA, WebglLine } from "webgl-plot";
+import { SimpleSlider } from "https://cdn.skypack.dev/@danchitnis/simple-slider";
+import { WebglPlot, ColorRGBA, WebglLine } from "https://cdn.skypack.dev/webgl-plot";
 
 let amp = 0.5;
 let noise = 0.1;
@@ -82,35 +82,35 @@ function changeView(): void {
 function createUI(): void {
   const sliderLines = new SimpleSlider("sliderLine", 0, lineNumList.length - 1, lineNumList.length);
   sliderLines.setValue(0);
-  sliderLines.addEventListener("update", () => {
+  sliderLines.callBackUpdate = () => {
     numLines = lineNumList[Math.round(sliderLines.value)];
     updateTextDisplay();
-  });
+  };
 
-  sliderLines.addEventListener("drag-end", () => {
+  sliderLines.callBackDragEnd = () => {
     init();
-  });
+  };
 
   const sliderFreq = new SimpleSlider("sliderFreq", 0, 0.03, 1001);
   sliderFreq.setValue(freq);
-  sliderFreq.addEventListener("update", () => {
+  sliderFreq.callBackUpdate = () => {
     freq = sliderFreq.value;
     updateTextDisplay();
-  });
+  };
 
   const sliderAmp = new SimpleSlider("sliderAmp", 0, 1, 1001);
   sliderAmp.setValue(amp);
-  sliderAmp.addEventListener("update", () => {
+  sliderAmp.callBackUpdate = () => {
     amp = sliderAmp.value;
     updateTextDisplay();
-  });
+  };
 
   const sliderNoise = new SimpleSlider("sliderNoise", 0, 0.5, 1001);
   sliderNoise.setValue(noise);
-  sliderNoise.addEventListener("update", () => {
+  sliderNoise.callBackUpdate = () => {
     noise = sliderNoise.value;
     updateTextDisplay();
-  });
+  };
 
   const btView = document.getElementById("btView") as HTMLButtonElement;
   btView.addEventListener("click", () => {

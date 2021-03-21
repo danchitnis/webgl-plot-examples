@@ -23,10 +23,10 @@
     chalk "^2.0.0"
     js-tokens "^4.0.0"
 
-"@danchitnis/simple-slider@^0.1.8":
-  version "0.1.8"
-  resolved "https://registry.yarnpkg.com/@danchitnis/simple-slider/-/simple-slider-0.1.8.tgz#cdb3d16e9481754a874f5f0200be578e19904bed"
-  integrity sha512-EQ4bltumKXPbKT7umZa8bKHY+/bhAFmoOXjRygPLX8/eYO7zhyUE/b2hq0lQcPIoOoavVqyyMDaE1b4GXmYGCg==
+"@danchitnis/simple-slider@^0.2.0":
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/@danchitnis/simple-slider/-/simple-slider-0.2.0.tgz#8988794b0f74f5d90fa3737af8fc936925acb6e3"
+  integrity sha512-vR2k5H6GI4LYF+QCa7pU3Dm46+8if6Itvwz3JdufaefWwZlAAPgZQHZHMntaqYlggcsDoene4HrHEgZACJWrhw==
 
 "@discoveryjs/json-ext@^0.5.0":
   version "0.5.2"
@@ -1834,10 +1834,10 @@ webpack-sources@^2.1.1:
     source-list-map "^2.0.1"
     source-map "^0.6.1"
 
-webpack@^5.25.0:
-  version "5.25.0"
-  resolved "https://registry.yarnpkg.com/webpack/-/webpack-5.25.0.tgz#f9409977f0f3b6d4b9c4f73adc7d7cb9603a09e9"
-  integrity sha512-jqQZopNCzt9c4K6Qa7j6kIhzHfR9wgF84go58VoNp4JbZrBr2D2l5lcv72CW80yc6NJl8CR6OY8xctnIs0r2uw==
+webpack@^5.25.1:
+  version "5.25.1"
+  resolved "https://registry.yarnpkg.com/webpack/-/webpack-5.25.1.tgz#d3564440ed2569253fa45864405a313916bef6f6"
+  integrity sha512-dzFTJwehoLZkeHUkvMSwAgVdGL+PerfX0mke9tOWjJs4OzFctkxCqD8Zj5J387jLkC4gNqSin0/EurhH28boCg==
   dependencies:
     "@types/eslint-scope" "^3.7.0"
     "@types/estree" "^0.0.46"

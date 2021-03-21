@@ -1,4 +1,4 @@
-import { WebglPlot, WebglLine, ColorRGBA } from "webgl-plot";
+import { WebglPlot, ColorRGBA, WebglLine } from "https://cdn.skypack.dev/webgl-plot";
 
 const canvas = document.getElementById("my_canvas") as HTMLCanvasElement;
 const player = document.getElementById("player") as HTMLVideoElement;

@@ -2,8 +2,8 @@
  * Author Danial Chitnis 2019
  */
 
-import { SimpleSlider } from "@danchitnis/simple-slider";
-import { WebglPlot, WebglLine, ColorRGBA } from "webgl-plot";
+import { SimpleSlider } from "https://cdn.skypack.dev/@danchitnis/simple-slider";
+import { WebglPlot, ColorRGBA, WebglLine } from "https://cdn.skypack.dev/webgl-plot";
 
 const canvas = document.getElementById("my_canvas") as HTMLCanvasElement;
 
@@ -92,37 +92,37 @@ function doneResizing(): void {
 function createUI(): void {
   const sliderLines = new SimpleSlider("sliderLine", 0, lineNumList.length - 1, lineNumList.length);
   sliderLines.setValue(0);
-  sliderLines.addEventListener("update", () => {
+  sliderLines.callBackUpdate = () => {
     numLines = lineNumList[Math.round(sliderLines.value)];
     updateTextDisplay();
-  });
-  sliderLines.addEventListener("drag-end", () => {
+  };
+  sliderLines.callBackDragEnd = () => {
     init();
-  });
+  };
 
   const sliderYScale = new SimpleSlider("sliderYScale", 0, 2, 0);
   //sliderYSclae.setDebug(true);
   sliderYScale.setValue(scaleY);
-  sliderYScale.addEventListener("update", () => {
+  sliderYScale.callBackUpdate = () => {
     scaleY = sliderYScale.value;
     updateTextDisplay();
-  });
+  };
 
   const sliderNewData = new SimpleSlider("sliderNewData", 0, 100, 101);
   //sliderYSclae.setDebug(true);
   sliderNewData.setValue(newDataSize);
-  sliderNewData.addEventListener("update", () => {
+  sliderNewData.callBackUpdate = () => {
     newDataSize = sliderNewData.value;
     updateTextDisplay();
-  });
+  };
 
   const sliderFps = new SimpleSlider("sliderFps", 1, 16, 16);
   //sliderYSclae.setDebug(true);
   sliderFps.setValue(newDataSize);
-  sliderFps.addEventListener("update", () => {
+  sliderFps.callBackUpdate = () => {
     fpsDivder = sliderFps.value;
     updateTextDisplay();
-  });
+  };
 
   updateTextDisplay();
 }
