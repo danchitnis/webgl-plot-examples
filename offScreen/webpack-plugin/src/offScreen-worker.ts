@@ -1,5 +1,5 @@
 import { expose } from "comlink";
-import WebGLplot, { WebglLine, ColorRGBA } from "webgl-plot";
+import { WebglPlot, WebglLine, ColorRGBA } from "webgl-plot";
 
 const exports = {
   amp: 0.5,
@@ -13,10 +13,10 @@ const exports = {
 
     const line = new WebglLine(color, numX);
 
-    const wglp = new WebGLplot(canvas);
+    const wglp = new WebglPlot(canvas);
 
     line.lineSpaceX(-1, 2 / numX);
-    wglp.addLine(line);
+    wglp.addDataLine(line);
 
     function newFrame() {
       update();

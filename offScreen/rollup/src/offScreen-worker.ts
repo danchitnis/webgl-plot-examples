@@ -1,4 +1,4 @@
-import WebGLplot, { WebglLine, ColorRGBA } from "webgl-plot";
+import { WebglPlot, WebglLine, ColorRGBA } from "webgl-plot";
 
 self.addEventListener("message", (e) => {
   const canvas = e.data.canvas;
@@ -11,10 +11,10 @@ self.addEventListener("message", (e) => {
 
   const line = new WebglLine(color, numX);
 
-  const wglp = new WebGLplot(canvas, true);
+  const wglp = new WebglPlot(canvas, true);
 
   line.lineSpaceX(-1, 2 / numX);
-  wglp.addLine(line);
+  wglp.addDataLine(line);
 
   function newFrame() {
     update();
