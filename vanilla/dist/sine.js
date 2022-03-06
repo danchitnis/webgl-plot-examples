@@ -30,7 +30,7 @@ function init() {
     for (let i = 0; i < numLines; i++) {
         const color = new ColorRGBA(Math.random(), Math.random(), Math.random(), 1);
         const line = new WebglLine(color, numX);
-        line.lineSpaceX(-1, 2 / numX);
+        line.arrangeX();
         wglp.addLine(line);
     }
     updateTextDisplay();

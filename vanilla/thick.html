@@ -3,9 +3,11 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>Webgl line plotting framework - Radar</title>
+    <title>Webgl line plotting framework - Lines</title>
     <link rel="stylesheet" href="style.css" type="text/css" />
     <link rel="stylesheet" href="./prod/nouislider.min.css" type="text/css" />
+
+    <link rel="stylesheet" href="./dist/slider.css" type="text/css" />
   </head>
 
   <body>
@@ -67,13 +69,11 @@
       }
     </style>
     <div>
-      <video id="player" autoplay muted></video>
-      <canvas class="camera" id="camera"></canvas>
       <canvas class="canvas" id="my_canvas"></canvas>
     </div>
 
     <div class="menu">
-      <a href="./index.html"><b>Random</b></a>
+      <a href="./index.html">Random</a>
       <a href="./sine.html">Sine</a>
       <a href="./static.html">Static</a>
       <a href="./axis.html">Axis</a>
@@ -82,26 +82,16 @@
       <a href="./radar.html">Radar</a>
       <a href="./camera.html">Camera</a>
       <a href="./microphone.html">Microphone</a>
-      <a href="./thick.html">Thick</a>
+      <a href="./thick.html"><b>Thick</b></a>
       <a href="./grid.html">Grid</a>
       <a href="./cross.html">Cross</a>
     </div>
 
     <p></p>
 
-    <div id="ui" class="items"></div>
-
-    <style>
-      .camera {
-        position: absolute;
-        z-index: -1;
-      }
-    </style>
-
-    <p>
-      Permission is required to access media input. No data is being uploaded. All data remains
-      locally and processed in client's browser
-    </p>
+    <div style="width: 80%; margin: auto">
+      <h3>Move the Sliders!</h3>
+    </div>
 
     <div class="credit-div">
       <style>
@@ -128,5 +118,5 @@
     </div>
   </body>
 
-  <script type="module" src="./dist/camera_hist.js"></script>
+  <script type="module" src="./dist/thick.js"></script>
 </html>

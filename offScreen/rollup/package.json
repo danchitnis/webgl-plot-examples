@@ -10,18 +10,18 @@
   "author": "Danial Chitnis",
   "license": "MIT",
   "dependencies": {
-    "webgl-plot": "^0.6.1"
+    "webgl-plot": "^0.6.2"
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^4.22.1",
-    "@typescript-eslint/parser": "^4.22.1",
-    "eslint": "^7.25.0",
-    "rollup": "^2.47.0",
+    "@typescript-eslint/eslint-plugin": "^4.29.3",
+    "@typescript-eslint/parser": "^4.29.3",
+    "eslint": "^7.32.0",
+    "rollup": "^2.56.3",
     "rollup-plugin-commonjs": "^10.1.0",
     "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-sourcemaps": "^0.6.3",
     "rollup-plugin-typescript2": "^0.30.0",
     "rollup-plugin-web-worker-loader": "^1.6.1",
-    "typescript": "^4.2.4"
+    "typescript": "^4.4.2"
   }
 }

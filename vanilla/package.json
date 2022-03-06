@@ -19,23 +19,23 @@
   "homepage": "https://github.com/danchitnis/WebGL-plot-examples#readme",
   "dependencies": {
     "@danchitnis/simple-slider": "^0.2.0",
-    "@types/nouislider": "^9.0.10",
+    "@types/nouislider": "^15.0.0",
     "@types/stats.js": "^0.17.0",
-    "nouislider": "^15.2.0",
+    "nouislider": "^15.5.1",
     "stats.js": "^0.17.0",
-    "webgl-plot": "^0.6.1"
+    "webgl-plot": "^0.7.0"
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^4.28.1",
-    "@typescript-eslint/parser": "^4.28.1",
-    "eslint": "^7.29.0",
-    "rollup": "^2.52.7",
+    "@typescript-eslint/eslint-plugin": "^5.13.0",
+    "@typescript-eslint/parser": "^5.13.0",
+    "eslint": "^8.10.0",
+    "rollup": "^2.69.2",
     "rollup-plugin-commonjs": "^10.1.0",
     "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-sourcemaps": "^0.6.3",
-    "rollup-plugin-typescript2": "^0.30.0",
-    "typescript": "^4.3.5",
-    "webpack": "^5.42.0",
-    "webpack-cli": "^4.7.2"
+    "rollup-plugin-typescript2": "^0.31.2",
+    "typescript": "^4.6.2",
+    "webpack": "^5.70.0",
+    "webpack-cli": "^4.9.2"
   }
 }
