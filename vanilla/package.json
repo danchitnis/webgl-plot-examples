@@ -21,21 +21,21 @@
     "@danchitnis/simple-slider": "^0.2.0",
     "@types/nouislider": "^15.0.0",
     "@types/stats.js": "^0.17.0",
-    "nouislider": "^15.5.1",
+    "nouislider": "^15.6.0",
     "stats.js": "^0.17.0",
     "webgl-plot": "^0.7.0"
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^5.13.0",
-    "@typescript-eslint/parser": "^5.13.0",
-    "eslint": "^8.10.0",
-    "rollup": "^2.69.2",
+    "@typescript-eslint/eslint-plugin": "^5.28.0",
+    "@typescript-eslint/parser": "^5.28.0",
+    "eslint": "^8.18.0",
+    "rollup": "^2.75.6",
     "rollup-plugin-commonjs": "^10.1.0",
     "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-sourcemaps": "^0.6.3",
-    "rollup-plugin-typescript2": "^0.31.2",
-    "typescript": "^4.6.2",
-    "webpack": "^5.70.0",
-    "webpack-cli": "^4.9.2"
+    "rollup-plugin-typescript2": "^0.32.1",
+    "typescript": "^4.7.4",
+    "webpack": "^5.73.0",
+    "webpack-cli": "^4.10.0"
   }
 }
