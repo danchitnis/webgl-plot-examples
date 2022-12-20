@@ -74,8 +74,9 @@
 
     <div class="menu">
       <a href="./index.html">Random</a>
-      <a href="./sine.html"><b>Sine</b></a>
+      <a href="./sine.html">Sine</a>
       <a href="./static.html">Static</a>
+      <a href="./multiPlot.html"><b>Multi Plot</b></a>
       <a href="./axis.html">Axis</a>
       <a href="./histogram.html">Histogram</a>
       <a href="./scatterXY.html">Scatter</a>
@@ -84,24 +85,18 @@
       <a href="./camera.html">Camera</a>
       <a href="./microphone.html">Microphone</a>
       <a href="./thick.html">Thick</a>
-      <a href="./grid.html">Grid</a>
+      <a href="./grid.html"><b>Grid</b></a>
       <a href="./cross.html">Cross</a>
     </div>
 
     <p></p>
 
     <div style="width: 80%; margin: auto">
-      <h3>Move the Sliders!</h3>
-      <span id="numLines"></span>
-      <div id="sliderLine"></div>
-      <span id="freq"></span>
-      <div id="sliderFreq"></div>
-      <span id="amp"></span>
-      <div id="sliderAmp"></div>
-      <span id="noise"></span>
-      <div id="sliderNoise"></div>
-      <br />
-      <button id="btView" class="button">Change View</button>
+      <h3>Change the grid numbers!</h3>
+      <label>X: </label>
+      <input type="number" id="gridX" value="3" min="1" max="32" step="1" />
+      <label>Y: </label>
+      <input type="number" id="gridY" value="3" min="1" max="32" step="1" />
     </div>
 
     <div class="credit-div">

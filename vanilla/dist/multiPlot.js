@@ -1,13 +1,16 @@
 import { WebglPlot, ColorRGBA, WebglLine } from "https://cdn.skypack.dev/webgl-plot";
 const canvas = document.getElementById("my_canvas");
+const gridX = document.getElementById("gridX");
+const gridY = document.getElementById("gridY");
+gridX.addEventListener("change", updateGrid);
+gridY.addEventListener("change", updateGrid);
 const devicePixelRatio = window.devicePixelRatio || 1;
 canvas.width = canvas.clientWidth * devicePixelRatio;
 canvas.height = canvas.clientHeight * devicePixelRatio;
 const numX = Math.round(canvas.width);
 const wglp = new WebglPlot(canvas);
-//let line: WebglLine;
-const lines = new Array();
-init();
+let lines = [];
+updateGrid();
 let resizeId;
 window.addEventListener("resize", () => {
     window.clearTimeout(resizeId);
@@ -19,11 +22,14 @@ function newFrame() {
     requestAnimationFrame(newFrame);
 }
 requestAnimationFrame(newFrame);
-function init() {
+function updateGrid() {
+    lines = new Array();
     wglp.removeAllLines();
+    const Nx = parseInt(gridX.value);
+    const Ny = parseInt(gridY.value);
     //const offset = scaleFactor / 2;
-    const Nx = 6;
-    const Ny = 6;
+    //const Nx = 6;
+    //const Ny = 6;
     const scaleFactorX = 1 / Nx - 0.1 / Nx;
     const scaleFactorY = 1 / Ny - 0.1 / Ny;
     for (let i = 0; i < Nx; i++) {
