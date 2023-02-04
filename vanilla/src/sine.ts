@@ -1,5 +1,6 @@
-import { SimpleSlider } from "https://cdn.skypack.dev/@danchitnis/simple-slider";
-import { WebglPlot, ColorRGBA, WebglLine } from "https://cdn.skypack.dev/webgl-plot";
+import { WebglPlot, ColorRGBA, WebglLine } from "webgl-plot";
+import { Slider } from "@spectrum-web-components/slider";
+import { Button } from "@spectrum-web-components/button";
 
 let amp = 0.5;
 let noise = 0.1;
@@ -46,7 +47,6 @@ function init(): void {
     line.arrangeX();
     wglp.addLine(line);
   }
-  updateTextDisplay();
 }
 
 function update(): void {
@@ -80,47 +80,35 @@ function changeView(): void {
 }
 
 function createUI(): void {
-  const sliderLines = new SimpleSlider("sliderLine", 0, lineNumList.length - 1, lineNumList.length);
-  sliderLines.setValue(0);
-  sliderLines.callBackUpdate = () => {
-    numLines = lineNumList[Math.round(sliderLines.value)];
-    updateTextDisplay();
-  };
-
-  sliderLines.callBackDragEnd = () => {
+  const spsl1 = document.getElementById("sp-sl-1") as Slider;
+  spsl1.addEventListener("input", (e: Event) => {
+    const value = (e.target as Slider).value;
+    numLines = lineNumList[value];
+  });
+  spsl1.addEventListener("change", (e: Event) => {
     init();
+  });
+  spsl1.getAriaValueText = () => {
+    return `${numLines}`;
   };
 
-  const sliderFreq = new SimpleSlider("sliderFreq", 0, 0.03, 1001);
-  sliderFreq.setValue(freq);
-  sliderFreq.callBackUpdate = () => {
-    freq = sliderFreq.value;
-    updateTextDisplay();
-  };
+  const spsl2 = document.getElementById("sp-sl-2") as Slider;
+  spsl2.addEventListener("input", (e: Event) => {
+    freq = (e.target as Slider).value;
+  });
 
-  const sliderAmp = new SimpleSlider("sliderAmp", 0, 1, 1001);
-  sliderAmp.setValue(amp);
-  sliderAmp.callBackUpdate = () => {
-    amp = sliderAmp.value;
-    updateTextDisplay();
-  };
+  const spsl3 = document.getElementById("sp-sl-3") as Slider;
+  spsl3.addEventListener("input", (e: Event) => {
+    amp = (e.target as Slider).value;
+  });
 
-  const sliderNoise = new SimpleSlider("sliderNoise", 0, 0.5, 1001);
-  sliderNoise.setValue(noise);
-  sliderNoise.callBackUpdate = () => {
-    noise = sliderNoise.value;
-    updateTextDisplay();
-  };
+  const spsl4 = document.getElementById("sp-sl-4") as Slider;
+  spsl4.addEventListener("input", (e: Event) => {
+    noise = (e.target as Slider).value;
+  });
 
-  const btView = document.getElementById("btView") as HTMLButtonElement;
+  const btView = document.getElementById("btView") as Button;
   btView.addEventListener("click", () => {
     changeView();
   });
-}
-
-function updateTextDisplay() {
-  document.getElementById("numLines").innerHTML = `Line number: ${numLines}`;
-  document.getElementById("freq").innerHTML = `Freq = ${freq.toFixed(2)}`;
-  document.getElementById("amp").innerHTML = `Amp = ${amp.toFixed(0)}`;
-  document.getElementById("noise").innerHTML = `Noise = ${noise.toFixed(2)}`;
 }
