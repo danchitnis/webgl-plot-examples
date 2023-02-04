@@ -2,8 +2,8 @@
  * Author Danial Chitnis 2019
  */
 
-import { SimpleSlider } from "https://cdn.skypack.dev/@danchitnis/simple-slider";
-import { WebglPlot, ColorRGBA, WebglLine } from "https://cdn.skypack.dev/webgl-plot";
+import { WebglPlot, ColorRGBA, WebglLine } from "webgl-plot";
+import { Slider } from "@spectrum-web-components/slider";
 
 const canvas = document.getElementById("my_canvas") as HTMLCanvasElement;
 
@@ -27,13 +27,13 @@ let newDataSize = 1;
 
 const lineNumList = [1, 2, 5, 10, 20, 50, 100, 200, 500, 1000, 2000, 5000, 10000];
 
-createUI();
-
 let resizeId: number;
 window.addEventListener("resize", () => {
   window.clearTimeout(resizeId);
   resizeId = window.setTimeout(doneResizing, 500);
 });
+
+setSliders();
 
 /*let bt = <HTMLButtonElement>document.getElementById("bt");
 bt.addEventListener("click",btclick);*/
@@ -89,47 +89,33 @@ function doneResizing(): void {
   //wglp.viewport(0, 0, canv.width, canv.height);
 }
 
-function createUI(): void {
-  const sliderLines = new SimpleSlider("sliderLine", 0, lineNumList.length - 1, lineNumList.length);
-  sliderLines.setValue(0);
-  sliderLines.callBackUpdate = () => {
-    numLines = lineNumList[Math.round(sliderLines.value)];
-    updateTextDisplay();
-  };
-  sliderLines.callBackDragEnd = () => {
+function setSliders(): void {
+  const sliderLine = document.getElementById("sliderLine") as Slider;
+  sliderLine.addEventListener("input", () => {
+    numLines = lineNumList[Math.round(sliderLine.value)];
+  });
+  sliderLine.addEventListener("change", () => {
     init();
+  });
+  sliderLine.getAriaValueText = () => {
+    return `${numLines}`;
   };
 
-  const sliderYScale = new SimpleSlider("sliderYScale", 0, 2, 0);
-  //sliderYSclae.setDebug(true);
-  sliderYScale.setValue(scaleY);
-  sliderYScale.callBackUpdate = () => {
+  const sliderYScale = document.getElementById("sliderYScale") as Slider;
+  sliderYScale.addEventListener("input", () => {
     scaleY = sliderYScale.value;
-    updateTextDisplay();
-  };
+  });
 
-  const sliderNewData = new SimpleSlider("sliderNewData", 0, 100, 101);
-  //sliderYSclae.setDebug(true);
-  sliderNewData.setValue(newDataSize);
-  sliderNewData.callBackUpdate = () => {
+  const sliderNewData = document.getElementById("sliderNewData") as Slider;
+  sliderNewData.addEventListener("input", () => {
     newDataSize = sliderNewData.value;
-    updateTextDisplay();
-  };
+  });
 
-  const sliderFps = new SimpleSlider("sliderFps", 1, 16, 16);
-  //sliderYSclae.setDebug(true);
-  sliderFps.setValue(newDataSize);
-  sliderFps.callBackUpdate = () => {
+  const sliderFps = document.getElementById("sliderFps") as Slider;
+  sliderFps.addEventListener("input", () => {
     fpsDivder = sliderFps.value;
-    updateTextDisplay();
+  });
+  sliderFps.getAriaValueText = () => {
+    return `${Math.round(60 / fpsDivder)}`;
   };
-
-  updateTextDisplay();
-}
-
-function updateTextDisplay() {
-  document.getElementById("numLines").innerHTML = `Line number: ${numLines}`;
-  document.getElementById("yScale").innerHTML = `Y scale = ${scaleY.toFixed(2)}`;
-  document.getElementById("newData").innerHTML = `New Data Size = ${newDataSize.toFixed(0)}`;
-  document.getElementById("fps").innerHTML = `FPS = ${60 / fpsDivder}`;
 }
