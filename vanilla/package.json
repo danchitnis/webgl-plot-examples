@@ -20,8 +20,6 @@
   "dependencies": {
     "@danchitnis/simple-slider": "^0.2.0",
     "@spectrum-web-components/bundle": "^0.28.7",
-    "@types/stats.js": "^0.17.0",
-    "stats.js": "^0.17.0",
     "webgl-plot": "^0.7.0"
   },
   "devDependencies": {
