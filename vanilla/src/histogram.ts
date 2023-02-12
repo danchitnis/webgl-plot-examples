@@ -62,7 +62,7 @@ function init(): void {
     xbins[i] = (i * (xmax - xmin)) / numBins + xmin;
   }
 
-  const color = new ColorRGBA(1, 1, 0, 0.5);
+  const color = new ColorRGBA(1, 1, 0, 1);
   line = new WebglStep(color, numBins);
   // line.linespaceX(-1, 2 / numBins);
   // instead of line above we are applying offsetX and scaleX

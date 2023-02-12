@@ -1,5 +1,5 @@
-import { SimpleSlider } from "https://cdn.skypack.dev/@danchitnis/simple-slider";
-import { WebglPlot, ColorRGBA, WebglPolar } from "https://cdn.skypack.dev/webgl-plot";
+import { WebglPlot, ColorRGBA, WebglPolar } from "webgl-plot";
+import { Slider } from "@spectrum-web-components/slider";
 
 let amp = 0.5;
 let updateRate = 0.1;
@@ -35,7 +35,6 @@ let timer = setInterval(() => {
 createUI();
 
 init();
-updateTextDisplay();
 
 /****************************************/
 
@@ -105,43 +104,25 @@ function doneResizing(): void {
 }
 
 function createUI(): void {
-  // ******slider lines */
-  const sliderLines = new SimpleSlider(
-    "sliderLine",
-    0,
-    numPointList.length - 1,
-    numPointList.length
-  );
-  sliderLines.setValue(9);
-  sliderLines.callBackUpdate = () => {
+  const sliderLines = document.getElementById("sliderLine") as Slider;
+  sliderLines.max = numPointList.length - 1;
+  sliderLines.addEventListener("input", () => {
     numPoints = numPointList[Math.round(sliderLines.value)];
-    updateTextDisplay();
-  };
-  sliderLines.callBackDragEnd = () => {
     init();
+  });
+  sliderLines.getAriaValueText = () => {
+    return numPoints.toString();
   };
 
-  const sliderAmp = new SimpleSlider("sliderAmp", 0, 1, 0);
-  //sliderYSclae.setDebug(true);
-  sliderAmp.setValue(amp);
-  sliderAmp.callBackUpdate = () => {
+  const sliderAmp = document.getElementById("sliderAmp") as Slider;
+  sliderAmp.addEventListener("input", () => {
     amp = sliderAmp.value;
-    updateTextDisplay();
-  };
+  });
 
-  const sliderUpdateRate = new SimpleSlider("sliderUpdateRate", 1, 100, 100);
-  //sliderYSclae.setDebug(true);
-  sliderUpdateRate.setValue(updateRate);
-  sliderUpdateRate.callBackUpdate = () => {
+  const sliderUpdateRate = document.getElementById("sliderUpdateRate") as Slider;
+  sliderUpdateRate.addEventListener("input", () => {
     updateRate = Math.round(sliderUpdateRate.value);
-    updateTextDisplay();
     clearInterval(timer);
     timer = setInterval(update, updateRate);
-  };
-}
-
-function updateTextDisplay() {
-  document.getElementById("numLines").innerHTML = `Line number: ${numPoints}`;
-  document.getElementById("amp").innerHTML = `Y scale = ${amp}`;
-  document.getElementById("rate").innerHTML = `New Data Size = ${updateRate}`;
+  });
 }

@@ -1,6 +1,6 @@
 const fs = require("fs");
 
-const names = ["histogram"];
+const names = ["histogram", "scatterXY", "polar", "radar", "static", "cross"];
 
 names.forEach((element) => {
   injectCode(element);
