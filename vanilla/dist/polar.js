@@ -1,5 +1,4 @@
-import { SimpleSlider } from "https://cdn.skypack.dev/@danchitnis/simple-slider";
-import { WebglPlot, ColorRGBA, WebglPolar } from "https://cdn.skypack.dev/webgl-plot";
+import { WebglPlot, ColorRGBA, WebglPolar } from "webgl-plot";
 let rotation = 0.1;
 let freq = 0.01;
 const canvas = document.getElementById("my_canvas");
@@ -12,7 +11,6 @@ const wglp = new WebglPlot(canvas);
 let line;
 createUI();
 init();
-updateTextDisplay();
 let resizeId;
 window.addEventListener("resize", () => {
     window.clearTimeout(resizeId);
@@ -47,36 +45,22 @@ function doneResizing() {
     init();
 }
 function createUI() {
-    // ******slider lines */
-    const sliderLines = new SimpleSlider("sliderLine", 0, numPointList.length - 1, numPointList.length);
-    sliderLines.setValue(9);
-    sliderLines.callBackUpdate = () => {
-        numPoints = numPointList[Math.round(sliderLines.value)];
-        updateTextDisplay();
-    };
-    sliderLines.callBackDragEnd = () => {
+    const sliderLine = document.getElementById("sliderLine");
+    sliderLine.max = numPointList.length - 1;
+    sliderLine.addEventListener("input", () => {
+        numPoints = numPointList[sliderLine.value];
         init();
+    });
+    sliderLine.getAriaValueText = () => {
+        return numPointList[sliderLine.value].toString();
     };
-    // ******slider Freq */
-    const sliderFreq = new SimpleSlider("sliderFreq", 0, 5, 0);
-    //sliderYSclae.setDebug(true);
-    sliderFreq.setValue(freq);
-    sliderFreq.callBackUpdate = () => {
+    const sliderFreq = document.getElementById("sliderFreq");
+    sliderFreq.addEventListener("input", () => {
         freq = sliderFreq.value;
-        updateTextDisplay();
-    };
-    // ******slider Rotation */
-    const sliderRotation = new SimpleSlider("sliderRotation", 0, 5, 0);
-    //sliderYSclae.setDebug(true);
-    sliderRotation.setValue(rotation);
-    sliderRotation.callBackUpdate = () => {
+    });
+    const sliderRotation = document.getElementById("sliderRotation");
+    sliderRotation.addEventListener("input", () => {
         rotation = sliderRotation.value;
-        updateTextDisplay();
-    };
-}
-function updateTextDisplay() {
-    document.getElementById("numLines").innerHTML = `Line number: ${numPoints}`;
-    document.getElementById("freq").innerHTML = `Y scale = ${freq.toFixed(2)}`;
-    document.getElementById("rotation").innerHTML = `New Data Size = ${rotation.toFixed(2)}`;
+    });
 }
 //# sourceMappingURL=polar.js.map

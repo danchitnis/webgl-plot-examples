@@ -1,5 +1,5 @@
-import { SimpleSlider } from "https://cdn.skypack.dev/@danchitnis/simple-slider";
-import { WebglPlot, ColorRGBA, WebglLine } from "https://cdn.skypack.dev/webgl-plot";
+import { WebglPlot, ColorRGBA, WebglLine } from "webgl-plot";
+import { Slider } from "@spectrum-web-components/slider";
 
 let numLines = 2;
 const lineNumList = [1, 2, 5, 10, 20, 50, 100, 200, 500, 1000];
@@ -34,8 +34,6 @@ window.addEventListener("resize", () => {
 });
 
 function newFrame(): void {
-  updateTextDisplay();
-
   wglp.update();
 
   requestAnimationFrame(newFrame);
@@ -261,35 +259,25 @@ function touchEnd(e: TouchEvent) {
   drag = false;
 }
 
-function updateZoomRect(x1: number, x2: number): void {
-  //
-}
-
 function doneResizing(): void {
   //wglp.viewport(0, 0, canv.width, canv.height);
 }
 
 function createUI(): void {
-  const sliderLines = new SimpleSlider("sliderLine", 0, lineNumList.length - 1, lineNumList.length);
-  sliderLines.setValue(0);
-  sliderLines.callBackUpdate = () => {
-    numLines = lineNumList[Math.round(sliderLines.value)];
-    updateTextDisplay();
-  };
-
-  sliderLines.callBackDragEnd = () => {
+  const sliderLine = document.getElementById("sliderLine") as Slider;
+  sliderLine.addEventListener("input", () => {
+    numLines = lineNumList[Math.round(sliderLine.value)];
+  });
+  sliderLine.addEventListener("change", () => {
     init();
+  });
+  sliderLine.getAriaValueText = () => {
+    return lineNumList[Math.round(sliderLine.value)].toString();
   };
+  sliderLine.max = lineNumList.length - 1;
 }
 
 function log(str: string) {
   //display.innerHTML = str;
   console.log(str);
-}
-
-function updateTextDisplay() {
-  document.getElementById("info").innerHTML = `Zoom: ${wglp.gScaleX.toFixed(
-    2
-  )}, Offset ${wglp.gOffsetX.toFixed(2)}`;
-  document.getElementById("numLines").innerHTML = `Line number: ${numLines}`;
 }

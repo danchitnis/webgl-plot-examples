@@ -1,5 +1,5 @@
-import { WebglPlot, ColorRGBA, WebglLine, WebglSquare } from "https://cdn.skypack.dev/webgl-plot";
-import { SimpleSlider } from "https://cdn.skypack.dev/@danchitnis/simple-slider";
+import { WebglPlot, ColorRGBA, WebglLine, WebglSquare } from "webgl-plot";
+import { Slider } from "@spectrum-web-components/slider";
 
 const canvas = document.getElementById("my_canvas") as HTMLCanvasElement;
 const devicePixelRatio = window.devicePixelRatio || 1;
@@ -56,7 +56,24 @@ const updatePoints = () => {
   }
 };
 
-const sliderSize = new SimpleSlider("sliderSize", 0, dataSizeList.length - 1, dataSizeList.length);
+const sliderSize = document.getElementById("sliderSize") as Slider;
+sliderSize.max = dataSizeList.length - 1;
+sliderSize.addEventListener("input", () => {
+  dataSizeIndex = sliderSize.value;
+  updatePoints();
+});
+sliderSize.getAriaValueText = () => {
+  return dataSizeList[Math.round(dataSizeIndex)].toString();
+};
+
+const sliderZoom = document.getElementById("sliderZoom") as Slider;
+sliderZoom.addEventListener("input", () => {
+  zoom = sliderZoom.value;
+  wglp.gScaleX = (canvas.height / canvas.width) * zoom;
+  wglp.gScaleY = zoom;
+});
+
+/*const sliderSize = new SimpleSlider("sliderSize", 0, dataSizeList.length - 1, dataSizeList.length);
 sliderSize.setValue(dataSizeIndex);
 sliderSize.callBackUpdate = () => {
   dataSizeIndex = sliderSize.value;
@@ -71,14 +88,6 @@ sliderZoom.callBackUpdate = () => {
   updateTextDisplay();
   wglp.gScaleX = (canvas.height / canvas.width) * zoom;
   wglp.gScaleY = zoom;
-};
+};*/
 
-function updateTextDisplay() {
-  document.getElementById("size").innerHTML = `Line number: ${
-    dataSizeList[Math.round(dataSizeIndex)]
-  }`;
-  document.getElementById("zoom").innerHTML = `Zoom = ${zoom}`;
-}
-
-updateTextDisplay();
 updatePoints();

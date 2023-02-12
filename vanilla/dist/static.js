@@ -1,5 +1,4 @@
-import { SimpleSlider } from "https://cdn.skypack.dev/@danchitnis/simple-slider";
-import { WebglPlot, ColorRGBA, WebglLine } from "https://cdn.skypack.dev/webgl-plot";
+import { WebglPlot, ColorRGBA, WebglLine } from "webgl-plot";
 let numLines = 2;
 const lineNumList = [1, 2, 5, 10, 20, 50, 100, 200, 500, 1000];
 const canvas = document.getElementById("my_canvas");
@@ -22,7 +21,6 @@ window.addEventListener("resize", () => {
     resizeId = window.setTimeout(doneResizing, 500);
 });
 function newFrame() {
-    updateTextDisplay();
     wglp.update();
     requestAnimationFrame(newFrame);
 }
@@ -210,29 +208,24 @@ function touchEnd(e) {
     pinchZoom = false;
     drag = false;
 }
-function updateZoomRect(x1, x2) {
-    //
-}
 function doneResizing() {
     //wglp.viewport(0, 0, canv.width, canv.height);
 }
 function createUI() {
-    const sliderLines = new SimpleSlider("sliderLine", 0, lineNumList.length - 1, lineNumList.length);
-    sliderLines.setValue(0);
-    sliderLines.callBackUpdate = () => {
-        numLines = lineNumList[Math.round(sliderLines.value)];
-        updateTextDisplay();
-    };
-    sliderLines.callBackDragEnd = () => {
+    const sliderLine = document.getElementById("sliderLine");
+    sliderLine.addEventListener("input", () => {
+        numLines = lineNumList[Math.round(sliderLine.value)];
+    });
+    sliderLine.addEventListener("change", () => {
         init();
+    });
+    sliderLine.getAriaValueText = () => {
+        return lineNumList[Math.round(sliderLine.value)].toString();
     };
+    sliderLine.max = lineNumList.length - 1;
 }
 function log(str) {
     //display.innerHTML = str;
     console.log(str);
-}
-function updateTextDisplay() {
-    document.getElementById("info").innerHTML = `Zoom: ${wglp.gScaleX.toFixed(2)}, Offset ${wglp.gOffsetX.toFixed(2)}`;
-    document.getElementById("numLines").innerHTML = `Line number: ${numLines}`;
 }
 //# sourceMappingURL=static.js.map

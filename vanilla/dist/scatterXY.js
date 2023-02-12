@@ -1,5 +1,4 @@
-import { WebglPlot, ColorRGBA, WebglLine, WebglSquare } from "https://cdn.skypack.dev/webgl-plot";
-import { SimpleSlider } from "https://cdn.skypack.dev/@danchitnis/simple-slider";
+import { WebglPlot, ColorRGBA, WebglLine, WebglSquare } from "webgl-plot";
 const canvas = document.getElementById("my_canvas");
 const devicePixelRatio = window.devicePixelRatio || 1;
 canvas.width = canvas.clientWidth * devicePixelRatio;
@@ -44,25 +43,36 @@ const updatePoints = () => {
         createDataPoint(Math.random() * 5 - 2.5, Math.random() * 2 - 1);
     }
 };
-const sliderSize = new SimpleSlider("sliderSize", 0, dataSizeList.length - 1, dataSizeList.length);
+const sliderSize = document.getElementById("sliderSize");
+sliderSize.max = dataSizeList.length - 1;
+sliderSize.addEventListener("input", () => {
+    dataSizeIndex = sliderSize.value;
+    updatePoints();
+});
+sliderSize.getAriaValueText = () => {
+    return dataSizeList[Math.round(dataSizeIndex)].toString();
+};
+const sliderZoom = document.getElementById("sliderZoom");
+sliderZoom.addEventListener("input", () => {
+    zoom = sliderZoom.value;
+    wglp.gScaleX = (canvas.height / canvas.width) * zoom;
+    wglp.gScaleY = zoom;
+});
+/*const sliderSize = new SimpleSlider("sliderSize", 0, dataSizeList.length - 1, dataSizeList.length);
 sliderSize.setValue(dataSizeIndex);
 sliderSize.callBackUpdate = () => {
-    dataSizeIndex = sliderSize.value;
-    updateTextDisplay();
-    updatePoints();
+  dataSizeIndex = sliderSize.value;
+  updateTextDisplay();
+  updatePoints();
 };
+
 const sliderZoom = new SimpleSlider("sliderZoom", 1, 10, 0);
 sliderZoom.setValue(zoom);
 sliderZoom.callBackUpdate = () => {
-    zoom = sliderZoom.value;
-    updateTextDisplay();
-    wglp.gScaleX = (canvas.height / canvas.width) * zoom;
-    wglp.gScaleY = zoom;
-};
-function updateTextDisplay() {
-    document.getElementById("size").innerHTML = `Line number: ${dataSizeList[Math.round(dataSizeIndex)]}`;
-    document.getElementById("zoom").innerHTML = `Zoom = ${zoom}`;
-}
-updateTextDisplay();
+  zoom = sliderZoom.value;
+  updateTextDisplay();
+  wglp.gScaleX = (canvas.height / canvas.width) * zoom;
+  wglp.gScaleY = zoom;
+};*/
 updatePoints();
 //# sourceMappingURL=scatterXY.js.map
